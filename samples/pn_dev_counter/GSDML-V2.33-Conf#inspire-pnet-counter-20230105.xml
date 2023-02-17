@@ -86,7 +86,7 @@
 						<InfoText TextId="IDT_INFO_Module1"/>
 					</ModuleInfo>
 					<VirtualSubmoduleList>
-						<VirtualSubmoduleItem ID="BIT_I8" SubmoduleIdentNumber="0x00000001" MayIssueProcessAlarm="true">
+						<VirtualSubmoduleItem ID="BIT_I8" SubmoduleIdentNumber="0x00000101" MayIssueProcessAlarm="true">
 							<IOData>
 								<Input>
 									<DataItem DataType="Unsigned8" UseAsBits="true" TextId="1ByteIn"/>
@@ -106,7 +106,7 @@
 						<InfoText TextId="IDT_INFO_Module41"/>
 					</ModuleInfo>
 					<VirtualSubmoduleList>
-						<VirtualSubmoduleItem ID="41" SubmoduleIdentNumber="0x00000001" MayIssueProcessAlarm="true">
+						<VirtualSubmoduleItem ID="41" SubmoduleIdentNumber="0x00004101" MayIssueProcessAlarm="true">
 							<IOData>
 								<Output>
 									<DataItem DataType="Unsigned16" UseAsBits="false" TextId="1WordOut"/>

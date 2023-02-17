@@ -53,6 +53,9 @@ static uint8_t counter = 0;
 static uint8_t echo_inputdata[APP_GSDML_INPUT_DATA_ECHO_SIZE] = {0};
 static uint8_t echo_outputdata[APP_GSDML_OUTPUT_DATA_ECHO_SIZE] = {0};
 
+static uint8_t counter_inputdata[APP_GSDML_INPUT_DATA_COUNTER_SIZE] = {0};
+static uint16_t counter_outputdata[APP_GSDML_OUTPUT_DATA_COUNTER_SIZE] = {0};
+
 CC_PACKED_BEGIN
 typedef struct CC_PACKED app_echo_data
 {
@@ -67,6 +70,24 @@ typedef struct CC_PACKED app_echo_data
 CC_PACKED_END
 CC_STATIC_ASSERT (sizeof (app_echo_data_t) == APP_GSDML_INPUT_DATA_ECHO_SIZE);
 CC_STATIC_ASSERT (sizeof (app_echo_data_t) == APP_GSDML_OUTPUT_DATA_ECHO_SIZE);
+
+CC_PACKED_BEGIN
+typedef struct CC_PACKED app_counter_in_data
+{
+   /* Network endianness.*/
+
+   uint8_t counter_in;
+} app_counter_in_data_t;
+CC_PACKED_END
+CC_PACKED_BEGIN
+typedef struct CC_PACKED app_counter_out_data
+{
+   /* Network endianness.*/
+   uint16_t counter_out;
+} app_counter_out_data_t;
+CC_PACKED_END
+CC_STATIC_ASSERT (sizeof (app_counter_in_data_t) == APP_GSDML_INPUT_DATA_COUNTER_SIZE);
+CC_STATIC_ASSERT (sizeof (app_counter_out_data_t) == APP_GSDML_OUTPUT_DATA_COUNTER_SIZE);
 
 /**
  * Set LED state.
@@ -102,6 +123,8 @@ uint8_t * app_data_get_input_data (
    uint32_t hostorder_outputfloat_bytes;
    app_echo_data_t * p_echo_inputdata = (app_echo_data_t *)&echo_inputdata;
    app_echo_data_t * p_echo_outputdata = (app_echo_data_t *)&echo_outputdata;
+   app_counter_in_data_t * p_counter_in = (app_counter_in_data_t *)&counter_inputdata;
+   app_counter_out_data_t * p_counter_out = (app_counter_out_data_t *)&counter_outputdata;
 
    if (size == NULL || iops == NULL)
    {
@@ -156,6 +179,14 @@ uint8_t * app_data_get_input_data (
       return echo_inputdata;
    }
 
+   if (submodule_id == APP_GSDML_SUBMOD_ID_COUNTER_IN){
+      p_counter_in->counter_in = ((uint8_t) CC_TO_BE16 (p_counter_out->counter_out) + 1);
+
+      *size = APP_GSDML_INPUT_DATA_COUNTER_SIZE;
+      *iops = PNET_IOXS_GOOD;
+      return counter_inputdata;
+   }
+
    /* Automated RT Tester scenario 2 - unsupported (sub)module */
    return NULL;
 }
@@ -194,6 +225,15 @@ int app_data_set_output_data (
       if (size == APP_GSDML_OUTPUT_DATA_ECHO_SIZE)
       {
          memcpy (echo_outputdata, data, size);
+
+         return 0;
+      }
+   }
+   else if (submodule_id == APP_GSDML_SUBMOD_ID_COUNTER_OUT )
+   {
+      if (size == APP_GSDML_OUTPUT_DATA_COUNTER_SIZE)
+      {
+         memcpy (counter_outputdata, data, size);
 
          return 0;
       }

@@ -151,6 +151,12 @@ typedef struct
 #define APP_GSDML_INPUT_DATA_ECHO_SIZE      8 /* bytes */
 #define APP_GSDML_OUTPUT_DATA_ECHO_SIZE     APP_GSDML_INPUT_DATA_ECHO_SIZE
 #define APP_GSDML_ALARM_PAYLOAD_SIZE        1 /* bytes */
+#define APP_GSDML_MOD_ID_COUNTER_IN         0x00000100
+#define APP_GSDML_MOD_ID_COUNTER_OUT     0x00004100
+#define APP_GSDML_SUBMOD_ID_COUNTER_IN   0x00000101
+#define APP_GSDML_SUBMOD_ID_COUNTER_OUT  0x00004101
+#define APP_GSDML_INPUT_DATA_COUNTER_SIZE 1 /* bytes */
+#define APP_GSDML_OUTPUT_DATA_COUNTER_SIZE 2 /* bytes */
 
 /**
  * Get module configuration from module ID
