@@ -39,13 +39,13 @@ extern "C" {
 
 #define APP_GSDML_API 0
 
-#define APP_GSDML_DEFAULT_STATION_NAME "rt-labs-dev"
+#define APP_GSDML_DEFAULT_STATION_NAME "tcpniodevice"
 
 /* GSDML tag: VendorID */
-#define APP_GSDML_VENDOR_ID 0x0493
+#define APP_GSDML_VENDOR_ID 0x0120
 
 /* GSDML tag: DeviceID */
-#define APP_GSDML_DEVICE_ID 0x0002
+#define APP_GSDML_DEVICE_ID 0x0021
 
 /* Used in DCP communication */
 #define APP_GSDML_OEM_VENDOR_ID 0xcafe
@@ -77,10 +77,10 @@ extern "C" {
    (PNET_SUPPORTED_IM1 | PNET_SUPPORTED_IM2 | PNET_SUPPORTED_IM3)
 
 /* GSDML tag: OrderNumber */
-#define APP_GSDML_ORDER_ID "12345 Abcdefghijk"
+#define APP_GSDML_ORDER_ID "TwinCAT PN Device"
 
 /* GSDML tag: ModuleInfo / Name */
-#define APP_GSDML_PRODUCT_NAME "P-Net Sample Application"
+#define APP_GSDML_PRODUCT_NAME "IDT_MODULE_NAME_DAP2"
 
 /* GSDML tag: MinDeviceInterval */
 #define APP_GSDML_MIN_DEVICE_INTERVAL 32 /* 1 ms */
@@ -152,7 +152,7 @@ typedef struct
 #define APP_GSDML_OUTPUT_DATA_ECHO_SIZE     APP_GSDML_INPUT_DATA_ECHO_SIZE
 #define APP_GSDML_ALARM_PAYLOAD_SIZE        1 /* bytes */
 #define APP_GSDML_MOD_ID_COUNTER_IN         0x00000100
-#define APP_GSDML_MOD_ID_COUNTER_OUT     0x00004100
+#define APP_GSDML_MOD_ID_COUNTER_OUT     0x0004100
 #define APP_GSDML_SUBMOD_ID_COUNTER_IN   0x00000101
 #define APP_GSDML_SUBMOD_ID_COUNTER_OUT  0x00004101
 #define APP_GSDML_INPUT_DATA_COUNTER_SIZE 1 /* bytes */

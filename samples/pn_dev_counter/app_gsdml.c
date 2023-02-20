@@ -59,6 +59,16 @@ static const app_gsdml_module_t module_echo = {
    .name = "Echo module",
    .submodules = {APP_GSDML_SUBMOD_ID_ECHO, 0}};
 
+static const app_gsdml_module_t module_byte_in = {
+   .id = APP_GSDML_MOD_ID_COUNTER_IN,
+   .name = "ID_1 8 DI",
+   .submodules = {APP_GSDML_SUBMOD_ID_COUNTER_OUT}};
+
+static const app_gsdml_module_t module_word_out = {
+   .id = APP_GSDML_MOD_ID_COUNTER_OUT,
+   .name = "ID_41 1Word Out",
+   .submodules = {APP_GSDML_SUBMOD_ID_COUNTER_OUT}};
+
 /******************* Supported submodules ************************/
 
 static const app_gsdml_submodule_t dap_indentity_1 = {
@@ -151,13 +161,34 @@ static const app_gsdml_submodule_t submod_echo = {
    .outsize = APP_GSDML_OUTPUT_DATA_ECHO_SIZE,
    .parameters = {APP_GSDML_PARAMETER_ECHO_IDX, 0}};
 
+static const app_gsdml_submodule_t submod_byte_in = {
+   .id = APP_GSDML_SUBMOD_ID_COUNTER_IN,
+   .name = "ID_1 8 DI",
+   .api = APP_GSDML_API,
+   .data_dir = PNET_DIR_IO,
+   .insize = APP_GSDML_INPUT_DATA_COUNTER_SIZE,
+   .outsize = 0,
+   .parameters = {0}};
+
+static const app_gsdml_submodule_t submod_word_out = {
+   .id = APP_GSDML_SUBMOD_ID_COUNTER_OUT,
+   .name = "ID_41 1Word Out",
+   .api = APP_GSDML_API,
+   .data_dir = PNET_DIR_IO,
+   .insize = 0,
+   .outsize = APP_GSDML_OUTPUT_DATA_COUNTER_SIZE,
+   .parameters = {0}};
+
 /** List of supported modules */
 static const app_gsdml_module_t * app_gsdml_modules[] = {
    &dap_1,
    &module_digital_in,
    &module_digital_out,
    &module_digital_in_out,
-   &module_echo};
+   &module_echo,
+   &module_byte_in,
+   &module_word_out
+};
 
 /** List of supported submodules */
 static const app_gsdml_submodule_t * app_gsdml_submodules[] = {
@@ -173,6 +204,9 @@ static const app_gsdml_submodule_t * app_gsdml_submodules[] = {
    &submod_digital_inout,
 
    &submod_echo,
+
+   &submod_word_out,
+   &submod_byte_in,
 };
 
 /* List of supported parameters.
