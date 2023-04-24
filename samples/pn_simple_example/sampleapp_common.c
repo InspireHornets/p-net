@@ -1235,10 +1235,10 @@ void app_loop_forever (void * arg)
 
    if (socket_desc < 0)
    {
-      APP_LOG_ERROR("UDP server:Error while creating socket\n");
+      APP_LOG_ERROR ("UDP server:Error while creating socket\n");
       // return -1;
    }
-   APP_LOG_INFO("UDP server: Socket created successfully\n");
+   APP_LOG_INFO ("UDP server: Socket created successfully\n");
 
    // Set port and IP:
    int port = 2000;
@@ -1283,9 +1283,12 @@ void app_loop_forever (void * arg)
             "UDP server: Received message from IP: %s and port: %i\n",
             inet_ntoa (client_addr.sin_addr),
             ntohs (client_addr.sin_port));
-         APP_LOG_DEBUG ("UDP server: Msg from client: %s\n", client_message);
-         struct Command command = parseCommand(client_message);
-         APP_LOG_DEBUG ("UDP server: Msg from client: %s %i\n", command.type, command.num);
+
+         struct Command command = parseCommand (client_message);
+         APP_LOG_DEBUG (
+            "UDP server: Msg from client: %s %i\n",
+            commandTypeToString (command.type),
+            command.num);
       }
 
       char repsonse[2000] = "sdfasd";
@@ -1343,6 +1346,6 @@ void app_loop_forever (void * arg)
          APP_LOG_DEBUG ("Connection closed\n");
          APP_LOG_DEBUG ("Waiting for PLC connect request\n\n");
       }
-      close (socket_desc);
+      //      close (socket_desc);
    }
 }

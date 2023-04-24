@@ -49,3 +49,18 @@ struct Command parseCommand (const char * input)
 
    return cmd;
 }
+
+const char * commandTypeToString (enum CommandType cmd)
+{
+   switch (cmd)
+   {
+   case GET_X:
+      return "get_x";
+   case SET_X:
+      return "set_x";
+   case INVALID_COMMAND:
+      return "invalid command";
+   default:
+      return "unknown";
+   }
+}
