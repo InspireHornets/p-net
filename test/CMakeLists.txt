@@ -36,6 +36,7 @@ target_sources(pf_test PRIVATE
   test_cmsm.cpp
   test_cmsu.cpp
   test_cmwdr.cpp
+  test_commands.cpp
   test_cpm.cpp
   test_dcp.cpp
   test_diag.cpp
@@ -93,6 +94,7 @@ target_sources(pf_test PRIVATE
   ${PROFINET_SOURCE_DIR}/src/common/pf_ppm_driver_sw.c
   ${PROFINET_SOURCE_DIR}/src/common/pf_ptcp.c
   ${PROFINET_SOURCE_DIR}/src/common/pf_scheduler.c
+  ${PROFINET_SOURCE_DIR}/samples/pn_simple_example/commands.c
   $<$<BOOL:${PNET_OPTION_SNMP}>:${PROFINET_SOURCE_DIR}/src/common/pf_snmp.c>
   ${PROFINET_SOURCE_DIR}/src/common/pf_udp.c
   )
@@ -121,6 +123,7 @@ target_include_directories(pf_test
   ${PROFINET_SOURCE_DIR}/src
   ${PROFINET_SOURCE_DIR}/src/common
   ${PROFINET_SOURCE_DIR}/src/device
+  ${PROFINET_SOURCE_DIR}/samples
   ${PROFINET_BINARY_DIR}/src
   )
 

@@ -33,6 +33,7 @@ target_sources(pn_simple_example
         sampleapp_common.c
         utils.c
         sampleapp_main.c
+        commands.c
         )
 
 target_compile_options(pn_simple_example
