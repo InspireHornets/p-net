@@ -34,6 +34,7 @@ target_sources(pn_simple_example
         utils.c
         sampleapp_main.c
         commands.c
+        udp_server.c
         )
 
 target_compile_options(pn_simple_example

@@ -22,6 +22,7 @@
 #include "osal.h"
 #include "pnal.h"
 #include "commands.h"
+#include "udp_server.h"
 #include <pnet_api.h>
 
 #include <sys/socket.h>
@@ -1221,44 +1222,15 @@ void app_loop_forever (void * arg)
 
    // UDP code from
    // https://www.educative.io/answers/how-to-implement-udp-sockets-in-c
-   int socket_desc;
-   struct sockaddr_in server_addr, client_addr;
-   char server_message[2000], client_message[2000];
+   struct sockaddr_in client_addr;
    socklen_t client_struct_length = sizeof (client_addr);
 
+   char server_message[2000], client_message[2000];
    // Clean buffers:
    memset (server_message, '\0', sizeof (server_message));
    memset (client_message, '\0', sizeof (client_message));
 
-   // Create UDP socket:
-   socket_desc = socket (AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-
-   if (socket_desc < 0)
-   {
-      APP_LOG_ERROR ("UDP server:Error while creating socket\n");
-      // return -1;
-   }
-   APP_LOG_INFO ("UDP server: Socket created successfully\n");
-
-   // Set port and IP:
-   int port = 2000;
-   server_addr.sin_family = AF_INET;
-   server_addr.sin_port = htons (port);
-   char host_address[15] = "127.0.0.1";
-   server_addr.sin_addr.s_addr = inet_addr (host_address);
-
-   // Bind to the set port and IP:
-   if (bind (socket_desc, (struct sockaddr *)&server_addr, sizeof (server_addr)) < 0)
-   {
-      APP_LOG_ERROR ("UDP server: Couldn't bind to port %i\n", port);
-      // return -1;
-   }
-   APP_LOG_INFO ("UDP server: Done with binding\n");
-
-   APP_LOG_INFO (
-      "UDP server: Listening for incoming messages on %s:%i\n\n",
-      host_address,
-      port);
+   int socket_desc = open_socket ("127.0.0.1", 2000);
 
    /* Main event loop */
    for (;;)
