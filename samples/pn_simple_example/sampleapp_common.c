@@ -94,13 +94,7 @@ typedef struct app_data_t
 
    uint32_t arep_for_appl_ready;
 
-   bool button1_pressed;
-   bool button2_pressed;
-   bool button2_pressed_previous;
-
-   /* Counters used to control when buttons are checked
-    * and process data is updated */
-   uint32_t buttons_tick_counter;
+   /* Counters used to control when process data is updated */
    uint32_t process_data_tick_counter;
 
 } app_data_t;
