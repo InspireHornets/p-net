@@ -23,9 +23,12 @@
 #include "pnal.h"
 #include <pnet_api.h>
 
+#include <sys/socket.h>
+#include <arpa/inet.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 /* Events handled by main task */
 #define APP_EVENT_READY_FOR_DATA BIT (0)
@@ -1215,9 +1218,92 @@ void app_loop_forever (void * arg)
    app_plug_dap (app, app->pnet_cfg->num_physical_ports);
    APP_LOG_INFO ("Waiting for PLC connect request\n\n");
 
+   // UDP code from
+   // https://www.educative.io/answers/how-to-implement-udp-sockets-in-c
+   int socket_desc;
+   struct sockaddr_in server_addr, client_addr;
+   char server_message[2000], client_message[2000];
+   socklen_t client_struct_length = sizeof (client_addr);
+
+   // Clean buffers:
+   memset (server_message, '\0', sizeof (server_message));
+   memset (client_message, '\0', sizeof (client_message));
+
+   // Create UDP socket:
+   socket_desc = socket (AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+
+   if (socket_desc < 0)
+   {
+      printf ("Error while creating socket\n");
+      // return -1;
+   }
+   printf ("Socket created successfully\n");
+
+   // Set port and IP:
+   int port = 2000;
+   server_addr.sin_family = AF_INET;
+   server_addr.sin_port = htons (port);
+   char host_address[15] = "127.0.0.1";
+   server_addr.sin_addr.s_addr = inet_addr (host_address);
+
+   // Bind to the set port and IP:
+   if (bind (socket_desc, (struct sockaddr *)&server_addr, sizeof (server_addr)) < 0)
+   {
+      APP_LOG_ERROR ("UDP server: Couldn't bind to port %i\n", port);
+      // return -1;
+   }
+   APP_LOG_INFO ("UDP server: Done with binding\n");
+
+   APP_LOG_INFO (
+      "UDP server: Listening for incoming messages on %s:%i\n\n",
+      host_address,
+      port);
+
    /* Main event loop */
    for (;;)
    {
+      // Receive client's message:
+      if (
+         recvfrom (
+            socket_desc,
+            client_message,
+            sizeof (client_message),
+            0,
+            (struct sockaddr *)&client_addr,
+            &client_struct_length) < 0)
+      {
+         APP_LOG_ERROR ("UDP server: Couldn't receive\n");
+         break;
+         // return -1;
+      }
+      else
+      {
+         APP_LOG_DEBUG (
+            "UDP server: Received message from IP: %s and port: %i\n",
+            inet_ntoa (client_addr.sin_addr),
+            ntohs (client_addr.sin_port));
+
+         APP_LOG_DEBUG ("UDP server: Msg from client: %s\n", client_message);
+      }
+
+      char repsonse[2000] = "sdfasd";
+      // Respond to client:
+      strcpy (server_message, repsonse);
+
+      if (
+         sendto (
+            socket_desc,
+            server_message,
+            strlen (server_message),
+            0,
+            (struct sockaddr *)&client_addr,
+            client_struct_length) < 0)
+      {
+         APP_LOG_ERROR ("UDP server: Can't send\n");
+         break;
+         // return -1;
+      }
+
       os_event_wait (app->main_events, mask, &flags, OS_WAIT_FOREVER);
       if (flags & APP_EVENT_READY_FOR_DATA)
       {
@@ -1255,5 +1341,6 @@ void app_loop_forever (void * arg)
          APP_LOG_DEBUG ("Connection closed\n");
          APP_LOG_DEBUG ("Waiting for PLC connect request\n\n");
       }
+      close (socket_desc);
    }
 }
