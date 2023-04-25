@@ -1238,7 +1238,7 @@ void app_handle_udp_communication (
          command.num);
    }
 
-   char repsonse[APP_UDP_MESSAGE_LENGTH] = "sdfasd";
+   char repsonse[APP_UDP_MESSAGE_LENGTH] = "get y 123";
    // Respond to client:
    strcpy (server_message, repsonse);
 
