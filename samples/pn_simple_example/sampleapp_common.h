@@ -116,7 +116,7 @@ int app_start (app_data_t * app, app_run_in_separate_task_t task_config);
  *
  * @param arg                 In: Application handle
  */
-void app_loop_forever (void * arg);
+_Noreturn void app_loop_forever (void * arg);
 
 /**
  * Get P-Net instance from application
