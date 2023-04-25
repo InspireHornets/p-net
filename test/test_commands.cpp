@@ -44,7 +44,7 @@ class CommandTest : public PnetUnitTest
 // Tests for commands
 TEST_F (CommandTest, TestGetCommand)
 {
-   testCommand ("get X 423", GET, 423);
+   testCommand ("get X 423", GET, 0);
 }
 
 TEST_F (CommandTest, TestSetCommand)

@@ -54,21 +54,29 @@ struct Command parseCommand (const char * input)
       return cmd;
    }
 
-   // Get the next token as the integer value
-   token = strtok (NULL, " ");
-
-   // Check if the third token is a valid integer
-   char * endptr;
-   long num = strtol (token, &endptr, 10);
-   if (*endptr != '\0')
+   // GET command have no number
+   if (cmd.type == SET)
    {
-      printf ("Error: Invalid number '%s'\n", token);
-      cmd.type = INVALID_COMMAND; // Set an invalid value to indicate error
-      return cmd;
-   }
+      // Get the next token as the integer value
+      token = strtok (NULL, " ");
 
-   // Cast the long value to int32_t
-   cmd.num = (int32_t)num;
+      // Check if the third token is a valid integer
+      char * endptr;
+      long num = strtol (token, &endptr, 10);
+      if (*endptr != '\0')
+      {
+         printf ("Error: Invalid number '%s'\n", token);
+         cmd.type = INVALID_COMMAND; // Set an invalid value to indicate error
+         return cmd;
+      }
+
+      // Cast the long value to int32_t
+      cmd.num = (int32_t)num;
+   }
+   else
+   {
+      cmd.num = 0;
+   }
 
    return cmd;
 }
