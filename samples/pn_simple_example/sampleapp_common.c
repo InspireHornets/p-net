@@ -1232,8 +1232,9 @@ void app_handle_udp_communication (
 
       struct Command command = parseCommand (client_message);
       APP_LOG_DEBUG (
-         "UDP server: Msg from client: %s %i\n",
+         "UDP server: Msg from client: %s %s %i\n",
          commandTypeToString (command.type),
+         coordinateToString (command.coordinate),
          command.num);
    }
 
