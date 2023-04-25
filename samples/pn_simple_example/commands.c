@@ -16,13 +16,13 @@ struct Command parseCommand (const char * input)
    char * token = strtok (buffer, " ");
 
    // Check if the first token is a valid command
-   if (strcmp (token, "get_x") == 0)
+   if (strcmp (token, "get") == 0)
    {
-      cmd.type = GET_X;
+      cmd.type = GET;
    }
-   else if (strcmp (token, "set_x") == 0)
+   else if (strcmp (token, "set") == 0)
    {
-      cmd.type = SET_X;
+      cmd.type = SET;
    }
    else
    {
@@ -31,10 +31,33 @@ struct Command parseCommand (const char * input)
       return cmd;
    }
 
+   // Get the next token as the motor coordinate
+   token = strtok (NULL, " ");
+
+   // Check if the second token is a valid coordinate
+   if (strcmp (token, "X") == 0)
+   {
+      cmd.coordinate = X;
+   }
+   else if (strcmp (token, "Y") == 0)
+   {
+      cmd.coordinate = Y;
+   }
+   else if (strcmp (token, "Z") == 0)
+   {
+      cmd.coordinate = Z;
+   }
+   else
+   {
+      printf ("Error: Invalid motor coordinate '%s'\n", token);
+      cmd.type = INVALID_COMMAND; // Set an invalid value to indicate error
+      return cmd;
+   }
+
    // Get the next token as the integer value
    token = strtok (NULL, " ");
 
-   // Check if the second token is a valid integer
+   // Check if the third token is a valid integer
    char * endptr;
    long num = strtol (token, &endptr, 10);
    if (*endptr != '\0')
@@ -54,13 +77,30 @@ const char * commandTypeToString (enum CommandType cmd)
 {
    switch (cmd)
    {
-   case GET_X:
-      return "get_x";
-   case SET_X:
-      return "set_x";
+   case GET:
+      return "get";
+   case SET:
+      return "set";
    case INVALID_COMMAND:
       return "invalid command";
    default:
       return "unknown";
+   }
+}
+
+const char * coordinateToString (enum Coordinate coord)
+{
+   switch (coord)
+   {
+   case X:
+      return "X";
+   case Y:
+      return "Y";
+   case Z:
+      return "Z";
+   case INVALID_COORDINATE:
+      return "INVALID_COORDINATE";
+   default:
+      return "UNKNOWN";
    }
 }

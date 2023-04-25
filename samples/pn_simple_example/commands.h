@@ -6,21 +6,33 @@
 // Enum definition for commands
 enum CommandType
 {
-   GET_X, // Command to get X
-   SET_X, // Command to set X
+   GET, // Command to get motor value
+   SET, // Command to set motor value
    INVALID_COMMAND
+};
+
+// Enum definition for motor coordinates
+enum Coordinate
+{
+   X,
+   Y,
+   Z,
+   INVALID_COORDINATE
 };
 
 // Struct definition
 struct Command
 {
-   enum CommandType type; // Enum representing the command type
-   int32_t num;           // Signed 32-bit integer
+   enum CommandType type;      // Enum representing the command type
+   enum Coordinate coordinate; // Enum representing the motor coordinate
+   int32_t num;                // Signed 32-bit integer
 };
 
 // Function to parse input string and convert to Command struct
 struct Command parseCommand (const char * input);
 
 const char * commandTypeToString (enum CommandType cmd);
+
+const char * coordinateToString (enum Coordinate coord);
 
 #endif // COMMANDS_H
