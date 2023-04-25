@@ -47,9 +47,29 @@ TEST_F (CommandTest, TestGetCommand)
    testCommand ("get X 423", GET, 0);
 }
 
+TEST_F (CommandTest, TestGetCommandLowerCaseDirection)
+{
+   testCommand ("get x", GET, 0);
+}
+
+TEST_F (CommandTest, TestGetCommandUpperCaseCommand)
+{
+   testCommand ("GET x", GET, 0);
+}
+
 TEST_F (CommandTest, TestSetCommand)
 {
    testCommand ("set X -123", SET, -123);
+}
+
+TEST_F (CommandTest, TestSetCommandLowerCaseDirection)
+{
+   testCommand ("set x -123", SET, -123);
+}
+
+TEST_F (CommandTest, TestSetCommandCapitalizedDirection)
+{
+   testCommand ("Set x -15687", SET, -15687);
 }
 
 TEST_F (CommandTest, TestInvalidCommand)

@@ -16,11 +16,11 @@ struct Command parseCommand (const char * input)
    char * token = strtok (buffer, " ");
 
    // Check if the first token is a valid command
-   if (strcmp (token, "get") == 0)
+   if (strcasecmp (token, "get") == 0)
    {
       cmd.type = GET;
    }
-   else if (strcmp (token, "set") == 0)
+   else if (strcasecmp (token, "set") == 0)
    {
       cmd.type = SET;
    }
@@ -35,15 +35,15 @@ struct Command parseCommand (const char * input)
    token = strtok (NULL, " ");
 
    // Check if the second token is a valid coordinate
-   if (strcmp (token, "X") == 0)
+   if (strcasecmp (token, "X") == 0)
    {
       cmd.coordinate = X;
    }
-   else if (strcmp (token, "Y") == 0)
+   else if (strcasecmp (token, "Y") == 0)
    {
       cmd.coordinate = Y;
    }
-   else if (strcmp (token, "Z") == 0)
+   else if (strcasecmp (token, "Z") == 0)
    {
       cmd.coordinate = Z;
    }
