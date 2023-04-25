@@ -1202,7 +1202,60 @@ void app_pnet_cfg_init_default (pnet_cfg_t * pnet_cfg)
    pnet_cfg->cb_arg = (void *)&app_state;
 }
 
-void app_loop_forever (void * arg)
+void app_handle_udp_communication (
+   int socket_desc,
+   char * client_message,
+   char * server_message)
+{
+   struct sockaddr_in client_addr;
+   socklen_t client_struct_length = sizeof (client_addr);
+
+   // Receive client's message:
+   if (
+      recvfrom (
+         socket_desc,
+         client_message,
+         sizeof (client_message),
+         0,
+         (struct sockaddr *)&client_addr,
+         &client_struct_length) < 0)
+   {
+      APP_LOG_ERROR ("UDP server: Couldn't receive\n");
+      // return -1;
+   }
+   else
+   {
+      APP_LOG_DEBUG (
+         "UDP server: Received message from IP: %s and port: %i\n",
+         inet_ntoa (client_addr.sin_addr),
+         ntohs (client_addr.sin_port));
+
+      struct Command command = parseCommand (client_message);
+      APP_LOG_DEBUG (
+         "UDP server: Msg from client: %s %i\n",
+         commandTypeToString (command.type),
+         command.num);
+   }
+
+   char repsonse[2000] = "sdfasd";
+   // Respond to client:
+   strcpy (server_message, repsonse);
+
+   if (
+      sendto (
+         socket_desc,
+         server_message,
+         strlen (server_message),
+         0,
+         (struct sockaddr *)&client_addr,
+         client_struct_length) < 0)
+   {
+      APP_LOG_ERROR ("UDP server: Can't send\n");
+      // return -1;
+   }
+}
+
+_Noreturn void app_loop_forever (void * arg)
 {
    app_data_t * app = (app_data_t *)arg;
    uint32_t mask = APP_EVENT_READY_FOR_DATA | APP_EVENT_TIMER |
@@ -1216,9 +1269,6 @@ void app_loop_forever (void * arg)
 
    // UDP code from
    // https://www.educative.io/answers/how-to-implement-udp-sockets-in-c
-   struct sockaddr_in client_addr;
-   socklen_t client_struct_length = sizeof (client_addr);
-
    char server_message[2000], client_message[2000];
    // Clean buffers:
    memset (server_message, '\0', sizeof (server_message));
@@ -1229,51 +1279,7 @@ void app_loop_forever (void * arg)
    /* Main event loop */
    for (;;)
    {
-      // Receive client's message:
-      if (
-         recvfrom (
-            socket_desc,
-            client_message,
-            sizeof (client_message),
-            0,
-            (struct sockaddr *)&client_addr,
-            &client_struct_length) < 0)
-      {
-         APP_LOG_ERROR ("UDP server: Couldn't receive\n");
-         break;
-         // return -1;
-      }
-      else
-      {
-         APP_LOG_DEBUG (
-            "UDP server: Received message from IP: %s and port: %i\n",
-            inet_ntoa (client_addr.sin_addr),
-            ntohs (client_addr.sin_port));
-
-         struct Command command = parseCommand (client_message);
-         APP_LOG_DEBUG (
-            "UDP server: Msg from client: %s %i\n",
-            commandTypeToString (command.type),
-            command.num);
-      }
-
-      char repsonse[2000] = "sdfasd";
-      // Respond to client:
-      strcpy (server_message, repsonse);
-
-      if (
-         sendto (
-            socket_desc,
-            server_message,
-            strlen (server_message),
-            0,
-            (struct sockaddr *)&client_addr,
-            client_struct_length) < 0)
-      {
-         APP_LOG_ERROR ("UDP server: Can't send\n");
-         break;
-         // return -1;
-      }
+      app_handle_udp_communication (socket_desc, client_message, server_message);
 
       os_event_wait (app->main_events, mask, &flags, OS_WAIT_FOREVER);
       if (flags & APP_EVENT_READY_FOR_DATA)
@@ -1312,6 +1318,7 @@ void app_loop_forever (void * arg)
          APP_LOG_DEBUG ("Connection closed\n");
          APP_LOG_DEBUG ("Waiting for PLC connect request\n\n");
       }
+      // TODO where to close the socket?
       //      close (socket_desc);
    }
 }
