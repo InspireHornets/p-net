@@ -1237,7 +1237,7 @@ void app_handle_udp_communication (
          command.num);
    }
 
-   char repsonse[2000] = "sdfasd";
+   char repsonse[APP_UDP_MESSAGE_LENGTH] = "sdfasd";
    // Respond to client:
    strcpy (server_message, repsonse);
 
@@ -1269,12 +1269,13 @@ _Noreturn void app_loop_forever (void * arg)
 
    // UDP code from
    // https://www.educative.io/answers/how-to-implement-udp-sockets-in-c
-   char server_message[2000], client_message[2000];
+   char server_message[APP_UDP_MESSAGE_LENGTH],
+      client_message[APP_UDP_MESSAGE_LENGTH];
    // Clean buffers:
    memset (server_message, '\0', sizeof (server_message));
    memset (client_message, '\0', sizeof (client_message));
 
-   int socket_desc = open_socket ("127.0.0.1", 2000);
+   int socket_desc = open_socket (APP_UDP_HOST_ADDRESS, APP_UDP_PORT);
 
    /* Main event loop */
    for (;;)

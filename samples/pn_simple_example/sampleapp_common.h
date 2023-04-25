@@ -39,6 +39,10 @@ extern "C" {
 #define APP_TICKS_READ_BUTTONS 10
 #define APP_TICKS_UPDATE_DATA  100
 
+#define APP_UDP_MESSAGE_LENGTH 2000
+#define APP_UDP_HOST_ADDRESS   "127.0.0.1"
+#define APP_UDP_PORT           2000
+
 /** HW Offload configuration. */
 typedef enum
 {
