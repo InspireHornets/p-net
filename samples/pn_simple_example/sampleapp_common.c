@@ -1003,7 +1003,7 @@ static void app_cyclic_data_callback (app_subslot_t * subslot, void * tag)
       {
          /* Application specific handling of the output data to a submodule.
             For the sample application, the data sets a LED. */
-         (void)app_data_set_output_data (
+         (void)app_data_from_plc (
             subslot->slot_nbr,
             subslot->subslot_nbr,
             subslot->submodule_id,
@@ -1018,7 +1018,7 @@ static void app_cyclic_data_callback (app_subslot_t * subslot, void * tag)
        *
        * For the sample application, the data includes a button
        * state and a counter value. */
-      indata = app_data_get_input_data (
+      indata = app_data_to_plc (
          subslot->slot_nbr,
          subslot->subslot_nbr,
          subslot->submodule_id,
@@ -1092,7 +1092,7 @@ static int app_set_initial_data_and_ioxs (app_data_t * app)
                   p_subslot->slot_nbr != PNET_SLOT_DAP_IDENT &&
                   p_subslot->data_cfg.insize > 0)
                {
-                  indata = app_data_get_input_data (
+                  indata = app_data_to_plc (
                      p_subslot->slot_nbr,
                      p_subslot->subslot_nbr,
                      p_subslot->submodule_id,
@@ -1256,7 +1256,7 @@ void app_handle_udp_communication (
    }
 }
 
-_Noreturn void app_loop_forever (void * arg)
+void app_loop_forever (void * arg)
 {
    app_data_t * app = (app_data_t *)arg;
    uint32_t mask = APP_EVENT_READY_FOR_DATA | APP_EVENT_TIMER |
@@ -1276,13 +1276,13 @@ _Noreturn void app_loop_forever (void * arg)
    memset (server_message, '\0', sizeof (server_message));
    memset (client_message, '\0', sizeof (client_message));
 
-   int socket_desc = open_socket (APP_UDP_HOST_ADDRESS, APP_UDP_PORT);
+   int socket_desc;
+   uint32_t delay_udp_connection_cycles = 100;
+   uint32_t cycle_app_ready = 0;
 
    /* Main event loop */
    for (;;)
    {
-      app_handle_udp_communication (socket_desc, client_message, server_message);
-
       os_event_wait (app->main_events, mask, &flags, OS_WAIT_FOREVER);
       if (flags & APP_EVENT_READY_FOR_DATA)
       {
@@ -1305,7 +1305,29 @@ _Noreturn void app_loop_forever (void * arg)
 
          if (app_is_connected_to_controller (app))
          {
+            if (cycle_app_ready == 0)
+            {
+               cycle_app_ready = app->process_data_tick_counter;
+            }
             app_handle_cyclic_data (app);
+
+            if (
+               (socket_desc == 0) &
+               (app->process_data_tick_counter >
+                cycle_app_ready + delay_udp_connection_cycles))
+            {
+               socket_desc = open_socket (APP_UDP_HOST_ADDRESS, APP_UDP_PORT);
+            }
+            else if (
+               (app->process_data_tick_counter % 40 == 0) &
+               (app->process_data_tick_counter >
+                cycle_app_ready + delay_udp_connection_cycles))
+            {
+               app_handle_udp_communication (
+                  socket_desc,
+                  client_message,
+                  server_message);
+            }
          }
 
          /* Run p-net stack */
@@ -1314,13 +1336,12 @@ _Noreturn void app_loop_forever (void * arg)
       else if (flags & APP_EVENT_ABORT)
       {
          os_event_clr (app->main_events, APP_EVENT_ABORT);
+         close (socket_desc);
 
          app->main_api.arep = UINT32_MAX;
          app->alarm_allowed = true;
          APP_LOG_DEBUG ("Connection closed\n");
          APP_LOG_DEBUG ("Waiting for PLC connect request\n\n");
       }
-      // TODO where to close the socket?
-      //      close (socket_desc);
    }
 }

@@ -59,7 +59,7 @@ CC_PACKED_END
 CC_STATIC_ASSERT (sizeof (app_echo_data_t) == APP_GSDML_INPUT_DATA_ECHO_SIZE);
 CC_STATIC_ASSERT (sizeof (app_echo_data_t) == APP_GSDML_OUTPUT_DATA_ECHO_SIZE);
 
-uint8_t * app_data_get_input_data (
+uint8_t * app_data_to_plc (
    uint16_t slot_nbr,
    uint16_t subslot_nbr,
    uint32_t submodule_id,
@@ -92,7 +92,7 @@ uint8_t * app_data_get_input_data (
    return NULL;
 }
 
-int app_data_set_output_data (
+int app_data_from_plc (
    uint16_t slot_nbr,
    uint16_t subslot_nbr,
    uint32_t submodule_id,
