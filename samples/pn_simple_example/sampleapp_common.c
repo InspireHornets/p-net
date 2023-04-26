@@ -1202,6 +1202,7 @@ void app_pnet_cfg_init_default (pnet_cfg_t * pnet_cfg)
    pnet_cfg->cb_arg = (void *)&app_state;
 }
 
+// TODO review this method
 void app_handle_udp_communication (
    int socket_desc,
    char * client_message,
@@ -1210,7 +1211,7 @@ void app_handle_udp_communication (
    struct sockaddr_in client_addr;
    socklen_t client_struct_length = sizeof (client_addr);
 
-   // Receive the clients message
+   // Receive client's message:
    if (
       recvfrom (
          socket_desc,
@@ -1232,11 +1233,13 @@ void app_handle_udp_communication (
          commandTypeToString (command.type),
          coordinateToString (command.coordinate),
          command.num);
+      // TODO How to set the received value at app_data.app_data_to_plc ?
    }
 
-   char repsonse[APP_UDP_MESSAGE_LENGTH] = "get y 123";
+   // TODO how to get the 123 from app_data.app_data_from_plc ?
+   char response[APP_UDP_MESSAGE_LENGTH] = "get y 123";
    // Respond to client:
-   strcpy (server_message, repsonse);
+   strcpy (server_message, response);
    sendto (
       socket_desc,
       server_message,
@@ -1258,8 +1261,7 @@ void app_loop_forever (void * arg)
    app_plug_dap (app, app->pnet_cfg->num_physical_ports);
    APP_LOG_INFO ("Waiting for PLC connect request\n\n");
 
-   // UDP code from
-   // https://www.educative.io/answers/how-to-implement-udp-sockets-in-c
+   // TODO Review the UDP implementation
    char server_message[APP_UDP_MESSAGE_LENGTH],
       client_message[APP_UDP_MESSAGE_LENGTH];
    // Clean buffers:
@@ -1267,8 +1269,6 @@ void app_loop_forever (void * arg)
    memset (client_message, '\0', sizeof (client_message));
 
    int socket_desc = open_socket (APP_UDP_HOST_ADDRESS, APP_UDP_PORT);
-   //   uint32_t delay_udp_connection_cycles = 100;
-   //   uint32_t cycle_app_ready = 0;
 
    /* Main event loop */
    for (;;)
@@ -1295,23 +1295,8 @@ void app_loop_forever (void * arg)
 
          if (app_is_connected_to_controller (app))
          {
-            //            if (cycle_app_ready == 0)
-            //            {
-            //               cycle_app_ready = app->process_data_tick_counter;
-            //            }
             app_handle_cyclic_data (app);
 
-            //            if (
-            //               (socket_desc == 0) &
-            //               (app->process_data_tick_counter >
-            //                cycle_app_ready + delay_udp_connection_cycles))
-            //            {
-            //            }
-            //            else if (
-            //               (app->process_data_tick_counter % 40 == 0) &
-            //               (app->process_data_tick_counter >
-            //                cycle_app_ready + delay_udp_connection_cycles))
-            //            {
             if (app->process_data_tick_counter % 100 == 0)
             {
                app_handle_udp_communication (
@@ -1319,7 +1304,6 @@ void app_loop_forever (void * arg)
                   client_message,
                   server_message);
             }
-            //            }
          }
 
          /* Run p-net stack */

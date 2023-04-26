@@ -5,6 +5,7 @@
 #include "udp_server.h"
 #include "app_log.h"
 
+// TODO review this
 int open_socket (const char * host_address, int port)
 {
    struct sockaddr_in server_addr;
