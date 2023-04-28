@@ -1205,8 +1205,8 @@ void app_pnet_cfg_init_default (pnet_cfg_t * pnet_cfg)
 // TODO review this method
 void app_handle_udp_communication (
    int socket_desc,
-   char * client_message,
-   char * server_message)
+   uint8_t * client_message,
+   uint8_t * server_message)
 {
    struct sockaddr_in client_addr;
    socklen_t client_struct_length = sizeof (client_addr);
@@ -1234,16 +1234,15 @@ void app_handle_udp_communication (
          coordinateToString (command.coordinate),
          command.num);
       // TODO How to set the received value at app_data.app_data_to_plc ?
+      // TODO set first byte to 0 of client_message
    }
 
    // TODO how to get the 123 from app_data.app_data_from_plc ?
-   char response[APP_UDP_MESSAGE_LENGTH] = "get y 123";
-   // Respond to client:
-   strcpy (server_message, response);
+   uint8_t response[APP_UDP_MESSAGE_LENGTH] = "get y 123";
    sendto (
       socket_desc,
       server_message,
-      strlen (server_message),
+      strlen (response),
       MSG_DONTWAIT,
       (struct sockaddr *)&client_addr,
       client_struct_length);
@@ -1262,11 +1261,12 @@ void app_loop_forever (void * arg)
    APP_LOG_INFO ("Waiting for PLC connect request\n\n");
 
    // TODO Review the UDP implementation
-   char server_message[APP_UDP_MESSAGE_LENGTH],
+   uint8_t server_message[APP_UDP_MESSAGE_LENGTH],
       client_message[APP_UDP_MESSAGE_LENGTH];
    // Clean buffers:
-   memset (server_message, '\0', sizeof (server_message));
-   memset (client_message, '\0', sizeof (client_message));
+   // TODO rename to read/write buffer
+   memset (server_message, 0, sizeof (server_message));
+   memset (client_message, 0, sizeof (client_message));
 
    int socket_desc = open_socket (APP_UDP_HOST_ADDRESS, APP_UDP_PORT);
 

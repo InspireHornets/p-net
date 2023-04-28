@@ -4,35 +4,29 @@
 #include <stdint-gcc.h>
 
 // Enum definition for commands
+// TODO change to GET_X, and numbering
 enum CommandType
 {
-   GET, // Command to get motor value
-   SET, // Command to set motor value
-   INVALID_COMMAND
-};
-
-// Enum definition for motor coordinates
-enum Coordinate
-{
-   X,
-   Y,
-   Z,
-   INVALID_COORDINATE
+   NO_COMMAND = 0x00,
+   GET_X = 0x10,
+   GET_Y = 0x11,
+   GET_Z = 0x12,
+   SET_X = 0x20,
+   SET_Y = 0x21,
+   SET_Z = 0x22,
+   INVALID_COMMAND = 0xff,
 };
 
 // Struct definition
 struct Command
 {
-   enum CommandType type;      // Enum representing the command type
-   enum Coordinate coordinate; // Enum representing the motor coordinate
-   int32_t num;                // Signed 32-bit integer
+   enum CommandType type; // Enum representing the command type
+   int32_t num;           // Signed 32-bit integer
 };
 
 // Function to parse input string and convert to Command struct
-struct Command parseCommand (const char * input);
+struct Command parseCommand (const uint8_t * input);
 
-const char * commandTypeToString (enum CommandType cmd);
-
-const char * coordinateToString (enum Coordinate coord);
+// const char * commandTypeToString (enum CommandType cmd);
 
 #endif // COMMANDS_H
