@@ -71,6 +71,12 @@ void set_x (uint32_t setpoint)
    p_echo_inputdata->echo_int = CC_TO_BE32 (setpoint);
 }
 
+void set_y (uint32_t setpoint)
+{
+   app_echo_data_t * p_echo_inputdata = (app_echo_data_t *)&echo_inputdata;
+   p_echo_inputdata->echo_int2 = CC_TO_BE32 (setpoint);
+}
+
 uint8_t * app_data_to_plc (
    uint16_t slot_nbr,
    uint16_t subslot_nbr,

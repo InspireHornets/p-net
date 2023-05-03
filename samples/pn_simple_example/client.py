@@ -15,18 +15,25 @@ class CommandType(Enum):
     SET_Z = 0x22
     INVALID_COMMAND = 0xff
 
-def set_x(setpoint: int):
-    command_type = struct.pack('>B', CommandType.SET_X.value)
+def _set(direction: CommandType, setpoint: int):
+    command_type = struct.pack('>B', direction.value)
     command_data = struct.pack('>I', setpoint)
 
     return command_type + command_data
 
+
+def set_x(setpoint: int):
+    return _set(CommandType.SET_X, setpoint)
+
+def set_y(setpoint: int):
+    return _set(CommandType.SET_Y, setpoint)
 
 server_address = ('127.0.0.1', PORT)
 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as client_socket:
     command = set_x(1337)
     client_socket.sendto(command, server_address)
     print(f"Sent: {command}")
+    client_socket.sendto(set_y(2356), server_address)
 
     # Get y
     command_type = CommandType.GET_X
