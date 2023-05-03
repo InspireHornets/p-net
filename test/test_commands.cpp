@@ -51,20 +51,6 @@ TEST_F (CommandTest, TestGetCommand)
    testCommand (input, GET_X, 0);
 }
 
-// TEST_F (CommandTest, TestGetCommandLowerCaseDirection)
-//{
-//    testCommand ("get x", GET, 0);
-// }
-//
-// TEST_F (CommandTest, TestGetCommandUpperCaseCommand)
-//{
-//    testCommand ("GET x", GET, 0);
-// }
-//
-// TEST_F (CommandTest, TestSetCommand)
-//{
-//    testCommand ("set X -123", SET, -123);
-// }
 //
 // TEST_F (CommandTest, TestSetCommandLowerCaseDirection)
 //{
