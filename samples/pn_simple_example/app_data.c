@@ -65,6 +65,12 @@ uint32_t get_x()
    return combine_bytes_to_uint32 (&echo_outputdata[0]);
 }
 
+void set_x (uint32_t setpoint)
+{
+   app_echo_data_t * p_echo_inputdata = (app_echo_data_t *)&echo_inputdata;
+   p_echo_inputdata->echo_int = CC_TO_BE32 (setpoint);
+}
+
 uint8_t * app_data_to_plc (
    uint16_t slot_nbr,
    uint16_t subslot_nbr,
@@ -86,7 +92,6 @@ uint8_t * app_data_to_plc (
        */
 
       /* Integer */
-      p_echo_inputdata->echo_int = CC_TO_BE32 (12354);
       p_echo_inputdata->echo_int2 = CC_TO_BE32 (9876);
 
       *size = APP_GSDML_INPUT_DATA_ECHO_SIZE;

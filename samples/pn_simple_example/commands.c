@@ -22,6 +22,7 @@ struct Command parse_command (const uint8_t * input)
    case SET_X:
       cmd.type = SET_X;
       cmd.num = combine_bytes_to_uint32 (&input[1]);
+      set_x (cmd.num);
       break;
    default:
       cmd.type = INVALID_COMMAND;

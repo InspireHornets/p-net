@@ -37,6 +37,7 @@ extern "C" {
 #include <stdbool.h>
 
 uint32_t get_x();
+void set_x (uint32_t setpoint);
 
 /**
  * Get application specific PNIO input data (for sending to PLC)
