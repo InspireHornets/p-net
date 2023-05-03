@@ -60,6 +60,10 @@ CC_STATIC_ASSERT (sizeof (app_echo_data_t) == APP_GSDML_INPUT_DATA_ECHO_SIZE);
 CC_STATIC_ASSERT (sizeof (app_echo_data_t) == APP_GSDML_OUTPUT_DATA_ECHO_SIZE);
 
 // ToDO add get_x, get_y
+uint32_t get_x()
+{
+   return combine_bytes_to_uint32 (&echo_outputdata[0]);
+}
 
 uint8_t * app_data_to_plc (
    uint16_t slot_nbr,

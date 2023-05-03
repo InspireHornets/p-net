@@ -19,14 +19,14 @@ class CommandType(Enum):
 server_address = ('127.0.0.1', PORT)
 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as client_socket:
     command_type = CommandType.SET_X
-    command_data = struct.pack('>I', 12345)
+    command_data = struct.pack('>I', 1337)
 
     command = struct.pack('>B', command_type.value) + command_data
     client_socket.sendto(command, server_address)
     print(f"Sent: {command}")
 
     # Get y
-    command_type = CommandType.GET_Y
+    command_type = CommandType.GET_X
     command = struct.pack('<B', command_type.value)
     client_socket.sendto(command, server_address)
     response, server = client_socket.recvfrom(PORT)

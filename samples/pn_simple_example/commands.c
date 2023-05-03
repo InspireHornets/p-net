@@ -1,5 +1,6 @@
 #include "commands.h"
 #include "utils.h"
+#include "app_data.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -16,7 +17,7 @@ struct Command parse_command (const uint8_t * input)
       break;
    case GET_X:
       cmd.type = GET_X;
-      cmd.num = 0; // TODO get_command
+      cmd.num = get_x();
       break;
    case SET_X:
       cmd.type = SET_X;
