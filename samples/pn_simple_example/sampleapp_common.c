@@ -1229,20 +1229,20 @@ void app_handle_udp_communication (
 
       struct Command command = parseCommand (client_message);
       APP_LOG_DEBUG (
-         "UDP server: Msg from client: %s %s %i\n",
-         commandTypeToString (command.type),
-         coordinateToString (command.coordinate),
+         "UDP server: Msg from client: %i %i\n",
+         command.type,
          command.num);
       // TODO How to set the received value at app_data.app_data_to_plc ?
       // TODO set first byte to 0 of client_message
    }
 
    // TODO how to get the 123 from app_data.app_data_from_plc ?
-   uint8_t response[APP_UDP_MESSAGE_LENGTH] = "get y 123";
+   uint response[5] = {GET_X, 0, 0, 34, 53};
+   memcpy (server_message, response, sizeof (response));
    sendto (
       socket_desc,
       server_message,
-      strlen (response),
+      5,
       MSG_DONTWAIT,
       (struct sockaddr *)&client_addr,
       client_struct_length);
