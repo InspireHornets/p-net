@@ -22,18 +22,14 @@ bool are_arrays_equal (
    return true;
 }
 
-uint32_t combine_bytes (
-   uint8_t byte1,
-   uint8_t byte2,
-   uint8_t byte3,
-   uint8_t byte4)
+uint32_t combine_bytes_to_uint32 (const uint8_t * bytes)
 {
    uint32_t result = 0;
 
-   result |= (uint32_t)byte1 << 24;
-   result |= (uint32_t)byte2 << 16;
-   result |= (uint32_t)byte3 << 8;
-   result |= (uint32_t)byte4;
+   result |= (uint32_t)bytes[0] << 24;
+   result |= (uint32_t)bytes[1] << 16;
+   result |= (uint32_t)bytes[2] << 8;
+   result |= (uint32_t)bytes[3];
 
    return result;
 }

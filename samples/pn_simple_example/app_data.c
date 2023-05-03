@@ -118,16 +118,10 @@ int app_data_from_plc (
          {
             for (int i = 0; i < APP_GSDML_OUTPUT_DATA_ECHO_SIZE; i++)
             {
-               uint32_t echo_uint = combine_bytes (
-                  echo_outputdata[0],
-                  echo_outputdata[1],
-                  echo_outputdata[2],
-                  echo_outputdata[3]);
-               uint32_t echo_uint2 = combine_bytes (
-                  echo_outputdata[4],
-                  echo_outputdata[5],
-                  echo_outputdata[6],
-                  echo_outputdata[7]);
+               uint32_t echo_uint =
+                  combine_bytes_to_uint32 (&echo_outputdata[0]);
+               uint32_t echo_uint2 =
+                  combine_bytes_to_uint32 (&echo_outputdata[4]);
 
                APP_LOG_DEBUG (
                   "New actual position 1: %u\tactual position 2: %u\n",

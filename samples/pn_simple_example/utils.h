@@ -10,10 +10,6 @@ bool are_arrays_equal (
    const uint8_t arr2[],
    int size2);
 
-uint32_t combine_bytes (
-   uint8_t byte1,
-   uint8_t byte2,
-   uint8_t byte3,
-   uint8_t byte4);
+uint32_t combine_bytes_to_uint32 (const uint8_t * bytes);
 
 #endif /* PROFINET_UTILS_H */
