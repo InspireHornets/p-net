@@ -1227,7 +1227,7 @@ void app_handle_udp_communication (
          inet_ntoa (client_addr.sin_addr),
          ntohs (client_addr.sin_port));
 
-      struct Command command = parseCommand (client_message);
+      struct Command command = parse_command (client_message);
       APP_LOG_DEBUG (
          "UDP server: Msg from client: %i %i\n",
          command.type,

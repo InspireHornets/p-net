@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 // Function to parse input string and convert to Command struct
-struct Command parseCommand (const uint8_t * input)
+struct Command parse_command (const uint8_t * input)
 {
    struct Command cmd;
 

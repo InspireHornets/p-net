@@ -19,7 +19,7 @@ class CommandTest : public PnetUnitTest
       CommandType expectedType,
       int32_t expectedNum)
    {
-      struct Command command = parseCommand (input);
+      struct Command command = parse_command (input);
       ASSERT_EQ (command.type, expectedType);
       ASSERT_EQ (command.num, expectedNum);
    }
@@ -76,7 +76,7 @@ TEST_F (CommandTest, TestGetCommand)
 //
 // TEST_F (CommandTest, TestInvalidCommand)
 //{
-//    struct Command command = parseCommand ("invalid_input");
+//    struct Command command = parse_command ("invalid_input");
 //    ASSERT_EQ (command.type, INVALID_COMMAND);
 // }
 //
