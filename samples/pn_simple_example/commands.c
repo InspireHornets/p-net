@@ -1,4 +1,5 @@
 #include "commands.h"
+#include "utils.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -19,7 +20,7 @@ struct Command parse_command (const uint8_t * input)
       break;
    case SET_X:
       cmd.type = SET_X;
-      cmd.num = 124; // TODO parse set command
+      cmd.num = combine_bytes_to_uint32 (&input[1]);
       break;
    default:
       cmd.type = INVALID_COMMAND;

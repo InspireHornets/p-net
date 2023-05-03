@@ -10,6 +10,8 @@ extern "C" {
 #endif
 
 // Test fixture for commands
+// TODO why can i run the tests after including `combine_bytes_to_uint32'
+// TODO in commands.c? I get undefined reference to `combine_bytes_to_uint32'
 class CommandTest : public PnetUnitTest
 {
  protected:
@@ -17,7 +19,7 @@ class CommandTest : public PnetUnitTest
    static void testCommand (
       uint8_t * input,
       CommandType expectedType,
-      int32_t expectedNum)
+      uint32_t expectedNum)
    {
       struct Command command = parse_command (input);
       ASSERT_EQ (command.type, expectedType);

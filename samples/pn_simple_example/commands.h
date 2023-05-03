@@ -21,7 +21,7 @@ enum CommandType
 struct Command
 {
    enum CommandType type; // Enum representing the command type
-   int32_t num;           // Signed 32-bit integer
+   uint32_t num;          // Signed 32-bit integer
 };
 
 // Function to parse input string and convert to Command struct
