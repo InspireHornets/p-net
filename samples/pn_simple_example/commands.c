@@ -6,6 +6,7 @@
 #include <stdlib.h>
 
 // Function to parse input string and convert to Command struct
+// TODO void hanle_command(...)
 struct Command parse_command (const uint8_t * input)
 {
    struct Command cmd;
@@ -16,8 +17,10 @@ struct Command parse_command (const uint8_t * input)
       cmd.type = NO_COMMAND;
       break;
    case GET_X:
-      cmd.type = GET_X;
-      cmd.num = get_x();
+      // TODO Send command type: GET_X
+      // TODO Send value: get_x()
+      cmd.type = GET_X;  // TODO remove enum
+      cmd.num = get_x(); // TODO write to UDP buffer
       break;
    case SET_X:
       cmd.type = SET_X;
@@ -30,7 +33,7 @@ struct Command parse_command (const uint8_t * input)
       set_y (cmd.num);
       break;
    default:
-      cmd.type = INVALID_COMMAND;
+      cmd.type = INVALID_COMMAND; // TODO use app log to log error
       break;
    }
 
