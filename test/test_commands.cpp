@@ -1,17 +1,11 @@
 #include <gtest/gtest.h>
 #include "utils_for_testing.h"
 
-#ifdef __cplusplus
 extern "C" {
-#endif
 #include "pn_simple_example/commands.h"
-#ifdef __cplusplus
 }
-#endif
 
 // Test fixture for commands
-// TODO why can i run the tests after including `combine_bytes_to_uint32'
-// TODO in commands.c? I get undefined reference to `combine_bytes_to_uint32'
 class CommandTest : public PnetUnitTest
 {
  protected:
@@ -47,10 +41,15 @@ class CommandTest : public PnetUnitTest
 // Tests for commands
 TEST_F (CommandTest, TestGetCommand)
 {
-   uint8_t input[3] = {16, 23, 255};
+   uint8_t input[3] = {GET_X, 23, 255};
    testCommand (input, GET_X, 0);
 }
 
+TEST_F (CommandTest, TestSetCommand)
+{
+   uint8_t input[5] = {SET_X, 0, 0, 6, 255};
+   testCommand (input, SET_X, 1791);
+}
 //
 // TEST_F (CommandTest, TestSetCommandLowerCaseDirection)
 //{
