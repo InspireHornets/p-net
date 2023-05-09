@@ -25,7 +25,7 @@ struct Command
 };
 
 // Function to parse input string and convert to Command struct
-struct Command parse_command (const uint8_t * input);
+struct Command handle_command (const uint8_t * input);
 
 // const char * commandTypeToString (enum CommandType cmd);
 

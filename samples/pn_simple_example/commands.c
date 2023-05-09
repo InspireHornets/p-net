@@ -6,8 +6,7 @@
 #include <stdlib.h>
 
 // Function to parse input string and convert to Command struct
-// TODO void hanle_command(...)
-struct Command parse_command (const uint8_t * input)
+struct Command handle_command (const uint8_t * input)
 {
    struct Command cmd;
 
@@ -30,7 +29,8 @@ struct Command parse_command (const uint8_t * input)
    case SET_Y:
       cmd.type = SET_Y;
       cmd.num = combine_bytes_to_uint32 (&input[1]);
-      set_y (cmd.num);
+      // TODO convert to SET_VEL_X
+      //      set_y (cmd.num);
       break;
    default:
       cmd.type = INVALID_COMMAND; // TODO use app log to log error
