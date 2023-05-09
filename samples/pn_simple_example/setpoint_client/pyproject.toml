@@ -43,6 +43,9 @@ include = '\.pyi?$'
 profile = "black"
 line_length = 120
 
+[tool.pytest.ini_options]
+testpaths = ["samples/pn_simple_example/setpoint_client"]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
