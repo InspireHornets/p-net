@@ -1227,7 +1227,7 @@ void app_handle_udp_communication (
          inet_ntoa (client_addr.sin_addr),
          ntohs (client_addr.sin_port));
 
-      struct Command command = handle_command (client_message);
+      struct Command command = parse_command (client_message);
       APP_LOG_DEBUG (
          "UDP server: Msg from client: %i %i\n",
          command.type,
@@ -1237,7 +1237,7 @@ void app_handle_udp_communication (
    }
 
    // TODO how to get the 123 from app_data.app_data_from_plc ?
-   uint response[5] = {GET_X, 0, 0, 34, 53};
+   uint response[5] = {GET_X_POSITION_UM, 0, 0, 34, 53};
    memcpy (server_message, response, sizeof (response));
    sendto (
       socket_desc,

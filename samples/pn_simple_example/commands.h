@@ -4,16 +4,33 @@
 #include <stdint-gcc.h>
 
 // Enum definition for commands
-// TODO change to GET_X, and numbering
 enum CommandType
 {
    NO_COMMAND = 0x00,
-   GET_X = 0x10,
-   GET_Y = 0x11,
-   GET_Z = 0x12,
-   SET_X = 0x20,
-   SET_Y = 0x21,
-   SET_Z = 0x22,
+   GET_X_POSITION_UM = 0x10,
+   GET_Y_POSITION_UM = 0x11,
+   GET_Z_POSITION_UM = 0x12,
+   GET_X_SPEED_MM_MIN = 0x13,
+   GET_Y_SPEED_MM_MIN = 0x14,
+   GET_Z_SPEED_MM_MIN = 0x15,
+   GET_X_ACCELERATION_MM_MIN2 = 0x16,
+   GET_Y_ACCELERATION_MM_MIN2 = 0x17,
+   GET_Z_ACCELERATION_MM_MIN2 = 0x18,
+   GET_X_POWER = 0x19,
+   GET_Y_POWER = 0x1a,
+   GET_Z_POWER = 0x1b,
+   GET_X_TEMPERATURE = 0x1c,
+   GET_Y_TEMPERATURE = 0x1d,
+   GET_Z_TEMPERATURE = 0x1e,
+   SET_X_POSITION_UM = 0x20,
+   SET_Y_POSITION_UM = 0x21,
+   SET_Z_POSITION_UM = 0x22,
+   SET_X_SPEED_MM_MIN = 0x23,
+   SET_Y_SPEED_MM_MIN = 0x24,
+   SET_Z_SPEED_MM_MIN = 0x25,
+   SET_X_ACCELERATION_MM_MIN2 = 0x26,
+   SET_Y_ACCELERATION_MM_MIN2 = 0x27,
+   SET_Z_ACCELERATION_MM_MIN2 = 0x28,
    INVALID_COMMAND = 0xff,
 };
 
@@ -25,8 +42,6 @@ struct Command
 };
 
 // Function to parse input string and convert to Command struct
-struct Command handle_command (const uint8_t * input);
-
-// const char * commandTypeToString (enum CommandType cmd);
+struct Command parse_command (const uint8_t * input);
 
 #endif // COMMANDS_H
