@@ -85,8 +85,8 @@ Add additional PortSubmoduleItems to support additional ports
          <ModuleList>
             <ModuleItem ID="IDM_40" ModuleIdentNumber="0x00000040">
                <ModuleInfo>
-                  <Name TextId="TOK_Name_Module_Echo"/>
-                  <InfoText TextId="TOK_InfoText_Module_Echo"/>
+                  <Name TextId="TOK_Name_Setpoint_Module"/>
+                  <InfoText TextId="TOK_InfoText_Setpoint_Module"/>
                   <HardwareRelease Value="1.0"/>
                   <SoftwareRelease Value="1.0"/>
                </ModuleInfo>
@@ -94,12 +94,26 @@ Add additional PortSubmoduleItems to support additional ports
                   <VirtualSubmoduleItem ID="IDSM_140" SubmoduleIdentNumber="0x0140" MayIssueProcessAlarm="true">
                      <IOData>
                         <Input Consistency="All items consistency">
-                           <DataItem DataType="Unsigned32" TextId="TOK_Input_DataItem_Echo_Unsigned32"/>
-                           <DataItem DataType="Unsigned32" TextId="TOK_Input_DataItem_Echo_Unsigned32"/>
+                           <DataItem DataType="Unsigned32"
+                                     TextId="TOK_Input_Setpoint_Position_um_Unsigned32"/>
+                           <DataItem DataType="Unsigned32"
+                                     TextId="TOK_Input_Setpoint_Speed_mm_min_Unsigned32"/>
+                           <DataItem DataType="Unsigned32"
+                                     TextId="TOK_Input_Setpoint_Acceleration_mm_min2_Unsigned32"/>
+                           <DataItem DataType="Unsigned32"
+                                     TextId="TOK_Input_State_Unsigned32"/>
                         </Input>
                         <Output Consistency="All items consistency">
-                           <DataItem DataType="Unsigned32" TextId="TOK_Output_DataItem_Echo_Unsigned32"/>
-                           <DataItem DataType="Unsigned32" TextId="TOK_Output_DataItem_Echo_Unsigned32"/>
+                           <DataItem DataType="Unsigned32"
+                                     TextId="TOK_Output_Actual_Position_Unsigned32"/>
+                           <DataItem DataType="Unsigned32"
+                                     TextId="TOK_Output_Actual_Speed_mm_min_Unsigned32"/>
+                           <DataItem DataType="Unsigned32"
+                                     TextId="TOK_Output_Actual_Acceleration_mm_min2_Unsigned32"/>
+                           <DataItem DataType="Unsigned32"
+                                     TextId="TOK_Output_Power_Unsigned32"/>
+                           <DataItem DataType="Unsigned32"
+                                     TextId="TOK_Output_Temperature_Unsigned32"/>
                         </Output>
                      </IOData>
                      <RecordDataList>
@@ -109,8 +123,8 @@ Add additional PortSubmoduleItems to support additional ports
                         </ParameterRecordDataItem>
                      </RecordDataList>
                      <ModuleInfo>
-                        <Name TextId="TOK_Name_Module_Echo"/>
-                        <InfoText TextId="TOK_InfoText_Module_Echo"/>
+                        <Name TextId="TOK_Name_Setpoint_Module"/>
+                        <InfoText TextId="TOK_InfoText_Setpoint_Module"/>
                      </ModuleInfo>
                   </VirtualSubmoduleItem>
                </VirtualSubmoduleList>
@@ -140,12 +154,25 @@ Add additional PortSubmoduleItems to support additional ports
                <Text TextId="IDT_NAME_PS1" Value="X1 P1"/>
                <Text TextId="IDT_NAME_PS2" Value="X1 P2"/>
                <!--module name-->
-               <Text TextId="TOK_Name_Module_Echo" Value="Setpoint interface module"/>
+               <Text TextId="TOK_Name_Setpoint_Module" Value="Setpoint interface module"/>
                <!--module info -->
-               <Text TextId="TOK_InfoText_Module_Echo" Value="Echo with adjustable gain"/>
+               <Text TextId="TOK_InfoText_Setpoint_Module" Value="Setpoint interface for axis"/>
                <!--dataitem name-->
-               <Text TextId="TOK_Input_DataItem_Echo_Unsigned32" Value="Input int to controller (output from controller multiplied by gain)"/>
-               <Text TextId="TOK_Output_DataItem_Echo_Unsigned32" Value="Output int from controller"/>
+               <Text TextId="TOK_Input_Setpoint_Position_um_Unsigned32"
+                     Value="Position setpoint (um)"/>
+               <Text TextId="TOK_Input_Setpoint_Speed_mm_min_Unsigned32"
+                     Value="Speed setpoint (mm/min)"/>
+               <Text TextId="TOK_Input_Setpoint_Acceleration_mm_min2_Unsigned32"
+                     Value="Acceleration setpoint (mm/min2)"/>
+               <Text TextId="TOK_Input_State_Unsigned32"
+                     Value="State of profinet stack"/>
+               <Text TextId="TOK_Output_Actual_Position_Unsigned32" Value="Actual position (um)"/>
+               <Text TextId="TOK_Output_Actual_Speed_mm_min_Unsigned32"
+                     Value="Actual speed (mm/min)"/>
+               <Text TextId="TOK_Output_Actual_Acceleration_mm_min2_Unsigned32"
+                     Value="Actual Acceleration (mm/min2)"/>
+               <Text TextId="TOK_Output_Power_Unsigned32" Value="Power consumed by the motor"/>
+               <Text TextId="TOK_Output_Temperature_Unsigned32" Value="Temperature of the motor"/>
                <!--ParameterRecordDataItem name-->
                <Text TextId="TOK_sample_parameter_Echo" Value="Gain for echo module"/>
                <Text TextId="TOK_Echo_Gain" Value="Gain"/>

@@ -45,37 +45,52 @@ static uint32_t app_param_2 = 0; /* Network endianness */
 static uint32_t app_param_echo_gain = 1; /* Network endianness */
 
 /* Network endianness */
-static uint8_t echo_inputdata[APP_GSDML_INPUT_DATA_ECHO_SIZE] = {0};
-static uint8_t echo_outputdata[APP_GSDML_OUTPUT_DATA_ECHO_SIZE] = {0};
+static uint8_t setpoint_data[APP_GSDML_INPUT_DATA_ECHO_SIZE] = {0};
+static uint8_t actual_data[APP_GSDML_OUTPUT_DATA_ECHO_SIZE] = {0};
 
 CC_PACKED_BEGIN
-typedef struct CC_PACKED app_echo_data
+typedef struct CC_PACKED app_setpoint_data
 {
    /* Network endianness */
-   uint32_t echo_int;
-   uint32_t echo_int2;
-} app_echo_data_t;
+   uint32_t position_um;
+   uint32_t speed_mm_min;
+   uint32_t acceleration_mm_min2;
+   uint32_t state;
+} app_setpoint_data_t;
 CC_PACKED_END
-CC_STATIC_ASSERT (sizeof (app_echo_data_t) == APP_GSDML_INPUT_DATA_ECHO_SIZE);
-CC_STATIC_ASSERT (sizeof (app_echo_data_t) == APP_GSDML_OUTPUT_DATA_ECHO_SIZE);
+CC_STATIC_ASSERT (
+   sizeof (app_setpoint_data_t) == APP_GSDML_INPUT_DATA_ECHO_SIZE);
+
+CC_PACKED_BEGIN
+typedef struct CC_PACKED app_actual_data
+{
+   /* Network endianness */
+   uint32_t position_um;
+   uint32_t speed_mm_min;
+   uint32_t acceleration_mm_min2;
+   uint32_t power;
+   uint32_t temperature;
+} app_actual_data_t;
+CC_PACKED_END
+CC_STATIC_ASSERT (sizeof (app_actual_data_t) == APP_GSDML_OUTPUT_DATA_ECHO_SIZE);
 
 // ToDO add get_x, get_y
 uint32_t get_x()
 {
-   return combine_bytes_to_uint32 (&echo_outputdata[0]);
+   return combine_bytes_to_uint32 (&actual_data[0]);
 }
 
 void set_x (uint32_t setpoint)
 {
-   app_echo_data_t * p_echo_inputdata = (app_echo_data_t *)&echo_inputdata;
-   p_echo_inputdata->echo_int = CC_TO_BE32 (setpoint);
+   app_actual_data_t * p_actual_data = (app_actual_data_t *)&setpoint_data;
+   p_actual_data->position_um = CC_TO_BE32 (setpoint);
 }
 
-void set_y (uint32_t setpoint)
-{
-   app_echo_data_t * p_echo_inputdata = (app_echo_data_t *)&echo_inputdata;
-   p_echo_inputdata->echo_int2 = CC_TO_BE32 (setpoint);
-}
+// void set_y (uint32_t setpoint)
+//{
+//    app_echo_data_t * p_echo_inputdata = (app_echo_data_t *)&setpoint_data;
+//    p_echo_inputdata->speed_mm_min = CC_TO_BE32 (setpoint);
+// }
 
 uint8_t * app_data_to_plc (
    uint16_t slot_nbr,
@@ -84,8 +99,6 @@ uint8_t * app_data_to_plc (
    uint16_t * size,
    uint8_t * iops)
 {
-   app_echo_data_t * p_echo_inputdata = (app_echo_data_t *)&echo_inputdata;
-
    if (size == NULL || iops == NULL)
    {
       return NULL;
@@ -93,16 +106,9 @@ uint8_t * app_data_to_plc (
 
    if (submodule_id == APP_GSDML_SUBMOD_ID_ECHO)
    {
-      /* Calculate echodata input (to the PLC)
-       * by multiplying the output (from the PLC) with a gain factor
-       */
-
-      /* Integer */
-      p_echo_inputdata->echo_int2 = CC_TO_BE32 (9876);
-
       *size = APP_GSDML_INPUT_DATA_ECHO_SIZE;
       *iops = PNET_IOXS_GOOD;
-      return echo_inputdata;
+      return setpoint_data;
    }
 
    /* Automated RT Tester scenario 2 - unsupported (sub)module */
@@ -128,23 +134,23 @@ int app_data_from_plc (
          if (!are_arrays_equal (
                 data,
                 size,
-                echo_outputdata,
+                actual_data,
                 APP_GSDML_OUTPUT_DATA_ECHO_SIZE))
          {
             for (int i = 0; i < APP_GSDML_OUTPUT_DATA_ECHO_SIZE; i++)
             {
-               uint32_t echo_uint =
-                  combine_bytes_to_uint32 (&echo_outputdata[0]);
-               uint32_t echo_uint2 =
-                  combine_bytes_to_uint32 (&echo_outputdata[4]);
+               uint32_t actual_position =
+                  combine_bytes_to_uint32 (&actual_data[0]);
+               uint32_t actual_speed =
+                  combine_bytes_to_uint32 (&actual_data[4]);
 
                APP_LOG_DEBUG (
                   "New actual position 1: %u\tactual position 2: %u\n",
-                  echo_uint,
-                  echo_uint2);
+                  actual_position,
+                  actual_speed);
             }
          }
-         memcpy (echo_outputdata, data, size);
+         memcpy (actual_data, data, size);
 
          return 0;
       }

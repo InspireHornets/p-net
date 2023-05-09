@@ -140,9 +140,9 @@ typedef struct
 
 #define APP_GSDML_MOD_ID_ECHO           0x00000040
 #define APP_GSDML_SUBMOD_ID_ECHO        0x00000140
-#define APP_GSDML_INPUT_DATA_ECHO_SIZE  8 /* bytes */
-#define APP_GSDML_OUTPUT_DATA_ECHO_SIZE APP_GSDML_INPUT_DATA_ECHO_SIZE
-#define APP_GSDML_ALARM_PAYLOAD_SIZE    1 /* bytes */
+#define APP_GSDML_INPUT_DATA_ECHO_SIZE  16 /* bytes */
+#define APP_GSDML_OUTPUT_DATA_ECHO_SIZE 20 /* bytes */
+#define APP_GSDML_ALARM_PAYLOAD_SIZE    1  /* bytes */
 
 /**
  * Get module configuration from module ID
