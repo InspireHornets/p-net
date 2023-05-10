@@ -66,12 +66,6 @@ class SetpointClient:
 
         return  ""
 
-    def _send(self, command: bytes) -> None:
-        self.socket.sendto(command, (self.host, self.port))
-
-    def set_x_position(self, setpoint: int):
-        self._send(set_x(setpoint))
-
 if __name__ == "__main__":
     server_address = ("127.0.0.1", PORT)
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as client_socket:
