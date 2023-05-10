@@ -57,6 +57,7 @@ class SetpointClient:
         self.host = host
         self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
     def get_x(self):
         command_type = CommandType.GET_X_POSITION_UM
         command = struct.pack("<B", command_type.value)
@@ -71,6 +72,9 @@ class SetpointClient:
 
     def set_x_position(self, setpoint: int):
         self._send(set_x(setpoint))
+
+    def disconnect(self):
+       self.socket.close()
 
 if __name__ == "__main__":
     server_address = ("127.0.0.1", PORT)
