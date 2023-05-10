@@ -40,7 +40,7 @@ static const app_gsdml_module_t dap_1 = {
 
 static const app_gsdml_module_t module_echo = {
    .id = APP_GSDML_MOD_ID_ECHO,
-   .name = "Echo module",
+   .name = "Setpoint interface module",
    .submodules = {APP_GSDML_SUBMOD_ID_ECHO, 0}};
 
 /******************* Supported submodules ************************/
@@ -101,7 +101,7 @@ static const app_gsdml_submodule_t dap_port_4 = {
 
 static const app_gsdml_submodule_t submod_echo = {
    .id = APP_GSDML_SUBMOD_ID_ECHO,
-   .name = "Echo submodule",
+   .name = "Setpoint interface for axis",
    .api = APP_GSDML_API,
    .data_dir = PNET_DIR_IO,
    .insize = APP_GSDML_INPUT_DATA_ECHO_SIZE,
