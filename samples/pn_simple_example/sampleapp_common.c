@@ -1237,7 +1237,7 @@ void app_handle_udp_communication (
    }
 
    // TODO how to get the 123 from app_data.app_data_from_plc ?
-   uint response[5] = {GET_X_POSITION_UM, 0, 0, 34, 53};
+   uint8_t response[5] = {GET_X_POSITION_UM, 0, 0, 0, 53};
    memcpy (server_message, response, sizeof (response));
    sendto (
       socket_desc,

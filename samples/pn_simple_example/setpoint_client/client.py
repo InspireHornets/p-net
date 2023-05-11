@@ -1,5 +1,6 @@
 import socket
 import struct
+import time
 from enum import Enum
 
 PORT = 2000
@@ -48,9 +49,10 @@ def set_x(setpoint: int):
 def set_y(setpoint: int):
     return _set(CommandType.SET_Y_POSITION_UM, setpoint)
 
-def get_y():
 
+def get_y():
     return 0
+
 
 class SetpointClient:
     def __init__(self, host: str, port: int):
@@ -58,17 +60,20 @@ class SetpointClient:
         self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    def get_x(self):
+    def get_x_position(self):
         command_type = CommandType.GET_X_POSITION_UM
-        command = struct.pack("<B", command_type.value)
-        self.socket.sendto(command, (self.host, self.port))
+        command = struct.pack(">B", command_type.value)
+        self._send(command)
+        answer = self._receive()
 
-        # response, _ = self.socket.recvfrom(self.port)
-
-        return  ""
+        return struct.unpack(">BI", answer)
 
     def _send(self, command: bytes) -> None:
         self.socket.sendto(command, (self.host, self.port))
+
+    def _receive(self):
+        response, _ = self.socket.recvfrom(1024)
+        return response
 
     def set_x_position(self, setpoint: int):
         self._send(set_x(setpoint))
@@ -80,7 +85,8 @@ class SetpointClient:
         self.disconnect()
 
     def disconnect(self):
-       self.socket.close()
+        self.socket.close()
+
 
 if __name__ == "__main__":
     server_address = ("127.0.0.1", PORT)
