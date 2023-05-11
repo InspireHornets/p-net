@@ -36,7 +36,14 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
+union Unint32
+{
+   uint8_t bytes[4];
+   uint32_t unint32;
+};
+
 uint32_t get_x();
+union Unint32 get_x_position();
 void set_x (uint32_t setpoint);
 void set_y (uint32_t setpoint);
 

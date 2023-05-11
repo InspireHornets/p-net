@@ -80,6 +80,17 @@ uint32_t get_x()
    return combine_bytes_to_uint32 (&actual_data[0]);
 }
 
+union Unint32 get_x_position()
+{
+   union Unint32 x_pos;
+   x_pos.bytes[0] = actual_data[3];
+   x_pos.bytes[1] = actual_data[2];
+   x_pos.bytes[2] = actual_data[1];
+   x_pos.bytes[3] = actual_data[0];
+
+   return x_pos;
+}
+
 void set_x (uint32_t setpoint)
 {
    app_actual_data_t * p_actual_data = (app_actual_data_t *)&setpoint_data;
