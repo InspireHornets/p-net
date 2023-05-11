@@ -56,3 +56,4 @@ pnet_led*.txt
 pnet_data*.bin
 
 __pycache__/
+*.ipynb
