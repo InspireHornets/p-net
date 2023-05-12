@@ -1,41 +1,70 @@
+#include <string.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include "commands.h"
 #include "utils.h"
 #include "app_data.h"
 #include "app_log.h"
+#include "sampleapp_common.h"
+
+void respond (
+   const uint8_t * response,
+   struct sockaddr_in client_addr,
+   int socket_desc)
+{
+   socklen_t client_struct_length = sizeof (client_addr);
+
+   uint8_t server_message[16];
+   memset (server_message, 0, sizeof (server_message));
+
+   memcpy (server_message, response, 6);
+   APP_LOG_DEBUG ("Sending message %x", server_message);
+   sendto (
+      socket_desc,
+      server_message,
+      5,
+      MSG_DONTWAIT,
+      (struct sockaddr *)&client_addr,
+      client_struct_length);
+}
 
 // Function to parse input string and convert to Command struct
-struct Command parse_command (const uint8_t * input)
+void handle_command (
+   const uint8_t * input,
+   struct sockaddr_in client_addr,
+   int socket_desc)
 {
-   // TODO remove struct
-   struct Command cmd;
+   union Unint32 plc_output;
+   union Unint32 plc_input;
+
+   APP_LOG_DEBUG ("Received command %x\n", input[0]);
 
    switch (input[0])
    {
    case NO_COMMAND:
-      cmd.type = NO_COMMAND;
       break;
    case GET_X_POSITION_UM:
-      cmd.type = GET_X_POSITION_UM;
-      cmd.num = get_x(); // TODO write to UDP buffer directly
-      union Unint32 x_pos = get_x_position();
-      // TODO use bffer[0] = GET_X_POS and then memccpy() to copy the position
-      // with memcopy(buffer + 1, position, 4)
-      //      uint8_t response[5] =
-      //         {GET_X_POSITION_UM, x_pos[0], x_pos[1], x_pos[2], x_pos[3]};
-      //      respond (response);
-      APP_LOG_DEBUG ("Get x position result: %u\n", cmd.num);
-      APP_LOG_DEBUG ("As an array: %u\n", x_pos.unint32);
+      plc_output = get_x_position();
+      APP_LOG_DEBUG ("Current x position: %u\n", plc_output.unint32);
+
+      uint8_t buffer[5];
+      buffer[0] = GET_X_POSITION_UM;
+      buffer[1] = plc_output.bytes[0];
+      buffer[2] = plc_output.bytes[1];
+      buffer[3] = plc_output.bytes[2];
+      buffer[4] = plc_output.bytes[3];
+
+      //      memcpy (buffer + 1, &plc_output.bytes, 4);
+      respond (buffer, client_addr, socket_desc);
+
       break;
    case SET_X_POSITION_UM:
-      cmd.type = SET_X_POSITION_UM;
-      cmd.num = combine_bytes_to_uint32 (&input[1]);
-      set_x (cmd.num);
+      memcpy (plc_input.bytes, input + 1, 4);
+      APP_LOG_DEBUG ("New x position setpoint %u\n", plc_input.unint32);
+      set_x (plc_input.unint32);
       break;
    default:
-      cmd.type = INVALID_COMMAND;
       APP_LOG_ERROR ("Invalid command: %i", input[0]);
       break;
    }
-
-   return cmd;
 }

@@ -1227,25 +1227,10 @@ void app_handle_udp_communication (
          inet_ntoa (client_addr.sin_addr),
          ntohs (client_addr.sin_port));
 
-      struct Command command = parse_command (client_message);
-      APP_LOG_DEBUG (
-         "UDP server: Msg from client: %i %i\n",
-         command.type,
-         command.num);
+      handle_command (client_message, client_addr, socket_desc);
       // TODO How to set the received value at app_data.app_data_to_plc ?
       // TODO set first byte to 0 of client_message
    }
-
-   // TODO how to get the 123 from app_data.app_data_from_plc ?
-   uint8_t response[5] = {GET_X_POSITION_UM, 0, 0, 0, 53};
-   memcpy (server_message, response, sizeof (response));
-   sendto (
-      socket_desc,
-      server_message,
-      5,
-      MSG_DONTWAIT,
-      (struct sockaddr *)&client_addr,
-      client_struct_length);
 }
 
 void app_loop_forever (void * arg)

@@ -36,8 +36,8 @@ class CommandType(Enum):
 
 
 def _set(direction: CommandType, setpoint: int):
-    command_type = struct.pack(">B", direction.value)
-    command_data = struct.pack(">I", setpoint)
+    command_type = struct.pack("<B", direction.value)
+    command_data = struct.pack("<I", setpoint)
 
     return command_type + command_data
 
@@ -63,10 +63,14 @@ class SetpointClient:
     def get_x_position(self):
         command_type = CommandType.GET_X_POSITION_UM
         command = struct.pack(">B", command_type.value)
+        print("Send command get_x_pos: ", command)
         self._send(command)
-        answer = self._receive()
+        ans = self._receive()
+        print(ans)
+        answer = struct.unpack("<BI", ans)
+        print("Current x_pos: ", answer)
 
-        return struct.unpack(">BI", answer)
+        return answer
 
     def _send(self, command: bytes) -> None:
         self.socket.sendto(command, (self.host, self.port))

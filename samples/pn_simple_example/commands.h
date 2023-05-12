@@ -42,6 +42,9 @@ struct Command
 };
 
 // Function to parse input string and convert to Command struct
-struct Command parse_command (const uint8_t * input);
+void handle_command (
+   const uint8_t * input,
+   struct sockaddr_in client_addr,
+   int socket_desc);
 
 #endif // COMMANDS_H

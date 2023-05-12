@@ -45,7 +45,7 @@ union Unint32
 uint32_t get_x();
 union Unint32 get_x_position();
 void set_x (uint32_t setpoint);
-void set_y (uint32_t setpoint);
+void set_y (union Unint32 setpoint);
 
 /**
  * Get application specific PNIO input data (for sending to PLC)
