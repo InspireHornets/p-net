@@ -57,3 +57,4 @@ pnet_data*.bin
 
 __pycache__/
 *.ipynb
+.ipynb_checkpoints/
