@@ -42,6 +42,8 @@ extern "C" {
 #define APP_UDP_MESSAGE_LENGTH 16
 #define APP_UDP_HOST_ADDRESS   "127.0.0.1"
 #define APP_UDP_PORT           2000
+/* update UDP communication every x app cycles */
+#define APP_UDP_UPDATE_INTERVAL_APP_CYCLES 10
 
 /** HW Offload configuration. */
 typedef enum

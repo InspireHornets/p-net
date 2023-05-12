@@ -1274,7 +1274,10 @@ void app_loop_forever (void * arg)
          {
             app_handle_cyclic_data (app);
 
-            if (app->process_data_tick_counter % 100 == 0)
+            if (
+               app->process_data_tick_counter %
+                  APP_UDP_UPDATE_INTERVAL_APP_CYCLES ==
+               0)
             {
                app_handle_udp_communication (socket_desc, read_buffer);
             }
