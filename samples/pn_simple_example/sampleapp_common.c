@@ -1202,11 +1202,8 @@ void app_pnet_cfg_init_default (pnet_cfg_t * pnet_cfg)
    pnet_cfg->cb_arg = (void *)&app_state;
 }
 
-// TODO review this method
-void app_handle_udp_communication (
-   int socket_desc,
-   uint8_t * client_message,
-   uint8_t * server_message)
+// TODO review this implementaiton with Thomas
+void app_handle_udp_communication (int socket_desc, uint8_t * client_message)
 {
    struct sockaddr_in client_addr;
    socklen_t client_struct_length = sizeof (client_addr);
@@ -1228,8 +1225,6 @@ void app_handle_udp_communication (
          ntohs (client_addr.sin_port));
 
       handle_command (client_message, client_addr, socket_desc);
-      // TODO How to set the received value at app_data.app_data_to_plc ?
-      // TODO set first byte to 0 of client_message
    }
 }
 
@@ -1245,13 +1240,10 @@ void app_loop_forever (void * arg)
    app_plug_dap (app, app->pnet_cfg->num_physical_ports);
    APP_LOG_INFO ("Waiting for PLC connect request\n\n");
 
-   // TODO Review the UDP implementation
-   uint8_t server_message[APP_UDP_MESSAGE_LENGTH],
-      client_message[APP_UDP_MESSAGE_LENGTH];
+   uint8_t read_buffer[APP_UDP_MESSAGE_LENGTH];
    // Clean buffers:
    // TODO rename to read/write buffer
-   memset (server_message, 0, sizeof (server_message));
-   memset (client_message, 0, sizeof (client_message));
+   memset (read_buffer, 0, sizeof (read_buffer));
 
    int socket_desc = open_socket (APP_UDP_HOST_ADDRESS, APP_UDP_PORT);
 
@@ -1284,10 +1276,7 @@ void app_loop_forever (void * arg)
 
             if (app->process_data_tick_counter % 100 == 0)
             {
-               app_handle_udp_communication (
-                  socket_desc,
-                  client_message,
-                  server_message);
+               app_handle_udp_communication (socket_desc, read_buffer);
             }
          }
 

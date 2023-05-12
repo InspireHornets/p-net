@@ -60,17 +60,17 @@ class SetpointClient:
         self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    def get_x_position(self):
+    def get_x_position(self) -> int:
         command_type = CommandType.GET_X_POSITION_UM
         command = struct.pack(">B", command_type.value)
-        print("Send command get_x_pos: ", command)
         self._send(command)
-        ans = self._receive()
-        print(ans)
-        answer = struct.unpack("<BI", ans)
-        print("Current x_pos: ", answer)
 
-        return answer
+        answer = struct.unpack("<BI", self._receive())
+        assert \
+            answer[0] == CommandType.GET_X_POSITION_UM.value,\
+            f"PLC returned {answer[0]}, expected {CommandType.GET_X_POSITION_UM.value,}"
+
+        return answer[1]
 
     def _send(self, command: bytes) -> None:
         self.socket.sendto(command, (self.host, self.port))

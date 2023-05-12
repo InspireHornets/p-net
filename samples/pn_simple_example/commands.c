@@ -2,23 +2,23 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include "commands.h"
-#include "utils.h"
 #include "app_data.h"
 #include "app_log.h"
 #include "sampleapp_common.h"
 
+// TODO review this implementaiton with Thomas
 void respond (
    const uint8_t * response,
+   int response_size,
    struct sockaddr_in client_addr,
    int socket_desc)
 {
    socklen_t client_struct_length = sizeof (client_addr);
 
-   uint8_t server_message[16];
+   uint8_t server_message[APP_UDP_MESSAGE_LENGTH];
    memset (server_message, 0, sizeof (server_message));
+   memcpy (server_message, response, response_size);
 
-   memcpy (server_message, response, 6);
-   APP_LOG_DEBUG ("Sending message %x", server_message);
    sendto (
       socket_desc,
       server_message,
@@ -28,6 +28,7 @@ void respond (
       client_struct_length);
 }
 
+// TODO review this implementaiton with Thomas
 // Function to parse input string and convert to Command struct
 void handle_command (
    const uint8_t * input,
@@ -37,7 +38,7 @@ void handle_command (
    union Unint32 plc_output;
    union Unint32 plc_input;
 
-   APP_LOG_DEBUG ("Received command %x\n", input[0]);
+   APP_LOG_DEBUG ("UDP server: received command %x\n", input[0]);
 
    switch (input[0])
    {
@@ -49,18 +50,13 @@ void handle_command (
 
       uint8_t buffer[5];
       buffer[0] = GET_X_POSITION_UM;
-      buffer[1] = plc_output.bytes[0];
-      buffer[2] = plc_output.bytes[1];
-      buffer[3] = plc_output.bytes[2];
-      buffer[4] = plc_output.bytes[3];
+      memcpy (buffer + 1, &plc_output.bytes, 4);
 
-      //      memcpy (buffer + 1, &plc_output.bytes, 4);
-      respond (buffer, client_addr, socket_desc);
-
+      respond (buffer, sizeof (buffer), client_addr, socket_desc);
       break;
    case SET_X_POSITION_UM:
       memcpy (plc_input.bytes, input + 1, 4);
-      APP_LOG_DEBUG ("New x position setpoint %u\n", plc_input.unint32);
+      APP_LOG_DEBUG ("New x position %u\n", plc_input.unint32);
       set_x (plc_input.unint32);
       break;
    default:
