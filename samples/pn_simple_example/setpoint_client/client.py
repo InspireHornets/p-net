@@ -47,14 +47,6 @@ def set_x(setpoint: int):
     return _set(CommandType.SET_X_POSITION_UM, setpoint)
 
 
-def set_y(setpoint: int):
-    return _set(CommandType.SET_Y_POSITION_UM, setpoint)
-
-
-def get_y():
-    return 0
-
-
 class SetpointClient:
     def __init__(self, host: str, port: int):
         self.host = host
