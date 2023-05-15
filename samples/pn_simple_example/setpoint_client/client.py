@@ -2,8 +2,6 @@ import socket
 import struct
 from enum import Enum
 
-PORT = 2000
-
 
 class CommandType(Enum):
     NO_COMMAND = 0x00
@@ -117,19 +115,3 @@ class SetpointClient:
 
     def disconnect(self):
         self.socket.close()
-
-
-if __name__ == "__main__":
-    server_address = ("127.0.0.1", PORT)
-    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as client_socket:
-        command = set_x(20000)
-        client_socket.sendto(command, server_address)
-        print(f"Sent: {command}")
-        client_socket.sendto(set_y(2356), server_address)
-
-        # Get y
-        command_type = CommandType.GET_X_POSITION_UM
-        command = struct.pack("<B", command_type.value)
-        client_socket.sendto(command, server_address)
-        response, server = client_socket.recvfrom(PORT)
-        print(f"Response: {response}")
