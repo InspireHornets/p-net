@@ -37,6 +37,7 @@ void handle_command (
 {
    union Unint32 plc_output;
    union Unint32 plc_input;
+   uint8_t buffer[5];
 
    APP_LOG_DEBUG ("UDP server: received command %x\n", input[0]);
 
@@ -48,8 +49,25 @@ void handle_command (
       plc_output = get_x_position();
       APP_LOG_DEBUG ("Current x position: %u\n", plc_output.unint32);
 
-      uint8_t buffer[5];
       buffer[0] = GET_X_POSITION_UM;
+      memcpy (buffer + 1, &plc_output.bytes, 4);
+
+      respond (buffer, sizeof (buffer), client_addr, socket_desc);
+      break;
+   case GET_X_SPEED_UM_S:
+      plc_output = get_x_speed();
+      APP_LOG_DEBUG ("Current x speed: %u\n", plc_output.unint32);
+
+      buffer[0] = GET_X_SPEED_UM_S;
+      memcpy (buffer + 1, &plc_output.bytes, 4);
+
+      respond (buffer, sizeof (buffer), client_addr, socket_desc);
+      break;
+   case GET_X_ACCELERATION_UM_S2:
+      plc_output = get_x_acceleration();
+      APP_LOG_DEBUG ("Current x acceleration: %u\n", plc_output.unint32);
+
+      buffer[0] = GET_X_ACCELERATION_UM_S2;
       memcpy (buffer + 1, &plc_output.bytes, 4);
 
       respond (buffer, sizeof (buffer), client_addr, socket_desc);

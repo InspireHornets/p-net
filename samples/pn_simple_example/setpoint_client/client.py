@@ -1,6 +1,5 @@
 import socket
 import struct
-import time
 from enum import Enum
 
 PORT = 2000
@@ -42,6 +41,10 @@ def _set(direction: CommandType, setpoint: int):
     return command_type + command_data
 
 
+def _get(command: CommandType):
+    return struct.pack(">B", command.value)
+
+
 def set_x(setpoint: int):
     return _set(CommandType.SET_X_POSITION_UM, setpoint)
 
@@ -66,9 +69,33 @@ class SetpointClient:
         self._send(command)
 
         answer = struct.unpack("<BI", self._receive())
-        assert \
-            answer[0] == CommandType.GET_X_POSITION_UM.value,\
-            f"PLC returned {answer[0]}, expected {CommandType.GET_X_POSITION_UM.value,}"
+        assert (
+            answer[0] == CommandType.GET_X_POSITION_UM.value
+        ), f"PLC returned {answer[0]}, expected {CommandType.GET_X_POSITION_UM.value,}"
+
+        return answer[1]
+
+    def get_x_speed(self) -> int:
+        command_type = CommandType.GET_X_SPEED_MM_MIN
+        command = struct.pack(">B", command_type.value)
+        self._send(command)
+
+        answer = struct.unpack("<BI", self._receive())
+        assert (
+            answer[0] == CommandType.GET_X_SPEED_MM_MIN.value
+        ), f"PLC returned {answer[0]}, expected {CommandType.GET_X_SPEED_MM_MIN.value,}"
+
+        return answer[1]
+
+    def get_x_acceleration(self) -> int:
+        command_type = CommandType.GET_X_ACCELERATION_MM_MIN2
+        command = struct.pack(">B", command_type.value)
+        self._send(command)
+
+        answer = struct.unpack("<BI", self._receive())
+        assert (
+            answer[0] == CommandType.GET_X_ACCELERATION_MM_MIN2.value
+        ), f"PLC returned {answer[0]}, expected {CommandType.GET_X_ACCELERATION_MM_MIN2.value,}"
 
         return answer[1]
 

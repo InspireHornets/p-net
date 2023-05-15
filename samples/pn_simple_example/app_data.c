@@ -91,6 +91,28 @@ union Unint32 get_x_position()
    return x_pos;
 }
 
+union Unint32 get_x_speed()
+{
+   union Unint32 x_speed;
+   x_speed.bytes[0] = actual_data[7];
+   x_speed.bytes[1] = actual_data[6];
+   x_speed.bytes[2] = actual_data[5];
+   x_speed.bytes[3] = actual_data[4];
+
+   return x_speed;
+}
+
+union Unint32 get_x_acceleration()
+{
+   union Unint32 x_acceleration;
+   x_acceleration.bytes[0] = actual_data[7];
+   x_acceleration.bytes[1] = actual_data[6];
+   x_acceleration.bytes[2] = actual_data[5];
+   x_acceleration.bytes[3] = actual_data[4];
+
+   return x_acceleration;
+}
+
 void set_x (uint32_t setpoint)
 {
    app_actual_data_t * p_actual_data = (app_actual_data_t *)&setpoint_data;
