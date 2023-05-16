@@ -3,7 +3,14 @@ import struct
 from unittest.mock import patch
 
 from assertpy import assert_that
-from client import CommandType, SetpointClient
+from client import CommandType, SetpointClient, set_command
+
+
+def test_set_command():
+    actual_command = set_command(CommandType.GET_X_POWER, 42)
+    expected_command = struct.pack("<B", CommandType.GET_X_POWER.value) + struct.pack("<I", 42)
+
+    assert_that(actual_command).is_equal_to(expected_command)
 
 
 @patch("socket.socket")

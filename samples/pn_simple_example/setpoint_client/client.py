@@ -32,8 +32,8 @@ class CommandType(Enum):
     INVALID_COMMAND = 0xFF
 
 
-def _set(direction: CommandType, setpoint: int):
-    command_type = struct.pack("<B", direction.value)
+def set_command(command: CommandType, setpoint: int):
+    command_type = struct.pack("<B", command.value)
     command_data = struct.pack("<I", setpoint)
 
     return command_type + command_data
@@ -44,7 +44,7 @@ def _get(command: CommandType):
 
 
 def set_x(setpoint: int):
-    return _set(CommandType.SET_X_POSITION_UM, setpoint)
+    return set_command(CommandType.SET_X_POSITION_UM, setpoint)
 
 
 class SetpointClient:
