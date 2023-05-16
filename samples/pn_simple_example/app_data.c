@@ -81,6 +81,16 @@ union Unint32 get_x_acceleration()
    return x_acceleration;
 }
 
+app_actual_data_t get_x_trajectory()
+{
+   app_actual_data_t trajectory;
+   trajectory.position_um = get_x_position().unint32;
+   trajectory.speed_mm_min = get_x_speed().unint32;
+   trajectory.acceleration_mm_min2 = get_x_speed().unint32;
+
+   return trajectory;
+}
+
 void set_x (uint32_t setpoint)
 {
    app_actual_data_t * p_actual_data = (app_actual_data_t *)&setpoint_data;

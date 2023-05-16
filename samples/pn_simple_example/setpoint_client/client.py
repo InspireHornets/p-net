@@ -1,12 +1,14 @@
 import socket
 import struct
 from enum import Enum
+from typing import Tuple
 
 from hat.ddd import ValueObject
 
 
 class CommandType(Enum):
     NO_COMMAND = 0x00
+
     GET_X_POSITION_UM = 0x10
     GET_Y_POSITION_UM = 0x11
     GET_Z_POSITION_UM = 0x12
@@ -22,16 +24,23 @@ class CommandType(Enum):
     GET_X_TEMPERATURE = 0x1C
     GET_Y_TEMPERATURE = 0x1D
     GET_Z_TEMPERATURE = 0x1E
-    SET_X_POSITION_UM = 0x20
-    SET_Y_POSITION_UM = 0x21
-    SET_Z_POSITION_UM = 0x22
-    SET_X_SPEED_UM_MIN = 0x23
-    SET_Y_SPEED_UM_MIN = 0x24
-    SET_Z_SPEED_UM_MIN = 0x25
-    SET_X_ACCELERATION_UM_MIN2 = 0x26
-    SET_Y_ACCELERATION_UM_MIN2 = 0x27
-    SET_Z_ACCELERATION_UM_MIN2 = 0x28
-    SET_X_TRAJECTORY_POINT = 0x30
+    GET_X_TRAJECTORY_POINT = 0x20
+    GET_Y_TRAJECTORY_POINT = 0x21
+    GET_Z_TRAJECTORY_POINT = 0x22
+
+    SET_X_POSITION_UM = 0x40
+    SET_Y_POSITION_UM = 0x41
+    SET_Z_POSITION_UM = 0x42
+    SET_X_SPEED_UM_MIN = 0x43
+    SET_Y_SPEED_UM_MIN = 0x44
+    SET_Z_SPEED_UM_MIN = 0x45
+    SET_X_ACCELERATION_UM_MIN2 = 0x46
+    SET_Y_ACCELERATION_UM_MIN2 = 0x47
+    SET_Z_ACCELERATION_UM_MIN2 = 0x48
+    SET_X_TRAJECTORY_POINT = 0x50
+    SET_Y_TRAJECTORY_POINT = 0x51
+    SET_Z_TRAJECTORY_POINT = 0x52
+
     INVALID_COMMAND = 0xFF
 
 
@@ -63,23 +72,30 @@ class SetpointClient:
         self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    def get_command(self, command_type: CommandType) -> int:
+    def get_command(self, command_type: CommandType) -> Tuple[int]:
         command = struct.pack(">B", command_type.value)
         self._send(command)
 
-        answer = struct.unpack("<BI", self._receive())
+        return_value_size = 3 if command_type.value >= CommandType.GET_X_TRAJECTORY_POINT.value else 1
+        format = "<B" + ("I" * return_value_size)
+        answer = struct.unpack(format, self._receive())
         assert answer[0] == command_type.value, f"PLC returned {CommandType(answer[0])}, but expected {command_type}."
 
-        return answer[1]
+        return answer[1:]
 
     def get_x_position(self) -> int:
-        return self.get_command(CommandType.GET_X_POSITION_UM)
+        return self.get_command(CommandType.GET_X_POSITION_UM)[0]
 
     def get_x_speed(self) -> int:
-        return self.get_command(CommandType.GET_X_SPEED_UM_S)
+        return self.get_command(CommandType.GET_X_SPEED_UM_S)[0]
 
     def get_x_acceleration(self) -> int:
-        return self.get_command(CommandType.GET_X_ACCELERATION_UM_S2)
+        return self.get_command(CommandType.GET_X_ACCELERATION_UM_S2)[0]
+
+    def get_x_trajectory(self) -> TrajectoryPoint:
+        trajectory = self.get_command(CommandType.GET_X_TRAJECTORY_POINT)
+
+        return TrajectoryPoint(position=trajectory[0], speed=trajectory[1], acceleration=trajectory[2])
 
     def set_x_position(self, setpoint: int) -> None:
         command = set_command(CommandType.SET_X_POSITION_UM, setpoint)

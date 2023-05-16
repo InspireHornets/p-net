@@ -15,14 +15,14 @@ void respond (
 {
    socklen_t client_struct_length = sizeof (client_addr);
 
-   uint8_t server_message[APP_UDP_MESSAGE_LENGTH];
-   memset (server_message, 0, sizeof (server_message));
+   uint8_t server_message[response_size];
+   memset (server_message, 0, response_size);
    memcpy (server_message, response, response_size);
 
    sendto (
       socket_desc,
       server_message,
-      5,
+      response_size,
       MSG_DONTWAIT,
       (struct sockaddr *)&client_addr,
       client_struct_length);
@@ -37,8 +37,9 @@ void handle_command (
 {
    union Unint32 plc_output;
    union Unint32 plc_input;
-   struct app_setpoint_data setpoint;
-   uint8_t buffer[5];
+   app_setpoint_data_t setpoint;
+   app_actual_data_t actual;
+   uint8_t buffer[13];
 
    APP_LOG_DEBUG ("UDP server: received command %x\n", input[0]);
 
@@ -53,7 +54,7 @@ void handle_command (
       buffer[0] = GET_X_POSITION_UM;
       memcpy (buffer + 1, &plc_output.bytes, 4);
 
-      respond (buffer, sizeof (buffer), client_addr, socket_desc);
+      respond (buffer, 5, client_addr, socket_desc);
       break;
    case GET_X_SPEED_UM_S:
       plc_output = get_x_speed();
@@ -62,7 +63,7 @@ void handle_command (
       buffer[0] = GET_X_SPEED_UM_S;
       memcpy (buffer + 1, &plc_output.bytes, 4);
 
-      respond (buffer, sizeof (buffer), client_addr, socket_desc);
+      respond (buffer, 5, client_addr, socket_desc);
       break;
    case GET_X_ACCELERATION_UM_S2:
       plc_output = get_x_acceleration();
@@ -71,7 +72,20 @@ void handle_command (
       buffer[0] = GET_X_ACCELERATION_UM_S2;
       memcpy (buffer + 1, &plc_output.bytes, 4);
 
-      respond (buffer, sizeof (buffer), client_addr, socket_desc);
+      respond (buffer, 5, client_addr, socket_desc);
+      break;
+   case GET_X_TRAJECTORY_POINT:
+      actual = get_x_trajectory();
+      APP_LOG_DEBUG (
+         "Current x position: %u, x speed: %u, x acceleration: %u\n",
+         actual.position_um,
+         actual.speed_mm_min,
+         actual.acceleration_mm_min2);
+
+      buffer[0] = GET_X_TRAJECTORY_POINT;
+      memcpy (buffer + 1, &actual, 12);
+
+      respond (buffer, 13, client_addr, socket_desc);
       break;
    case SET_X_POSITION_UM:
       memcpy (plc_input.bytes, input + 1, 4);
