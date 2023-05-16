@@ -3,12 +3,19 @@ import struct
 from unittest.mock import patch
 
 from assertpy import assert_that
-from client import CommandType, SetpointClient, set_command
+from client import CommandType, SetpointClient, get_command, set_command
 
 
 def test_set_command():
     actual_command = set_command(CommandType.GET_X_POWER, 42)
     expected_command = struct.pack("<B", CommandType.GET_X_POWER.value) + struct.pack("<I", 42)
+
+    assert_that(actual_command).is_equal_to(expected_command)
+
+
+def test_get_command():
+    actual_command = get_command(CommandType.GET_X_TEMPERATURE)
+    expected_command = struct.pack(">B", CommandType.GET_X_TEMPERATURE.value)
 
     assert_that(actual_command).is_equal_to(expected_command)
 

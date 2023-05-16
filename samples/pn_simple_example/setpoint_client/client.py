@@ -39,7 +39,7 @@ def set_command(command: CommandType, setpoint: int):
     return command_type + command_data
 
 
-def _get(command: CommandType):
+def get_command(command: CommandType):
     return struct.pack(">B", command.value)
 
 
