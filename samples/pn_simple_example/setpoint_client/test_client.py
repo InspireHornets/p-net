@@ -64,6 +64,29 @@ def test_get_x_speed(mock_socket):
         assert_that(x_speed).is_equal_to(123)
 
 
+@patch("socket.socket")
+def test_get_x_acceleration(mock_socket):
+    # Mock the send and receive methods of the socket
+    mock_send = mock_socket.return_value.sendto
+    mock_receive = mock_socket.return_value.recvfrom
+
+    # Set the expected response from the PLC
+    expected_response = struct.pack("<BI", CommandType.GET_X_ACCELERATION_UM_S2.value, 123)
+    mock_receive.return_value = (expected_response, None)
+
+    # Create the client and call the method
+    with SetpointClient("localhost", 1234) as client:
+        x_acceleration = client.get_x_acceleration()
+
+        # Check that the socket methods were called with the expected commands
+        mock_send.assert_called_once_with(
+            struct.pack(">B", CommandType.GET_X_ACCELERATION_UM_S2.value), ("localhost", 1234)
+        )
+        mock_receive.assert_called_once_with(1024)
+
+        assert_that(x_acceleration).is_equal_to(123)
+
+
 def test_with_magic_methods():
     with SetpointClient("127.0.0.1", 12345) as client:
         client.set_x_position(123)
