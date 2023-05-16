@@ -32,19 +32,15 @@ class CommandType(Enum):
     INVALID_COMMAND = 0xFF
 
 
-def set_command(command: CommandType, setpoint: int):
+def set_command(command: CommandType, setpoint: int) -> bytes:
     command_type = struct.pack("<B", command.value)
     command_data = struct.pack("<I", setpoint)
 
     return command_type + command_data
 
 
-def get_command(command: CommandType):
+def get_command(command: CommandType) -> bytes:
     return struct.pack(">B", command.value)
-
-
-def set_x(setpoint: int):
-    return set_command(CommandType.SET_X_POSITION_UM, setpoint)
 
 
 class SetpointClient:
@@ -74,12 +70,13 @@ class SetpointClient:
     def _send(self, command: bytes) -> None:
         self.socket.sendto(command, (self.host, self.port))
 
-    def _receive(self):
+    def _receive(self) -> bytes:
         response, _ = self.socket.recvfrom(1024)
         return response
 
-    def set_x_position(self, setpoint: int):
-        self._send(set_x(setpoint))
+    def set_x_position(self, setpoint: int) -> None:
+        command = set_command(CommandType.SET_X_POSITION_UM, setpoint)
+        self._send(command)
 
     def __enter__(self):
         return self
@@ -87,5 +84,5 @@ class SetpointClient:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.disconnect()
 
-    def disconnect(self):
+    def disconnect(self) -> None:
         self.socket.close()
