@@ -53,41 +53,23 @@ class SetpointClient:
         self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    def get_x_position(self) -> int:
-        command_type = CommandType.GET_X_POSITION_UM
+    def get_command(self, command_type: CommandType) -> int:
         command = struct.pack(">B", command_type.value)
         self._send(command)
 
         answer = struct.unpack("<BI", self._receive())
-        assert (
-            answer[0] == CommandType.GET_X_POSITION_UM.value
-        ), f"PLC returned {answer[0]}, expected {CommandType.GET_X_POSITION_UM.value,}"
+        assert answer[0] == command_type.value, f"PLC returned {answer[0]}, expected {command_type.value,}"
 
         return answer[1]
+
+    def get_x_position(self) -> int:
+        return self.get_command(CommandType.GET_X_POSITION_UM)
 
     def get_x_speed(self) -> int:
-        command_type = CommandType.GET_X_SPEED_UM_S
-        command = struct.pack(">B", command_type.value)
-        self._send(command)
-
-        answer = struct.unpack("<BI", self._receive())
-        assert (
-            answer[0] == CommandType.GET_X_SPEED_UM_S.value
-        ), f"PLC returned {answer[0]}, expected {CommandType.GET_X_SPEED_UM_S.value,}"
-
-        return answer[1]
+        return self.get_command(CommandType.GET_X_SPEED_UM_S)
 
     def get_x_acceleration(self) -> int:
-        command_type = CommandType.GET_X_ACCELERATION_UM_S2
-        command = struct.pack(">B", command_type.value)
-        self._send(command)
-
-        answer = struct.unpack("<BI", self._receive())
-        assert (
-            answer[0] == CommandType.GET_X_ACCELERATION_UM_S2.value
-        ), f"PLC returned {answer[0]}, expected {CommandType.GET_X_ACCELERATION_UM_S2.value,}"
-
-        return answer[1]
+        return self.get_command(CommandType.GET_X_ACCELERATION_UM_S2)
 
     def _send(self, command: bytes) -> None:
         self.socket.sendto(command, (self.host, self.port))
