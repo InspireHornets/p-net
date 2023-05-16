@@ -58,7 +58,7 @@ class SetpointClient:
         self._send(command)
 
         answer = struct.unpack("<BI", self._receive())
-        assert answer[0] == command_type.value, f"PLC returned {answer[0]}, expected {command_type.value,}"
+        assert answer[0] == command_type.value, f"PLC returned {CommandType(answer[0])}, but expected {command_type}."
 
         return answer[1]
 
