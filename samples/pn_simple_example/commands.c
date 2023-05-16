@@ -90,7 +90,7 @@ void handle_command (
    case SET_X_POSITION_UM:
       memcpy (plc_input.bytes, input + 1, 4);
       APP_LOG_DEBUG ("New x position %u\n", plc_input.unint32);
-      set_x (plc_input.unint32);
+      set_x_position (plc_input.unint32);
       break;
    case SET_X_TRAJECTORY_POINT:
       memcpy (&setpoint, input + 1, 4 * 3);

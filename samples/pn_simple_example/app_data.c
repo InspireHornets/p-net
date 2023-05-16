@@ -91,10 +91,11 @@ app_actual_data_t get_x_trajectory()
    return trajectory;
 }
 
-void set_x (uint32_t setpoint)
+void set_x_position (uint32_t setpoint)
 {
-   app_actual_data_t * p_actual_data = (app_actual_data_t *)&setpoint_data;
-   p_actual_data->position_um = CC_TO_BE32 (setpoint);
+   app_setpoint_data_t * p_setpoint_data =
+      (app_setpoint_data_t *)&setpoint_data;
+   p_setpoint_data->position_um = CC_TO_BE32 (setpoint);
 }
 
 void set_trajectory_point (app_setpoint_data_t trajectory)

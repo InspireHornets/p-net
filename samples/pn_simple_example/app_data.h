@@ -74,7 +74,7 @@ union Unint32 get_x_position();
 union Unint32 get_x_speed();
 union Unint32 get_x_acceleration();
 
-void set_x (uint32_t setpoint);
+void set_x_position (uint32_t setpoint);
 void set_trajectory_point (app_setpoint_data_t trajectory);
 
 /**
