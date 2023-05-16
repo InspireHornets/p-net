@@ -6,7 +6,7 @@
 #include "app_log.h"
 #include "sampleapp_common.h"
 
-// TODO review this implementaiton with Thomas
+// TODO review this implementation with Thomas
 void respond (
    const uint8_t * response,
    int response_size,
@@ -28,7 +28,7 @@ void respond (
       client_struct_length);
 }
 
-// TODO review this implementaiton with Thomas
+// TODO review this implementation with Thomas
 // Function to parse input string and convert to Command struct
 void handle_command (
    const uint8_t * input,
