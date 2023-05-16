@@ -35,6 +35,34 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "sys/osal_cc.h"
+#include "app_gsdml.h"
+
+CC_PACKED_BEGIN
+typedef struct CC_PACKED app_actual_data
+{
+   /* Network endianness */
+   uint32_t position_um;
+   uint32_t speed_mm_min;
+   uint32_t acceleration_mm_min2;
+   uint32_t power;
+   uint32_t temperature;
+} app_actual_data_t;
+CC_PACKED_END
+CC_STATIC_ASSERT (sizeof (app_actual_data_t) == APP_GSDML_OUTPUT_DATA_ECHO_SIZE);
+
+CC_PACKED_BEGIN
+typedef struct CC_PACKED app_setpoint_data
+{
+   /* Network endianness */
+   uint32_t position_um;
+   uint32_t speed_mm_min;
+   uint32_t acceleration_mm_min2;
+   uint32_t state;
+} app_setpoint_data_t;
+CC_PACKED_END
+CC_STATIC_ASSERT (
+   sizeof (app_setpoint_data_t) == APP_GSDML_INPUT_DATA_ECHO_SIZE);
 
 union Unint32
 {
@@ -42,12 +70,11 @@ union Unint32
    uint32_t unint32;
 };
 
-uint32_t get_x();
 union Unint32 get_x_position();
 union Unint32 get_x_speed();
 union Unint32 get_x_acceleration();
 void set_x (uint32_t setpoint);
-void set_y (union Unint32 setpoint);
+void set_trajectory_point (app_setpoint_data_t trajectory);
 
 /**
  * Get application specific PNIO input data (for sending to PLC)

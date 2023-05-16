@@ -37,6 +37,7 @@ void handle_command (
 {
    union Unint32 plc_output;
    union Unint32 plc_input;
+   struct app_setpoint_data setpoint;
    uint8_t buffer[5];
 
    APP_LOG_DEBUG ("UDP server: received command %x\n", input[0]);
@@ -76,6 +77,15 @@ void handle_command (
       memcpy (plc_input.bytes, input + 1, 4);
       APP_LOG_DEBUG ("New x position %u\n", plc_input.unint32);
       set_x (plc_input.unint32);
+      break;
+   case SET_X_TRAJECTORY_POINT:
+      memcpy (&setpoint, input + 1, 4 * 3);
+      APP_LOG_DEBUG (
+         "New x position %u, x speed %u, x acceleration: %u\n",
+         setpoint.position_um,
+         setpoint.speed_mm_min,
+         setpoint.acceleration_mm_min2);
+      set_trajectory_point (setpoint);
       break;
    default:
       APP_LOG_ERROR ("Invalid command: %i", input[0]);

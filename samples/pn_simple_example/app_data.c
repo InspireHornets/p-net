@@ -48,38 +48,6 @@ static uint32_t app_param_echo_gain = 1; /* Network endianness */
 static uint8_t setpoint_data[APP_GSDML_INPUT_DATA_ECHO_SIZE] = {0};
 static uint8_t actual_data[APP_GSDML_OUTPUT_DATA_ECHO_SIZE] = {0};
 
-CC_PACKED_BEGIN
-typedef struct CC_PACKED app_setpoint_data
-{
-   /* Network endianness */
-   uint32_t position_um;
-   uint32_t speed_mm_min;
-   uint32_t acceleration_mm_min2;
-   uint32_t state;
-} app_setpoint_data_t;
-CC_PACKED_END
-CC_STATIC_ASSERT (
-   sizeof (app_setpoint_data_t) == APP_GSDML_INPUT_DATA_ECHO_SIZE);
-
-CC_PACKED_BEGIN
-typedef struct CC_PACKED app_actual_data
-{
-   /* Network endianness */
-   uint32_t position_um;
-   uint32_t speed_mm_min;
-   uint32_t acceleration_mm_min2;
-   uint32_t power;
-   uint32_t temperature;
-} app_actual_data_t;
-CC_PACKED_END
-CC_STATIC_ASSERT (sizeof (app_actual_data_t) == APP_GSDML_OUTPUT_DATA_ECHO_SIZE);
-
-// ToDO add get_x, get_y
-uint32_t get_x()
-{
-   return combine_bytes_to_uint32 (&actual_data[0]);
-}
-
 union Unint32 get_x_position()
 {
    union Unint32 x_pos;
@@ -119,11 +87,15 @@ void set_x (uint32_t setpoint)
    p_actual_data->position_um = CC_TO_BE32 (setpoint);
 }
 
-// void set_y (uint32_t setpoint)
-//{
-//    app_echo_data_t * p_echo_inputdata = (app_echo_data_t *)&setpoint_data;
-//    p_echo_inputdata->speed_mm_min = CC_TO_BE32 (setpoint);
-// }
+void set_trajectory_point (app_setpoint_data_t trajectory)
+{
+   app_setpoint_data_t * p_setpoint_data =
+      (app_setpoint_data_t *)&setpoint_data;
+   p_setpoint_data->position_um = CC_TO_BE32 (trajectory.position_um);
+   p_setpoint_data->speed_mm_min = CC_TO_BE32 (trajectory.speed_mm_min);
+   p_setpoint_data->acceleration_mm_min2 =
+      CC_TO_BE32 (trajectory.acceleration_mm_min2);
+}
 
 uint8_t * app_data_to_plc (
    uint16_t slot_nbr,

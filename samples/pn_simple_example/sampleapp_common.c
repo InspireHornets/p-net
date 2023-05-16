@@ -1213,7 +1213,7 @@ void app_handle_udp_communication (int socket_desc, uint8_t * client_message)
       recvfrom (
          socket_desc,
          client_message,
-         sizeof (client_message),
+         APP_UDP_MESSAGE_LENGTH,
          MSG_DONTWAIT,
          (struct sockaddr *)&client_addr,
          &client_struct_length) > 0)

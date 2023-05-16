@@ -39,7 +39,7 @@ extern "C" {
 #define APP_TICKS_READ_BUTTONS 10
 #define APP_TICKS_UPDATE_DATA  100
 
-#define APP_UDP_MESSAGE_LENGTH 16
+#define APP_UDP_MESSAGE_LENGTH 32
 #define APP_UDP_HOST_ADDRESS   "127.0.0.1"
 #define APP_UDP_PORT           2000
 /* update UDP communication every x app cycles */
