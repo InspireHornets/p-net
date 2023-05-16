@@ -8,12 +8,12 @@ class CommandType(Enum):
     GET_X_POSITION_UM = 0x10
     GET_Y_POSITION_UM = 0x11
     GET_Z_POSITION_UM = 0x12
-    GET_X_SPEED_MM_MIN = 0x13
-    GET_Y_SPEED_MM_MIN = 0x14
-    GET_Z_SPEED_MM_MIN = 0x15
-    GET_X_ACCELERATION_MM_MIN2 = 0x16
-    GET_Y_ACCELERATION_MM_MIN2 = 0x17
-    GET_Z_ACCELERATION_MM_MIN2 = 0x18
+    GET_X_SPEED_UM_S = 0x13
+    GET_Y_SPEED_UM_S = 0x14
+    GET_Z_SPEED_UM_S = 0x15
+    GET_X_ACCELERATION_UM_S2 = 0x16
+    GET_Y_ACCELERATION_UM_S2 = 0x17
+    GET_Z_ACCELERATION_UM_S2 = 0x18
     GET_X_POWER = 0x19
     GET_Y_POWER = 0x1A
     GET_Z_POWER = 0x1B
@@ -23,12 +23,12 @@ class CommandType(Enum):
     SET_X_POSITION_UM = 0x20
     SET_Y_POSITION_UM = 0x21
     SET_Z_POSITION_UM = 0x22
-    SET_X_SPEED_MM_MIN = 0x23
-    SET_Y_SPEED_MM_MIN = 0x24
-    SET_Z_SPEED_MM_MIN = 0x25
-    SET_X_ACCELERATION_MM_MIN2 = 0x26
-    SET_Y_ACCELERATION_MM_MIN2 = 0x27
-    SET_Z_ACCELERATION_MM_MIN2 = 0x28
+    SET_X_SPEED_UM_MIN = 0x23
+    SET_Y_SPEED_UM_MIN = 0x24
+    SET_Z_SPEED_UM_MIN = 0x25
+    SET_X_ACCELERATION_UM_MIN2 = 0x26
+    SET_Y_ACCELERATION_UM_MIN2 = 0x27
+    SET_Z_ACCELERATION_UM_MIN2 = 0x28
     INVALID_COMMAND = 0xFF
 
 
@@ -66,26 +66,26 @@ class SetpointClient:
         return answer[1]
 
     def get_x_speed(self) -> int:
-        command_type = CommandType.GET_X_SPEED_MM_MIN
+        command_type = CommandType.GET_X_SPEED_UM_S
         command = struct.pack(">B", command_type.value)
         self._send(command)
 
         answer = struct.unpack("<BI", self._receive())
         assert (
-            answer[0] == CommandType.GET_X_SPEED_MM_MIN.value
-        ), f"PLC returned {answer[0]}, expected {CommandType.GET_X_SPEED_MM_MIN.value,}"
+            answer[0] == CommandType.GET_X_SPEED_UM_S.value
+        ), f"PLC returned {answer[0]}, expected {CommandType.GET_X_SPEED_UM_S.value,}"
 
         return answer[1]
 
     def get_x_acceleration(self) -> int:
-        command_type = CommandType.GET_X_ACCELERATION_MM_MIN2
+        command_type = CommandType.GET_X_ACCELERATION_UM_S2
         command = struct.pack(">B", command_type.value)
         self._send(command)
 
         answer = struct.unpack("<BI", self._receive())
         assert (
-            answer[0] == CommandType.GET_X_ACCELERATION_MM_MIN2.value
-        ), f"PLC returned {answer[0]}, expected {CommandType.GET_X_ACCELERATION_MM_MIN2.value,}"
+            answer[0] == CommandType.GET_X_ACCELERATION_UM_S2.value
+        ), f"PLC returned {answer[0]}, expected {CommandType.GET_X_ACCELERATION_UM_S2.value,}"
 
         return answer[1]
 
