@@ -3,7 +3,7 @@ import struct
 from unittest.mock import patch
 
 from assertpy import assert_that
-from client import CommandType, SetpointClient, get_command, set_command
+from client import CommandType, SetpointClient, TrajectoryPoint, get_command, set_command
 
 
 def test_set_command():
@@ -33,6 +33,19 @@ def test_set_x_position(mock_socket):
 
         client.set_x_position(4294967295)
         expected_command = struct.pack(">BI", CommandType.SET_X_POSITION_UM.value, 4294967295)
+        mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
+
+
+@patch("socket.socket")
+def test_set_x_trajectory_point(mock_socket):
+    with SetpointClient("127.0.0.1", 12345) as client:
+        trajectory = TrajectoryPoint(position=123, speed=35, acceleration=98)
+        client.set_x_trajectory(trajectory)
+
+        mock_socket.assert_called_once_with(socket.AF_INET, socket.SOCK_DGRAM)
+        mock_socket.return_value.sendto.assert_called_once()
+
+        expected_command = struct.pack("<BIII", CommandType.SET_X_TRAJECTORY_POINT.value, 123, 35, 98)
         mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
 
 

@@ -2,6 +2,8 @@ import socket
 import struct
 from enum import Enum
 
+from hat.ddd import ValueObject
+
 
 class CommandType(Enum):
     NO_COMMAND = 0x00
@@ -29,12 +31,24 @@ class CommandType(Enum):
     SET_X_ACCELERATION_UM_MIN2 = 0x26
     SET_Y_ACCELERATION_UM_MIN2 = 0x27
     SET_Z_ACCELERATION_UM_MIN2 = 0x28
+    SET_X_TRAJECTORY_POINT = 0x30
     INVALID_COMMAND = 0xFF
 
 
-def set_command(command: CommandType, setpoint: int) -> bytes:
+um = int
+um_s = int
+um_s2 = int
+
+
+class TrajectoryPoint(ValueObject):
+    position: um
+    speed: um_s
+    acceleration: um_s2
+
+
+def set_command(command: CommandType, *setpoints: int) -> bytes:
     command_type = struct.pack("<B", command.value)
-    command_data = struct.pack("<I", setpoint)
+    command_data = struct.pack("<" + "I" * len(setpoints), *setpoints)
 
     return command_type + command_data
 
@@ -67,16 +81,25 @@ class SetpointClient:
     def get_x_acceleration(self) -> int:
         return self.get_command(CommandType.GET_X_ACCELERATION_UM_S2)
 
+    def set_x_position(self, setpoint: int) -> None:
+        command = set_command(CommandType.SET_X_POSITION_UM, setpoint)
+        self._send(command)
+
+    def set_x_trajectory(self, trajectory_point: TrajectoryPoint) -> None:
+        command = set_command(
+            CommandType.SET_X_TRAJECTORY_POINT,
+            trajectory_point.position,
+            trajectory_point.speed,
+            trajectory_point.acceleration,
+        )
+        self._send(command)
+
     def _send(self, command: bytes) -> None:
         self.socket.sendto(command, (self.host, self.port))
 
     def _receive(self) -> bytes:
         response, _ = self.socket.recvfrom(1024)
         return response
-
-    def set_x_position(self, setpoint: int) -> None:
-        command = set_command(CommandType.SET_X_POSITION_UM, setpoint)
-        self._send(command)
 
     def __enter__(self):
         return self
