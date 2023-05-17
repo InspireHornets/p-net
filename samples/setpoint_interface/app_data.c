@@ -108,7 +108,7 @@ app_actual_data_t get_x_trajectory()
    app_actual_data_t trajectory;
    trajectory.position_um = get_x_position().unint32;
    trajectory.speed_mm_min = get_x_speed().unint32;
-   trajectory.acceleration_mm_min2 = get_x_speed().unint32;
+   trajectory.acceleration_mm_min2 = get_x_acceleration().unint32;
 
    return trajectory;
 }
