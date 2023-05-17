@@ -97,6 +97,9 @@ typedef struct app_data_t
    /* Counters used to control when process data is updated */
    uint32_t process_data_tick_counter;
 
+   /* Socket for Python API */
+   int socket_desc;
+
 } app_data_t;
 
 /* Forward declarations */
@@ -1158,50 +1161,6 @@ static int app_set_initial_data_and_ioxs (app_data_t * app)
    return 0;
 }
 
-/**
- * Send and receive cyclic/process data for all subslots.
- *
- * Updates the data only on every APP_TICKS_UPDATE_DATA invocation
- *
- * @param app        In:    Application handle
- */
-static void app_handle_cyclic_data (app_data_t * app)
-{
-   /* For the sample application cyclic data is updated
-    * with a period defined by APP_TICKS_UPDATE_DATA
-    */
-   app->process_data_tick_counter++;
-   if (app->process_data_tick_counter < APP_TICKS_UPDATE_DATA)
-   {
-      return;
-   }
-   app->process_data_tick_counter = 0;
-
-   app_utils_cyclic_data_poll (&app->main_api);
-}
-
-void app_pnet_cfg_init_default (pnet_cfg_t * pnet_cfg)
-{
-   app_utils_pnet_cfg_init_default (pnet_cfg);
-
-   pnet_cfg->state_cb = app_state_ind;
-   pnet_cfg->connect_cb = app_connect_ind;
-   pnet_cfg->release_cb = app_release_ind;
-   pnet_cfg->dcontrol_cb = app_dcontrol_ind;
-   pnet_cfg->ccontrol_cb = app_ccontrol_cnf;
-   pnet_cfg->read_cb = app_read_ind;
-   pnet_cfg->write_cb = app_write_ind;
-   pnet_cfg->exp_module_cb = app_exp_module_ind;
-   pnet_cfg->exp_submodule_cb = app_exp_submodule_ind;
-   pnet_cfg->new_data_status_cb = app_new_data_status_ind;
-   pnet_cfg->alarm_ind_cb = app_alarm_ind;
-   pnet_cfg->alarm_cnf_cb = app_alarm_cnf;
-   pnet_cfg->alarm_ack_cnf_cb = app_alarm_ack_cnf;
-   pnet_cfg->reset_cb = app_reset_ind;
-
-   pnet_cfg->cb_arg = (void *)&app_state;
-}
-
 // TODO review this implementaiton with Thomas
 void app_handle_udp_communication (int socket_desc, uint8_t * client_message)
 {
@@ -1228,6 +1187,55 @@ void app_handle_udp_communication (int socket_desc, uint8_t * client_message)
    }
 }
 
+/**
+ * Send and receive cyclic/process data for all subslots.
+ *
+ * Updates the data only on every APP_TICKS_UPDATE_DATA invocation
+ *
+ * @param app        In:    Application handle
+ */
+static void app_handle_cyclic_data (app_data_t * app)
+{
+   /* For the sample application cyclic data is updated
+    * with a period defined by APP_TICKS_UPDATE_DATA
+    */
+   app->process_data_tick_counter++;
+   if (app->process_data_tick_counter < APP_TICKS_UPDATE_DATA)
+   {
+      return;
+   }
+   app->process_data_tick_counter = 0;
+
+   uint8_t read_buffer[APP_UDP_MESSAGE_LENGTH];
+   // Clean buffers:
+   memset (read_buffer, 0, sizeof (read_buffer));
+
+   app_utils_cyclic_data_poll (&app->main_api);
+   app_handle_udp_communication (app->socket_desc, read_buffer);
+}
+
+void app_pnet_cfg_init_default (pnet_cfg_t * pnet_cfg)
+{
+   app_utils_pnet_cfg_init_default (pnet_cfg);
+
+   pnet_cfg->state_cb = app_state_ind;
+   pnet_cfg->connect_cb = app_connect_ind;
+   pnet_cfg->release_cb = app_release_ind;
+   pnet_cfg->dcontrol_cb = app_dcontrol_ind;
+   pnet_cfg->ccontrol_cb = app_ccontrol_cnf;
+   pnet_cfg->read_cb = app_read_ind;
+   pnet_cfg->write_cb = app_write_ind;
+   pnet_cfg->exp_module_cb = app_exp_module_ind;
+   pnet_cfg->exp_submodule_cb = app_exp_submodule_ind;
+   pnet_cfg->new_data_status_cb = app_new_data_status_ind;
+   pnet_cfg->alarm_ind_cb = app_alarm_ind;
+   pnet_cfg->alarm_cnf_cb = app_alarm_cnf;
+   pnet_cfg->alarm_ack_cnf_cb = app_alarm_ack_cnf;
+   pnet_cfg->reset_cb = app_reset_ind;
+
+   pnet_cfg->cb_arg = (void *)&app_state;
+}
+
 void app_loop_forever (void * arg)
 {
    app_data_t * app = (app_data_t *)arg;
@@ -1240,12 +1248,7 @@ void app_loop_forever (void * arg)
    app_plug_dap (app, app->pnet_cfg->num_physical_ports);
    APP_LOG_INFO ("Waiting for PLC connect request\n\n");
 
-   uint8_t read_buffer[APP_UDP_MESSAGE_LENGTH];
-   // Clean buffers:
-   // TODO rename to read/write buffer
-   memset (read_buffer, 0, sizeof (read_buffer));
-
-   int socket_desc = open_socket (APP_UDP_HOST_ADDRESS, APP_UDP_PORT);
+   app->socket_desc = open_socket (APP_UDP_HOST_ADDRESS, APP_UDP_PORT);
 
    /* Main event loop */
    for (;;)
@@ -1273,14 +1276,6 @@ void app_loop_forever (void * arg)
          if (app_is_connected_to_controller (app))
          {
             app_handle_cyclic_data (app);
-
-            if (
-               app->process_data_tick_counter %
-                  APP_UDP_UPDATE_INTERVAL_APP_CYCLES ==
-               0)
-            {
-               app_handle_udp_communication (socket_desc, read_buffer);
-            }
          }
 
          /* Run p-net stack */
@@ -1289,7 +1284,7 @@ void app_loop_forever (void * arg)
       else if (flags & APP_EVENT_ABORT)
       {
          os_event_clr (app->main_events, APP_EVENT_ABORT);
-         close (socket_desc);
+         close (app->socket_desc);
 
          app->main_api.arep = UINT32_MAX;
          app->alarm_allowed = true;
