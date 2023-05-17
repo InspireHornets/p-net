@@ -28,11 +28,27 @@ def test_set_x_position(mock_socket):
         mock_socket.assert_called_once_with(socket.AF_INET, socket.SOCK_DGRAM)
         mock_socket.return_value.sendto.assert_called_once()
 
-        expected_command = struct.pack(">BI", CommandType.SET_X_POSITION_UM.value, 0)
+        expected_command = struct.pack("<BI", CommandType.SET_X_POSITION_UM.value, 0)
+        mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
+
+        client.set_x_position(1337)
+        expected_command = struct.pack("<BI", CommandType.SET_X_POSITION_UM.value, 1337)
         mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
 
         client.set_x_position(4294967295)
-        expected_command = struct.pack(">BI", CommandType.SET_X_POSITION_UM.value, 4294967295)
+        expected_command = struct.pack("<BI", CommandType.SET_X_POSITION_UM.value, 4294967295)
+        mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
+
+
+@patch("socket.socket")
+def test_set_x_state(mock_socket):
+    with SetpointClient("127.0.0.1", 12345) as client:
+        client.set_x_state(1337)
+
+        mock_socket.assert_called_once_with(socket.AF_INET, socket.SOCK_DGRAM)
+        mock_socket.return_value.sendto.assert_called_once()
+
+        expected_command = struct.pack("<BI", CommandType.SET_X_STATE.value, 1337)
         mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
 
 

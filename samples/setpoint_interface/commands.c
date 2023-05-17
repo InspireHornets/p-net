@@ -112,6 +112,11 @@ void handle_command (
       APP_LOG_DEBUG ("New x position %u\n", plc_input.unint32);
       set_x_position (plc_input.unint32);
       break;
+   case SET_X_STATE:
+      memcpy (plc_input.bytes, input + 1, 4);
+      APP_LOG_DEBUG ("New x state %u\n", plc_input.unint32);
+      set_x_state (plc_input.unint32);
+      break;
    case SET_X_TRAJECTORY_POINT:
       memcpy (&setpoint, input + 1, 4 * 3);
       APP_LOG_DEBUG (

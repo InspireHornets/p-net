@@ -120,6 +120,13 @@ void set_x_position (uint32_t setpoint)
    p_setpoint_data->position_um = CC_TO_BE32 (setpoint);
 }
 
+void set_x_state (uint32_t state)
+{
+   app_setpoint_data_t * p_setpoint_data =
+      (app_setpoint_data_t *)&setpoint_data;
+   p_setpoint_data->state = CC_TO_BE32 (state);
+}
+
 void set_trajectory_point (app_setpoint_data_t trajectory)
 {
    app_setpoint_data_t * p_setpoint_data =

@@ -77,6 +77,7 @@ union Unint32 get_x_power();
 union Unint32 get_x_temperature();
 
 void set_x_position (uint32_t setpoint);
+void set_x_state (uint32_t state);
 void set_trajectory_point (app_setpoint_data_t trajectory);
 
 /**

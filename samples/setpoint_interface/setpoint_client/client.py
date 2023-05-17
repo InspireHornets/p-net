@@ -37,6 +37,9 @@ class CommandType(Enum):
     SET_X_ACCELERATION_UM_MIN2 = 0x46
     SET_Y_ACCELERATION_UM_MIN2 = 0x47
     SET_Z_ACCELERATION_UM_MIN2 = 0x48
+    SET_X_STATE = 0x49
+    SET_Y_STATE = 0x4A
+    SET_Z_STATE = 0x4B
     SET_X_TRAJECTORY_POINT = 0x50
     SET_Y_TRAJECTORY_POINT = 0x51
     SET_Z_TRAJECTORY_POINT = 0x52
@@ -105,6 +108,10 @@ class SetpointClient:
 
     def set_x_position(self, setpoint: int) -> None:
         command = set_command(CommandType.SET_X_POSITION_UM, setpoint)
+        self._send(command)
+
+    def set_x_state(self, state: int) -> None:
+        command = set_command(CommandType.SET_X_STATE, state)
         self._send(command)
 
     def set_x_trajectory(self, trajectory_point: TrajectoryPoint) -> None:
