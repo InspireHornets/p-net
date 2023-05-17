@@ -153,18 +153,20 @@ int app_data_from_plc (
                 actual_data,
                 APP_GSDML_OUTPUT_DATA_ECHO_SIZE))
          {
-            for (int i = 0; i < APP_GSDML_OUTPUT_DATA_ECHO_SIZE; i++)
-            {
-               uint32_t actual_position =
-                  combine_bytes_to_uint32 (&actual_data[0]);
-               uint32_t actual_speed =
-                  combine_bytes_to_uint32 (&actual_data[4]);
+            uint32_t actual_position =
+               combine_bytes_to_uint32 (&actual_data[0]);
+            uint32_t actual_speed = combine_bytes_to_uint32 (&actual_data[4]);
+            uint32_t actual_acc = combine_bytes_to_uint32 (&actual_data[8]);
+            uint32_t loop_in = combine_bytes_to_uint32 (&actual_data[8]);
+            uint32_t time = combine_bytes_to_uint32 (&actual_data[16]);
 
-               APP_LOG_DEBUG (
-                  "New actual position 1: %u\tactual position 2: %u\n",
-                  actual_position,
-                  actual_speed);
-            }
+            APP_LOG_DEBUG (
+               "Out 1: %u\tOut 2: %u\tOut 3: %u\tOut 4: %u\tOut 5: %u\n",
+               actual_position,
+               actual_speed,
+               actual_acc,
+               loop_in,
+               time);
          }
          memcpy (actual_data, data, size);
 
