@@ -92,6 +92,12 @@ class SetpointClient:
     def get_x_acceleration(self) -> int:
         return self.get_command(CommandType.GET_X_ACCELERATION_UM_S2)[0]
 
+    def get_x_power(self) -> int:
+        return self.get_command(CommandType.GET_X_POWER)[0]
+
+    def get_x_temperature(self) -> int:
+        return self.get_command(CommandType.GET_X_TEMPERATURE)[0]
+
     def get_x_trajectory(self) -> TrajectoryPoint:
         trajectory = self.get_command(CommandType.GET_X_TRAJECTORY_POINT)
 

@@ -73,6 +73,8 @@ app_actual_data_t get_x_trajectory();
 union Unint32 get_x_position();
 union Unint32 get_x_speed();
 union Unint32 get_x_acceleration();
+union Unint32 get_x_power();
+union Unint32 get_x_temperature();
 
 void set_x_position (uint32_t setpoint);
 void set_trajectory_point (app_setpoint_data_t trajectory);

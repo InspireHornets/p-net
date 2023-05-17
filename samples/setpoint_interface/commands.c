@@ -87,6 +87,26 @@ void handle_command (
 
       respond (buffer, 13, client_addr, socket_desc);
       break;
+   case GET_X_POWER:
+      plc_output = get_x_power();
+
+      APP_LOG_DEBUG ("Current x power: %u\n", plc_output.unint32);
+
+      buffer[0] = GET_X_POWER;
+      memcpy (buffer + 1, &plc_output.bytes, 4);
+
+      respond (buffer, 5, client_addr, socket_desc);
+      break;
+   case GET_X_TEMPERATURE:
+      plc_output = get_x_temperature();
+
+      APP_LOG_DEBUG ("Current x temperature: %u\n", plc_output.unint32);
+
+      buffer[0] = GET_X_TEMPERATURE;
+      memcpy (buffer + 1, &plc_output.bytes, 4);
+
+      respond (buffer, 5, client_addr, socket_desc);
+      break;
    case SET_X_POSITION_UM:
       memcpy (plc_input.bytes, input + 1, 4);
       APP_LOG_DEBUG ("New x position %u\n", plc_input.unint32);

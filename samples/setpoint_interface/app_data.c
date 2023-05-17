@@ -81,6 +81,28 @@ union Unint32 get_x_acceleration()
    return x_acceleration;
 }
 
+union Unint32 get_x_power()
+{
+   union Unint32 x_power;
+   x_power.bytes[0] = actual_data[15];
+   x_power.bytes[1] = actual_data[14];
+   x_power.bytes[2] = actual_data[13];
+   x_power.bytes[3] = actual_data[12];
+
+   return x_power;
+}
+
+union Unint32 get_x_temperature()
+{
+   union Unint32 x_temperature;
+   x_temperature.bytes[0] = actual_data[19];
+   x_temperature.bytes[1] = actual_data[18];
+   x_temperature.bytes[2] = actual_data[17];
+   x_temperature.bytes[3] = actual_data[16];
+
+   return x_temperature;
+}
+
 app_actual_data_t get_x_trajectory()
 {
    app_actual_data_t trajectory;
