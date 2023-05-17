@@ -10,13 +10,13 @@
 # See LICENSE file in the project root for full license information.
 #*******************************************************************/
 
-add_executable(pn_simple_example "")
-set_target_properties(profinet pn_simple_example
+add_executable(setpoint_interface "")
+set_target_properties(profinet setpoint_interface
         PROPERTIES
         C_STANDARD 99
         )
 
-target_include_directories(pn_simple_example
+target_include_directories(setpoint_interface
         PRIVATE
         .
         ${PROFINET_SOURCE_DIR}/src/ports/linux
@@ -24,7 +24,7 @@ target_include_directories(pn_simple_example
         ${PROFINET_BINARY_DIR}/src
         )
 
-target_sources(pn_simple_example
+target_sources(setpoint_interface
         PRIVATE
         app_data.c
         app_gsdml.c
@@ -37,7 +37,7 @@ target_sources(pn_simple_example
         udp_server.c
         )
 
-target_compile_options(pn_simple_example
+target_compile_options(setpoint_interface
         PRIVATE
         -Wall
         -Wextra
@@ -47,7 +47,7 @@ target_compile_options(pn_simple_example
         -fdata-sections
         )
 
-target_link_options(pn_simple_example
+target_link_options(setpoint_interface
         PRIVATE
         -Wl,--gc-sections
         )
@@ -55,6 +55,6 @@ target_link_options(pn_simple_example
 # TODO not sure if this one is required
 file(COPY ${PROFINET_SOURCE_DIR}/src/ports/linux/set_network_parameters DESTINATION ${CMAKE_CURRENT_BINARY_DIR} FILE_PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ)
 
-target_link_libraries(pn_simple_example PUBLIC profinet)
+target_link_libraries(setpoint_interface PUBLIC profinet)
 
-install(TARGETS pn_simple_example DESTINATION bin)
+install(TARGETS setpoint_interface DESTINATION bin)

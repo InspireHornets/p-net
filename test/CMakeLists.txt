@@ -94,11 +94,11 @@ target_sources(pf_test PRIVATE
   ${PROFINET_SOURCE_DIR}/src/common/pf_ppm_driver_sw.c
   ${PROFINET_SOURCE_DIR}/src/common/pf_ptcp.c
   ${PROFINET_SOURCE_DIR}/src/common/pf_scheduler.c
-  ${PROFINET_SOURCE_DIR}/samples/pn_simple_example/commands.c
-  ${PROFINET_SOURCE_DIR}/samples/pn_simple_example/app_data.c
-  ${PROFINET_SOURCE_DIR}/samples/pn_simple_example/app_gsdml.c
-  ${PROFINET_SOURCE_DIR}/samples/pn_simple_example/app_log.c
-  ${PROFINET_SOURCE_DIR}/samples/pn_simple_example/utils.c
+  ${PROFINET_SOURCE_DIR}/samples/setpoint_interface/commands.c
+  ${PROFINET_SOURCE_DIR}/samples/setpoint_interface/app_data.c
+  ${PROFINET_SOURCE_DIR}/samples/setpoint_interface/app_gsdml.c
+  ${PROFINET_SOURCE_DIR}/samples/setpoint_interface/app_log.c
+  ${PROFINET_SOURCE_DIR}/samples/setpoint_interface/utils.c
   $<$<BOOL:${PNET_OPTION_SNMP}>:${PROFINET_SOURCE_DIR}/src/common/pf_snmp.c>
   ${PROFINET_SOURCE_DIR}/src/common/pf_udp.c
   )
