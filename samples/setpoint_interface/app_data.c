@@ -48,9 +48,9 @@ static uint32_t app_param_echo_gain = 1; /* Network endianness */
 static uint8_t setpoint_data[APP_GSDML_INPUT_DATA_ECHO_SIZE] = {0};
 static uint8_t actual_data[APP_GSDML_OUTPUT_DATA_ECHO_SIZE] = {0};
 
-union Unint32 get_x_position()
+union Sint32 get_x_position()
 {
-   union Unint32 x_pos;
+   union Sint32 x_pos;
    x_pos.bytes[0] = actual_data[3];
    x_pos.bytes[1] = actual_data[2];
    x_pos.bytes[2] = actual_data[1];
@@ -59,9 +59,9 @@ union Unint32 get_x_position()
    return x_pos;
 }
 
-union Unint32 get_x_speed()
+union Sint32 get_x_speed()
 {
-   union Unint32 x_speed;
+   union Sint32 x_speed;
    x_speed.bytes[0] = actual_data[7];
    x_speed.bytes[1] = actual_data[6];
    x_speed.bytes[2] = actual_data[5];
@@ -70,9 +70,9 @@ union Unint32 get_x_speed()
    return x_speed;
 }
 
-union Unint32 get_x_acceleration()
+union Sint32 get_x_acceleration()
 {
-   union Unint32 x_acceleration;
+   union Sint32 x_acceleration;
    x_acceleration.bytes[0] = actual_data[11];
    x_acceleration.bytes[1] = actual_data[10];
    x_acceleration.bytes[2] = actual_data[9];
@@ -81,9 +81,9 @@ union Unint32 get_x_acceleration()
    return x_acceleration;
 }
 
-union Unint32 get_x_power()
+union Sint32 get_x_power()
 {
-   union Unint32 x_power;
+   union Sint32 x_power;
    x_power.bytes[0] = actual_data[15];
    x_power.bytes[1] = actual_data[14];
    x_power.bytes[2] = actual_data[13];
@@ -92,9 +92,9 @@ union Unint32 get_x_power()
    return x_power;
 }
 
-union Unint32 get_x_temperature()
+union Sint32 get_x_temperature()
 {
-   union Unint32 x_temperature;
+   union Sint32 x_temperature;
    x_temperature.bytes[0] = actual_data[19];
    x_temperature.bytes[1] = actual_data[18];
    x_temperature.bytes[2] = actual_data[17];
@@ -106,21 +106,21 @@ union Unint32 get_x_temperature()
 app_actual_data_t get_x_trajectory()
 {
    app_actual_data_t trajectory;
-   trajectory.position_um = get_x_position().unint32;
-   trajectory.speed_mm_min = get_x_speed().unint32;
-   trajectory.acceleration_mm_min2 = get_x_acceleration().unint32;
+   trajectory.position_um = get_x_position().sint32;
+   trajectory.speed_mm_min = get_x_speed().sint32;
+   trajectory.acceleration_mm_min2 = get_x_acceleration().sint32;
 
    return trajectory;
 }
 
-void set_x_position (uint32_t setpoint)
+void set_x_position (int32_t setpoint)
 {
    app_setpoint_data_t * p_setpoint_data =
       (app_setpoint_data_t *)&setpoint_data;
    p_setpoint_data->position_um = CC_TO_BE32 (setpoint);
 }
 
-void set_x_state (uint32_t state)
+void set_x_state (int32_t state)
 {
    app_setpoint_data_t * p_setpoint_data =
       (app_setpoint_data_t *)&setpoint_data;

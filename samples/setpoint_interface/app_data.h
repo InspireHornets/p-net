@@ -42,11 +42,11 @@ CC_PACKED_BEGIN
 typedef struct CC_PACKED app_actual_data
 {
    /* Network endianness */
-   uint32_t position_um;
-   uint32_t speed_mm_min;
-   uint32_t acceleration_mm_min2;
-   uint32_t power;
-   uint32_t temperature;
+   int32_t position_um;
+   int32_t speed_mm_min;
+   int32_t acceleration_mm_min2;
+   int32_t power;
+   int32_t temperature;
 } app_actual_data_t;
 CC_PACKED_END
 CC_STATIC_ASSERT (sizeof (app_actual_data_t) == APP_GSDML_OUTPUT_DATA_ECHO_SIZE);
@@ -55,29 +55,29 @@ CC_PACKED_BEGIN
 typedef struct CC_PACKED app_setpoint_data
 {
    /* Network endianness */
-   uint32_t position_um;
-   uint32_t speed_mm_min;
-   uint32_t acceleration_mm_min2;
-   uint32_t state;
+   int32_t position_um;
+   int32_t speed_mm_min;
+   int32_t acceleration_mm_min2;
+   int32_t state;
 } app_setpoint_data_t;
 CC_PACKED_END
 CC_STATIC_ASSERT (
    sizeof (app_setpoint_data_t) == APP_GSDML_INPUT_DATA_ECHO_SIZE);
 
-union Unint32
+union Sint32
 {
    uint8_t bytes[4];
-   uint32_t unint32;
+   int32_t sint32;
 };
 app_actual_data_t get_x_trajectory();
-union Unint32 get_x_position();
-union Unint32 get_x_speed();
-union Unint32 get_x_acceleration();
-union Unint32 get_x_power();
-union Unint32 get_x_temperature();
+union Sint32 get_x_position();
+union Sint32 get_x_speed();
+union Sint32 get_x_acceleration();
+union Sint32 get_x_power();
+union Sint32 get_x_temperature();
 
-void set_x_position (uint32_t setpoint);
-void set_x_state (uint32_t state);
+void set_x_position (int32_t setpoint);
+void set_x_state (int32_t state);
 void set_trajectory_point (app_setpoint_data_t trajectory);
 
 /**

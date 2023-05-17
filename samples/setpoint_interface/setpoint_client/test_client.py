@@ -28,15 +28,15 @@ def test_set_x_position(mock_socket):
         mock_socket.assert_called_once_with(socket.AF_INET, socket.SOCK_DGRAM)
         mock_socket.return_value.sendto.assert_called_once()
 
-        expected_command = struct.pack("<BI", CommandType.SET_X_POSITION_UM.value, 0)
+        expected_command = struct.pack("<Bi", CommandType.SET_X_POSITION_UM.value, 0)
         mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
 
         client.set_x_position(1337)
-        expected_command = struct.pack("<BI", CommandType.SET_X_POSITION_UM.value, 1337)
+        expected_command = struct.pack("<Bi", CommandType.SET_X_POSITION_UM.value, 1337)
         mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
 
-        client.set_x_position(4294967295)
-        expected_command = struct.pack("<BI", CommandType.SET_X_POSITION_UM.value, 4294967295)
+        client.set_x_position(-12354567)
+        expected_command = struct.pack("<Bi", CommandType.SET_X_POSITION_UM.value, -12354567)
         mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
 
 
@@ -48,7 +48,7 @@ def test_set_x_state(mock_socket):
         mock_socket.assert_called_once_with(socket.AF_INET, socket.SOCK_DGRAM)
         mock_socket.return_value.sendto.assert_called_once()
 
-        expected_command = struct.pack("<BI", CommandType.SET_X_STATE.value, 1337)
+        expected_command = struct.pack("<Bi", CommandType.SET_X_STATE.value, 1337)
         mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
 
 
@@ -61,7 +61,7 @@ def test_set_x_trajectory_point(mock_socket):
         mock_socket.assert_called_once_with(socket.AF_INET, socket.SOCK_DGRAM)
         mock_socket.return_value.sendto.assert_called_once()
 
-        expected_command = struct.pack("<BIII", CommandType.SET_X_TRAJECTORY_POINT.value, 123, 35, 98)
+        expected_command = struct.pack("<Biii", CommandType.SET_X_TRAJECTORY_POINT.value, 123, 35, 98)
         mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
 
 
@@ -72,7 +72,7 @@ def test_get_x_position(mock_socket):
     mock_receive = mock_socket.return_value.recvfrom
 
     # Set the expected response from the PLC
-    expected_response = struct.pack("<BI", CommandType.GET_X_POSITION_UM.value, 123)
+    expected_response = struct.pack("<Bi", CommandType.GET_X_POSITION_UM.value, 123)
     mock_receive.return_value = (expected_response, None)
 
     # Create the client and call the method
@@ -85,6 +85,11 @@ def test_get_x_position(mock_socket):
 
         assert_that(x_position).is_equal_to(123)
 
+        expected_response = struct.pack("<Bi", CommandType.GET_X_POSITION_UM.value, -123)
+        mock_receive.return_value = (expected_response, None)
+        x_position = client.get_x_position()
+        assert_that(x_position).is_equal_to(-123)
+
 
 @patch("socket.socket")
 def test_get_x_speed(mock_socket):
@@ -93,7 +98,7 @@ def test_get_x_speed(mock_socket):
     mock_receive = mock_socket.return_value.recvfrom
 
     # Set the expected response from the PLC
-    expected_response = struct.pack("<BI", CommandType.GET_X_SPEED_UM_S.value, 123)
+    expected_response = struct.pack("<Bi", CommandType.GET_X_SPEED_UM_S.value, 123)
     mock_receive.return_value = (expected_response, None)
 
     # Create the client and call the method
@@ -114,7 +119,7 @@ def test_get_x_power(mock_socket):
     mock_receive = mock_socket.return_value.recvfrom
 
     # Set the expected response from the PLC
-    expected_response = struct.pack("<BI", CommandType.GET_X_POWER.value, 123)
+    expected_response = struct.pack("<Bi", CommandType.GET_X_POWER.value, 123)
     mock_receive.return_value = (expected_response, None)
 
     # Create the client and call the method
@@ -135,7 +140,7 @@ def test_get_x_temperature(mock_socket):
     mock_receive = mock_socket.return_value.recvfrom
 
     # Set the expected response from the PLC
-    expected_response = struct.pack("<BI", CommandType.GET_X_TEMPERATURE.value, 123)
+    expected_response = struct.pack("<Bi", CommandType.GET_X_TEMPERATURE.value, 123)
     mock_receive.return_value = (expected_response, None)
 
     # Create the client and call the method
@@ -156,7 +161,7 @@ def test_get_x_trajectory(mock_socket):
     mock_receive = mock_socket.return_value.recvfrom
 
     # Set the expected response from the PLC
-    expected_response = struct.pack("<BIII", CommandType.GET_X_TRAJECTORY_POINT.value, 123, 456, 789)
+    expected_response = struct.pack("<Biii", CommandType.GET_X_TRAJECTORY_POINT.value, 123, 456, 789)
     mock_receive.return_value = (expected_response, None)
 
     # Create the client and call the method
@@ -179,7 +184,7 @@ def test_get_x_acceleration(mock_socket):
     mock_receive = mock_socket.return_value.recvfrom
 
     # Set the expected response from the PLC
-    expected_response = struct.pack("<BI", CommandType.GET_X_ACCELERATION_UM_S2.value, 123)
+    expected_response = struct.pack("<Bi", CommandType.GET_X_ACCELERATION_UM_S2.value, 123)
     mock_receive.return_value = (expected_response, None)
 
     # Create the client and call the method
@@ -202,7 +207,7 @@ def test_get_command_with_wrong_return_command(mock_socket):
     mock_receive = mock_socket.return_value.recvfrom
 
     # Set the expected response from the PLC
-    actual_response = struct.pack("<BI", CommandType.GET_X_POSITION_UM.value, 123)
+    actual_response = struct.pack("<Bi", CommandType.GET_X_POSITION_UM.value, 123)
     mock_receive.return_value = (actual_response, None)
 
     # Create the client and call the method

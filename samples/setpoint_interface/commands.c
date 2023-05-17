@@ -35,8 +35,8 @@ void handle_command (
    struct sockaddr_in client_addr,
    int socket_desc)
 {
-   union Unint32 plc_output;
-   union Unint32 plc_input;
+   union Sint32 plc_output;
+   union Sint32 plc_input;
    app_setpoint_data_t setpoint;
    app_actual_data_t actual;
    uint8_t buffer[13];
@@ -49,7 +49,7 @@ void handle_command (
       break;
    case GET_X_POSITION_UM:
       plc_output = get_x_position();
-      APP_LOG_DEBUG ("Current x position: %u\n", plc_output.unint32);
+      APP_LOG_DEBUG ("Current x position: %i\n", plc_output.sint32);
 
       buffer[0] = GET_X_POSITION_UM;
       memcpy (buffer + 1, &plc_output.bytes, 4);
@@ -58,7 +58,7 @@ void handle_command (
       break;
    case GET_X_SPEED_UM_S:
       plc_output = get_x_speed();
-      APP_LOG_DEBUG ("Current x speed: %u\n", plc_output.unint32);
+      APP_LOG_DEBUG ("Current x speed: %i\n", plc_output.sint32);
 
       buffer[0] = GET_X_SPEED_UM_S;
       memcpy (buffer + 1, &plc_output.bytes, 4);
@@ -67,7 +67,7 @@ void handle_command (
       break;
    case GET_X_ACCELERATION_UM_S2:
       plc_output = get_x_acceleration();
-      APP_LOG_DEBUG ("Current x acceleration: %u\n", plc_output.unint32);
+      APP_LOG_DEBUG ("Current x acceleration: %i\n", plc_output.sint32);
 
       buffer[0] = GET_X_ACCELERATION_UM_S2;
       memcpy (buffer + 1, &plc_output.bytes, 4);
@@ -77,7 +77,7 @@ void handle_command (
    case GET_X_TRAJECTORY_POINT:
       actual = get_x_trajectory();
       APP_LOG_DEBUG (
-         "Current x position: %u, x speed: %u, x acceleration: %u\n",
+         "Current x position: %i, x speed: %i, x acceleration: %i\n",
          actual.position_um,
          actual.speed_mm_min,
          actual.acceleration_mm_min2);
@@ -90,7 +90,7 @@ void handle_command (
    case GET_X_POWER:
       plc_output = get_x_power();
 
-      APP_LOG_DEBUG ("Current x power: %u\n", plc_output.unint32);
+      APP_LOG_DEBUG ("Current x power: %u\n", plc_output.sint32);
 
       buffer[0] = GET_X_POWER;
       memcpy (buffer + 1, &plc_output.bytes, 4);
@@ -100,7 +100,7 @@ void handle_command (
    case GET_X_TEMPERATURE:
       plc_output = get_x_temperature();
 
-      APP_LOG_DEBUG ("Current x temperature: %u\n", plc_output.unint32);
+      APP_LOG_DEBUG ("Current x temperature: %i\n", plc_output.sint32);
 
       buffer[0] = GET_X_TEMPERATURE;
       memcpy (buffer + 1, &plc_output.bytes, 4);
@@ -109,18 +109,18 @@ void handle_command (
       break;
    case SET_X_POSITION_UM:
       memcpy (plc_input.bytes, input + 1, 4);
-      APP_LOG_DEBUG ("New x position %u\n", plc_input.unint32);
-      set_x_position (plc_input.unint32);
+      APP_LOG_DEBUG ("New x position %i\n", plc_input.sint32);
+      set_x_position (plc_input.sint32);
       break;
    case SET_X_STATE:
       memcpy (plc_input.bytes, input + 1, 4);
-      APP_LOG_DEBUG ("New x state %u\n", plc_input.unint32);
-      set_x_state (plc_input.unint32);
+      APP_LOG_DEBUG ("New x state %i\n", plc_input.sint32);
+      set_x_state (plc_input.sint32);
       break;
    case SET_X_TRAJECTORY_POINT:
       memcpy (&setpoint, input + 1, 4 * 3);
       APP_LOG_DEBUG (
-         "New x position %u, x speed %u, x acceleration: %u\n",
+         "New x position %i, x speed %i, x acceleration: %i\n",
          setpoint.position_um,
          setpoint.speed_mm_min,
          setpoint.acceleration_mm_min2);

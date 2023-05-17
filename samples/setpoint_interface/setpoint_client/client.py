@@ -60,7 +60,7 @@ class TrajectoryPoint(ValueObject):
 
 def set_command(command: CommandType, *setpoints: int) -> bytes:
     command_type = struct.pack("<B", command.value)
-    command_data = struct.pack("<" + "I" * len(setpoints), *setpoints)
+    command_data = struct.pack("<" + "i" * len(setpoints), *setpoints)
 
     return command_type + command_data
 
@@ -80,7 +80,7 @@ class SetpointClient:
         self._send(command)
 
         return_value_size = 3 if command_type.value >= CommandType.GET_X_TRAJECTORY_POINT.value else 1
-        format = "<B" + ("I" * return_value_size)
+        format = "<B" + ("i" * return_value_size)
         answer = struct.unpack(format, self._receive())
         assert answer[0] == command_type.value, f"PLC returned {CommandType(answer[0])}, but expected {command_type}."
 
