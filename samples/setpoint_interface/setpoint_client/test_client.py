@@ -51,6 +51,10 @@ def test_set_x_state(mock_socket):
         expected_command = struct.pack("<Bi", CommandType.SET_X_STATE.value, 1337)
         mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
 
+        client.set_x_state(-1234)
+        expected_command = struct.pack("<Bi", CommandType.SET_X_STATE.value, -1234)
+        mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
+
 
 @patch("socket.socket")
 def test_set_x_trajectory_point(mock_socket):
