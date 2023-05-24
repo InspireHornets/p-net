@@ -190,7 +190,7 @@ int app_data_from_plc (
             uint32_t time = combine_bytes_to_uint32 (&actual_data[16]);
 
             APP_LOG_DEBUG (
-               "Out 1: %u\tOut 2: %u\tOut 3: %u\tOut 4: %u\tOut 5: %u\n",
+               "Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: %i\tOut 5:% i\n ",
                actual_position,
                actual_speed,
                actual_acc,
