@@ -26,10 +26,6 @@
 #include "pnal_filetools.h"
 #include <pnet_api.h>
 
-#include <net/if.h>
-#include <sys/ioctl.h>
-#include <sys/stat.h>
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -219,67 +215,6 @@ app_args_t parse_commandline_arguments (int argc, char * argv[])
    }
 
    return output_arguments;
-}
-
-/**
- * Read a bool from a file
- *
- * @param filepath      In: Path to file
- * @return true if file exists and the first character is '1'
- */
-bool read_bool_from_file (const char * filepath)
-{
-   FILE * fp;
-   char ch;
-   int eof_indicator;
-
-   fp = fopen (filepath, "r");
-   if (fp == NULL)
-   {
-      return false;
-   }
-
-   ch = fgetc (fp);
-   eof_indicator = feof (fp);
-   fclose (fp);
-
-   if (eof_indicator)
-   {
-      return false;
-   }
-   return ch == '1';
-}
-
-void app_set_led (uint16_t id, bool led_state)
-{
-   /* Important:
-    * The Linux sample application uses a script to set the LED state,
-    * for easy adaption to different development boards.
-    *
-    * The script typically writes to files in the /sys directory to set LED
-    * state via GPIO operations. If you do not have any physical LEDs you can
-    * use a script that writes to regular files instead.
-    *
-    * However, file operations shall be avoided within the main task
-    * in a real application. File operations may affect the timing of the
-    * Profinet communication depending on file system implementation.
-    */
-
-   char id_str[7] = {0}; /** Terminated string */
-   const char * argv[4];
-
-   sprintf (id_str, "%u", id);
-   id_str[sizeof (id_str) - 1] = '\0';
-
-   argv[0] = "set_profinet_leds";
-   argv[1] = (char *)&id_str;
-   argv[2] = (led_state == 1) ? "1" : "0";
-   argv[3] = NULL;
-
-   if (pnal_execute_script (argv) != 0)
-   {
-      printf ("Failed to set LED state\n");
-   }
 }
 
 /** Update configuration with file storage path.
