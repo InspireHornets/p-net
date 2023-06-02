@@ -138,11 +138,13 @@ typedef struct
    uint16_t length;
 } app_gsdml_param_t;
 
-#define APP_GSDML_MOD_ID_ECHO           0x00000040
-#define APP_GSDML_SUBMOD_ID_ECHO        0x00000140
-#define APP_GSDML_INPUT_DATA_ECHO_SIZE  16 /* bytes */
-#define APP_GSDML_OUTPUT_DATA_ECHO_SIZE 20 /* bytes */
-#define APP_GSDML_ALARM_PAYLOAD_SIZE    1  /* bytes */
+#define APP_GSDML_MOD_ID_SETPOINT_X         0x00000040
+#define APP_GSDML_SUBMOD_ID_SETPOINT_X      0x00000140
+#define APP_GSDML_MOD_ID_SETPOINT_Y         0x00000041
+#define APP_GSDML_SUBMOD_ID_SETPOINT_Y      0x00000141
+#define APP_GSDML_INPUT_DATA_SETPOINT_SIZE  16 /* bytes */
+#define APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE 20 /* bytes */
+#define APP_GSDML_ALARM_PAYLOAD_SIZE        1  /* bytes */
 
 /**
  * Get module configuration from module ID

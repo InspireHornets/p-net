@@ -38,10 +38,15 @@ static const app_gsdml_module_t dap_1 = {
       PNET_SUBMOD_DAP_INTERFACE_1_PORT_4_IDENT,
       0}};
 
-static const app_gsdml_module_t module_echo = {
-   .id = APP_GSDML_MOD_ID_ECHO,
-   .name = "Setpoint interface module",
-   .submodules = {APP_GSDML_SUBMOD_ID_ECHO, 0}};
+static const app_gsdml_module_t setpoint_x_module = {
+   .id = APP_GSDML_MOD_ID_SETPOINT_X,
+   .name = "Setpoint X interface module",
+   .submodules = {APP_GSDML_SUBMOD_ID_SETPOINT_X, 0}};
+
+static const app_gsdml_module_t setpoint_y_module = {
+   .id = APP_GSDML_MOD_ID_SETPOINT_Y,
+   .name = "Setpoint y interface module",
+   .submodules = {APP_GSDML_SUBMOD_ID_SETPOINT_Y, 0}};
 
 /******************* Supported submodules ************************/
 
@@ -99,17 +104,29 @@ static const app_gsdml_submodule_t dap_port_4 = {
    .outsize = 0,
    .parameters = {0}};
 
-static const app_gsdml_submodule_t submod_echo = {
-   .id = APP_GSDML_SUBMOD_ID_ECHO,
-   .name = "Setpoint interface for axis",
+static const app_gsdml_submodule_t submod_setpoint_x = {
+   .id = APP_GSDML_SUBMOD_ID_SETPOINT_X,
+   .name = "Setpoint interface for x-axis",
    .api = APP_GSDML_API,
    .data_dir = PNET_DIR_IO,
-   .insize = APP_GSDML_INPUT_DATA_ECHO_SIZE,
-   .outsize = APP_GSDML_OUTPUT_DATA_ECHO_SIZE,
+   .insize = APP_GSDML_INPUT_DATA_SETPOINT_SIZE,
+   .outsize = APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE,
+   .parameters = {APP_GSDML_PARAMETER_ECHO_IDX, 0}};
+
+static const app_gsdml_submodule_t submod_setpoint_y = {
+   .id = APP_GSDML_SUBMOD_ID_SETPOINT_Y,
+   .name = "Setpoint interface for y-axis",
+   .api = APP_GSDML_API,
+   .data_dir = PNET_DIR_IO,
+   .insize = APP_GSDML_INPUT_DATA_SETPOINT_SIZE,
+   .outsize = APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE,
    .parameters = {APP_GSDML_PARAMETER_ECHO_IDX, 0}};
 
 /** List of supported modules */
-static const app_gsdml_module_t * app_gsdml_modules[] = {&dap_1, &module_echo};
+static const app_gsdml_module_t * app_gsdml_modules[] = {
+   &dap_1,
+   &setpoint_x_module,
+   &setpoint_y_module};
 
 /** List of supported submodules */
 static const app_gsdml_submodule_t * app_gsdml_submodules[] = {
@@ -120,7 +137,8 @@ static const app_gsdml_submodule_t * app_gsdml_submodules[] = {
    &dap_port_3,
    &dap_port_4,
 
-   &submod_echo,
+   &submod_setpoint_x,
+   &submod_setpoint_y,
 };
 
 /* List of supported parameters.

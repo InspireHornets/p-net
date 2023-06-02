@@ -58,10 +58,8 @@
           />
                <IOConfigData MaxInputLength="244" MaxOutputLength="244" />
                <UseableModules>
-                  <ModuleItemRef
-              ModuleItemTarget="IDM_40"
-              AllowedInSlots="1..4"
-            />
+                  <ModuleItemRef ModuleItemTarget="IDM_40" AllowedInSlots="1" />
+				  <ModuleItemRef ModuleItemTarget="IDM_41" AllowedInSlots="2" />
                </UseableModules>
                <VirtualSubmoduleList>
                   <VirtualSubmoduleItem
@@ -139,8 +137,8 @@ Add additional PortSubmoduleItems to support additional ports
          <ModuleList>
             <ModuleItem ID="IDM_40" ModuleIdentNumber="0x00000040">
                <ModuleInfo>
-                  <Name TextId="TOK_Name_Setpoint_Module" />
-                  <InfoText TextId="TOK_InfoText_Setpoint_Module" />
+                  <Name TextId="TOK_Name_Setpoint_X_Module" />
+                  <InfoText TextId="TOK_InfoText_Setpoint_X_Module" />
                   <HardwareRelease Value="1.0" />
                   <SoftwareRelease Value="1.0" />
                </ModuleInfo>
@@ -153,42 +151,42 @@ Add additional PortSubmoduleItems to support additional ports
                      <IOData>
                         <Input Consistency="All items consistency">
                            <DataItem
-                    DataType="Unsigned32"
-                    TextId="TOK_Input_Setpoint_Position_um_Unsigned32"
+                    DataType="Integer32"
+                    TextId="TOK_Input_Setpoint_X_Position_um_Integer32"
                   />
                            <DataItem
-                    DataType="Unsigned32"
-                    TextId="TOK_Input_Setpoint_Speed_mm_min_Unsigned32"
+                    DataType="Integer32"
+                    TextId="TOK_Input_Setpoint_X_Speed_mm_min_Integer32"
                   />
                            <DataItem
-                    DataType="Unsigned32"
-                    TextId="TOK_Input_Setpoint_Acceleration_mm_min2_Unsigned32"
+                    DataType="Integer32"
+                    TextId="TOK_Input_Setpoint_X_Acceleration_mm_min2_Integer32"
                   />
                            <DataItem
-                    DataType="Unsigned32"
-                    TextId="TOK_Input_State_Unsigned32"
+                    DataType="Integer32"
+                    TextId="TOK_Input_State_X_Integer32"
                   />
                         </Input>
                         <Output Consistency="All items consistency">
                            <DataItem
-                    DataType="Unsigned32"
-                    TextId="TOK_Output_Actual_Position_Unsigned32"
+                    DataType="Integer32"
+                    TextId="TOK_Output_Actual_X_Position_Integer32"
                   />
                            <DataItem
-                    DataType="Unsigned32"
-                    TextId="TOK_Output_Actual_Speed_mm_min_Unsigned32"
+                    DataType="Integer32"
+                    TextId="TOK_Output_Actual_X_Speed_mm_min_Integer32"
                   />
                            <DataItem
-                    DataType="Unsigned32"
-                    TextId="TOK_Output_Actual_Acceleration_mm_min2_Unsigned32"
+                    DataType="Integer32"
+                    TextId="TOK_Output_Actual_X_Acceleration_mm_min2_Integer32"
                   />
                            <DataItem
-                    DataType="Unsigned32"
-                    TextId="TOK_Output_Power_Unsigned32"
+                    DataType="Integer32"
+                    TextId="TOK_Output_X_Power_Integer32"
                   />
                            <DataItem
-                    DataType="Unsigned32"
-                    TextId="TOK_Output_Temperature_Unsigned32"
+                    DataType="Integer32"
+                    TextId="TOK_Output_X_Temperature_Integer32"
                   />
                         </Output>
                      </IOData>
@@ -207,11 +205,87 @@ Add additional PortSubmoduleItems to support additional ports
                         </ParameterRecordDataItem>
                      </RecordDataList>
                      <ModuleInfo>
-                        <Name TextId="TOK_Name_Setpoint_Module" />
-                        <InfoText TextId="TOK_InfoText_Setpoint_Module" />
+                        <Name TextId="TOK_Name_Setpoint_X_Module" />
+                        <InfoText TextId="TOK_InfoText_Setpoint_X_Module" />
+                     </ModuleInfo>
+				  </VirtualSubmoduleItem>
+				</VirtualSubmoduleList>
+			</ModuleItem>
+			<ModuleItem ID="IDM_41" ModuleIdentNumber="0x00000041">
+               <ModuleInfo>
+                  <Name TextId="TOK_Name_Setpoint_Y_Module" />
+                  <InfoText TextId="TOK_InfoText_Setpoint_Y_Module" />
+                  <HardwareRelease Value="1.0" />
+                  <SoftwareRelease Value="1.0" />
+               </ModuleInfo>
+			   <VirtualSubmoduleList>
+				  <VirtualSubmoduleItem
+              ID="IDSM_141"
+              SubmoduleIdentNumber="0x0141"
+              MayIssueProcessAlarm="true"
+            >
+                     <IOData>
+                        <Input Consistency="All items consistency">
+                           <DataItem
+                    DataType="Integer32"
+                    TextId="TOK_Input_Setpoint_Y_Position_um_Integer32"
+                  />
+                           <DataItem
+                    DataType="Integer32"
+                    TextId="TOK_Input_Setpoint_Y_Speed_mm_min_Integer32"
+                  />
+                           <DataItem
+                    DataType="Integer32"
+                    TextId="TOK_Input_Setpoint_Y_Acceleration_mm_min2_Integer32"
+                  />
+                           <DataItem
+                    DataType="Integer32"
+                    TextId="TOK_Input_State_Y_Integer32"
+                  />
+                        </Input>
+                        <Output Consistency="All items consistency">
+                           <DataItem
+                    DataType="Integer32"
+                    TextId="TOK_Output_Actual_Y_Position_Integer32"
+                  />
+                           <DataItem
+                    DataType="Integer32"
+                    TextId="TOK_Output_Actual_Y_Speed_mm_min_Integer32"
+                  />
+                           <DataItem
+                    DataType="Integer32"
+                    TextId="TOK_Output_Actual_Y_Acceleration_mm_min2_Integer32"
+                  />
+                           <DataItem
+                    DataType="Integer32"
+                    TextId="TOK_Output_Y_Power_Integer32"
+                  />
+                           <DataItem
+                    DataType="Integer32"
+                    TextId="TOK_Output_Y_Temperature_Integer32"
+                  />
+                        </Output>
+                     </IOData>
+						<RecordDataList>
+                        <ParameterRecordDataItem Index="125" Length="4">
+                           <Name TextId="TOK_sample_parameter_Echo" />
+                           <Ref
+                    DataType="Unsigned32"
+                    ByteOffset="0"
+                    DefaultValue="2"
+                    AllowedValues="1..4"
+                    Changeable="true"
+                    Visible="true"
+                    TextId="TOK_Echo_Gain"
+                  />
+                        </ParameterRecordDataItem>
+                     </RecordDataList>
+					  <ModuleInfo>
+                        <Name TextId="TOK_Name_Setpoint_Y_Module" />
+                        <InfoText TextId="TOK_InfoText_Setpoint_Y_Module" />
                      </ModuleInfo>
                   </VirtualSubmoduleItem>
-               </VirtualSubmoduleList>
+				  </VirtualSubmoduleList>
             </ModuleItem>
          </ModuleList>
          <LogBookEntryList>
@@ -260,52 +334,99 @@ Add additional PortSubmoduleItems to support additional ports
                <Text TextId="IDT_NAME_PS2" Value="X1 P2" />
                <!--module name-->
                <Text
-            TextId="TOK_Name_Setpoint_Module"
-            Value="Setpoint interface module"
+            TextId="TOK_Name_Setpoint_X_Module"
+            Value="Setpoint X interface module"
           />
                <!--module info -->
                <Text
-            TextId="TOK_InfoText_Setpoint_Module"
-            Value="Setpoint interface for axis"
+            TextId="TOK_InfoText_Setpoint_X_Module"
+            Value="Setpoint interface for x axis"
           />
                <!--dataitem name-->
                <Text
-            TextId="TOK_Input_Setpoint_Position_um_Unsigned32"
-            Value="Position setpoint (um)"
+            TextId="TOK_Input_Setpoint_X_Position_um_Integer32"
+            Value="Position setpoint x (um)"
           />
                <Text
-            TextId="TOK_Input_Setpoint_Speed_mm_min_Unsigned32"
-            Value="Speed setpoint (mm/min)"
+            TextId="TOK_Input_Setpoint_X_Speed_mm_min_Integer32"
+            Value="Speed setpoint x (mm/min)"
           />
                <Text
-            TextId="TOK_Input_Setpoint_Acceleration_mm_min2_Unsigned32"
-            Value="Acceleration setpoint (mm/min2)"
+            TextId="TOK_Input_Setpoint_X_Acceleration_mm_min2_Integer32"
+            Value="Acceleration setpoint x (mm/min2)"
           />
                <Text
-            TextId="TOK_Input_State_Unsigned32"
+            TextId="TOK_Input_State_X_Integer32"
             Value="State of profinet stack"
           />
                <Text
-            TextId="TOK_Output_Actual_Position_Unsigned32"
-            Value="Actual position (um)"
+            TextId="TOK_Output_Actual_X_Position_Integer32"
+            Value="Actual x position (um)"
           />
                <Text
-            TextId="TOK_Output_Actual_Speed_mm_min_Unsigned32"
-            Value="Actual speed (mm/min)"
+            TextId="TOK_Output_Actual_X_Speed_mm_min_Integer32"
+            Value="Actual x speed (mm/min)"
           />
                <Text
-            TextId="TOK_Output_Actual_Acceleration_mm_min2_Unsigned32"
-            Value="Actual Acceleration (mm/min2)"
+            TextId="TOK_Output_Actual_X_Acceleration_mm_min2_Integer32"
+            Value="Actual x acceleration (mm/min2)"
           />
                <Text
-            TextId="TOK_Output_Power_Unsigned32"
-            Value="Power consumed by the motor"
+            TextId="TOK_Output_X_Power_Integer32"
+            Value="Power consumed by the x motor"
           />
                <Text
-            TextId="TOK_Output_Temperature_Unsigned32"
-            Value="Temperature of the motor"
+            TextId="TOK_Output_X_Temperature_Integer32"
+            Value="Temperature of the x motor"
           />
-               <!--ParameterRecordDataItem name-->
+			  <!--module name-->
+               <Text
+            TextId="TOK_Name_Setpoint_Y_Module"
+            Value="Setpoint Y interface module"
+          />
+               <!--module info -->
+               <Text
+            TextId="TOK_InfoText_Setpoint_Y_Module"
+            Value="Setpoint interface for y axis"
+          />
+               <!--dataitem name-->
+               <Text
+            TextId="TOK_Input_Setpoint_Y_Position_um_Integer32"
+            Value="Position setpoint y (um)"
+          />
+               <Text
+            TextId="TOK_Input_Setpoint_Y_Speed_mm_min_Integer32"
+            Value="Speed setpoint y (mm/min)"
+          />
+               <Text
+            TextId="TOK_Input_Setpoint_Y_Acceleration_mm_min2_Integer32"
+            Value="Acceleration setpoint y (mm/min2)"
+          />
+               <Text
+            TextId="TOK_Input_State_Y_Integer32"
+            Value="State of profinet stack"
+          />
+               <Text
+            TextId="TOK_Output_Actual_Y_Position_Integer32"
+            Value="Actual y position (um)"
+          />
+               <Text
+            TextId="TOK_Output_Actual_Y_Speed_mm_min_Integer32"
+            Value="Actual y speed (mm/min)"
+          />
+               <Text
+            TextId="TOK_Output_Actual_Y_Acceleration_mm_min2_Integer32"
+            Value="Actual y acceleration (mm/min2)"
+          />
+               <Text
+            TextId="TOK_Output_Y_Power_Integer32"
+            Value="Power consumed by the y motor"
+          />
+               <Text
+            TextId="TOK_Output_Y_Temperature_Integer32"
+            Value="Temperature of the y motor"
+          />
+			   <!--ParameterRecordDataItem name-->
                <Text
             TextId="TOK_sample_parameter_Echo"
             Value="Gain for echo module"

@@ -49,7 +49,8 @@ typedef struct CC_PACKED app_actual_data
    int32_t temperature;
 } app_actual_data_t;
 CC_PACKED_END
-CC_STATIC_ASSERT (sizeof (app_actual_data_t) == APP_GSDML_OUTPUT_DATA_ECHO_SIZE);
+CC_STATIC_ASSERT (
+   sizeof (app_actual_data_t) == APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE);
 
 CC_PACKED_BEGIN
 typedef struct CC_PACKED app_setpoint_data
@@ -62,7 +63,7 @@ typedef struct CC_PACKED app_setpoint_data
 } app_setpoint_data_t;
 CC_PACKED_END
 CC_STATIC_ASSERT (
-   sizeof (app_setpoint_data_t) == APP_GSDML_INPUT_DATA_ECHO_SIZE);
+   sizeof (app_setpoint_data_t) == APP_GSDML_INPUT_DATA_SETPOINT_SIZE);
 
 union Sint32
 {

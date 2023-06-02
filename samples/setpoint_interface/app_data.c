@@ -14,17 +14,10 @@
  ********************************************************************/
 
 #include "app_data.h"
-#include "app_utils.h"
 #include "app_gsdml.h"
 #include "app_log.h"
-#include "sampleapp_common.h"
-#include "osal.h"
-#include "pnal.h"
 #include "utils.h"
-#include <pnet_api.h>
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #define APP_DATA_DEFAULT_OUTPUT_DATA 0
@@ -45,18 +38,20 @@ static uint32_t app_param_2 = 0; /* Network endianness */
 static uint32_t app_param_echo_gain = 1; /* Network endianness */
 
 /* Network endianness */
-static uint8_t setpoint_data[APP_GSDML_INPUT_DATA_ECHO_SIZE] = {0};
-static uint8_t actual_data[APP_GSDML_OUTPUT_DATA_ECHO_SIZE] = {0};
+static uint8_t setpoint_x_data[APP_GSDML_INPUT_DATA_SETPOINT_SIZE] = {0};
+static uint8_t actual_x_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
+static uint8_t setpoint_y_data[APP_GSDML_INPUT_DATA_SETPOINT_SIZE] = {0};
+static uint8_t actual_y_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
 
 static int32_t counter = 0;
 
 union Sint32 get_x_position()
 {
    union Sint32 x_pos;
-   x_pos.bytes[0] = actual_data[3];
-   x_pos.bytes[1] = actual_data[2];
-   x_pos.bytes[2] = actual_data[1];
-   x_pos.bytes[3] = actual_data[0];
+   x_pos.bytes[0] = actual_x_data[3];
+   x_pos.bytes[1] = actual_x_data[2];
+   x_pos.bytes[2] = actual_x_data[1];
+   x_pos.bytes[3] = actual_x_data[0];
 
    return x_pos;
 }
@@ -64,10 +59,10 @@ union Sint32 get_x_position()
 union Sint32 get_x_speed()
 {
    union Sint32 x_speed;
-   x_speed.bytes[0] = actual_data[7];
-   x_speed.bytes[1] = actual_data[6];
-   x_speed.bytes[2] = actual_data[5];
-   x_speed.bytes[3] = actual_data[4];
+   x_speed.bytes[0] = actual_x_data[7];
+   x_speed.bytes[1] = actual_x_data[6];
+   x_speed.bytes[2] = actual_x_data[5];
+   x_speed.bytes[3] = actual_x_data[4];
 
    return x_speed;
 }
@@ -75,10 +70,10 @@ union Sint32 get_x_speed()
 union Sint32 get_x_acceleration()
 {
    union Sint32 x_acceleration;
-   x_acceleration.bytes[0] = actual_data[11];
-   x_acceleration.bytes[1] = actual_data[10];
-   x_acceleration.bytes[2] = actual_data[9];
-   x_acceleration.bytes[3] = actual_data[8];
+   x_acceleration.bytes[0] = actual_x_data[11];
+   x_acceleration.bytes[1] = actual_x_data[10];
+   x_acceleration.bytes[2] = actual_x_data[9];
+   x_acceleration.bytes[3] = actual_x_data[8];
 
    return x_acceleration;
 }
@@ -86,10 +81,10 @@ union Sint32 get_x_acceleration()
 union Sint32 get_x_power()
 {
    union Sint32 x_power;
-   x_power.bytes[0] = actual_data[15];
-   x_power.bytes[1] = actual_data[14];
-   x_power.bytes[2] = actual_data[13];
-   x_power.bytes[3] = actual_data[12];
+   x_power.bytes[0] = actual_x_data[15];
+   x_power.bytes[1] = actual_x_data[14];
+   x_power.bytes[2] = actual_x_data[13];
+   x_power.bytes[3] = actual_x_data[12];
 
    return x_power;
 }
@@ -97,10 +92,10 @@ union Sint32 get_x_power()
 union Sint32 get_x_temperature()
 {
    union Sint32 x_temperature;
-   x_temperature.bytes[0] = actual_data[19];
-   x_temperature.bytes[1] = actual_data[18];
-   x_temperature.bytes[2] = actual_data[17];
-   x_temperature.bytes[3] = actual_data[16];
+   x_temperature.bytes[0] = actual_x_data[19];
+   x_temperature.bytes[1] = actual_x_data[18];
+   x_temperature.bytes[2] = actual_x_data[17];
+   x_temperature.bytes[3] = actual_x_data[16];
 
    return x_temperature;
 }
@@ -118,21 +113,21 @@ app_actual_data_t get_x_trajectory()
 void set_x_position (int32_t setpoint)
 {
    app_setpoint_data_t * p_setpoint_data =
-      (app_setpoint_data_t *)&setpoint_data;
+      (app_setpoint_data_t *)&setpoint_x_data;
    p_setpoint_data->position_um = CC_TO_BE32 (setpoint);
 }
 
 void set_x_state (int32_t state)
 {
    app_setpoint_data_t * p_setpoint_data =
-      (app_setpoint_data_t *)&setpoint_data;
+      (app_setpoint_data_t *)&setpoint_x_data;
    p_setpoint_data->state = CC_TO_BE32 (state);
 }
 
 void set_trajectory_point (app_setpoint_data_t trajectory)
 {
    app_setpoint_data_t * p_setpoint_data =
-      (app_setpoint_data_t *)&setpoint_data;
+      (app_setpoint_data_t *)&setpoint_x_data;
    p_setpoint_data->position_um = CC_TO_BE32 (trajectory.position_um);
    p_setpoint_data->speed_mm_min = CC_TO_BE32 (trajectory.speed_mm_min);
    p_setpoint_data->acceleration_mm_min2 =
@@ -151,16 +146,22 @@ uint8_t * app_data_to_plc (
       return NULL;
    }
 
-   if (submodule_id == APP_GSDML_SUBMOD_ID_ECHO)
+   if (submodule_id == APP_GSDML_SUBMOD_ID_SETPOINT_X)
    {
-      *size = APP_GSDML_INPUT_DATA_ECHO_SIZE;
+      *size = APP_GSDML_INPUT_DATA_SETPOINT_SIZE;
       *iops = PNET_IOXS_GOOD;
 
       counter += 1;
       uint32_t counter_network_endianess = CC_TO_BE32 (counter);
-      memcpy (&setpoint_data[12], &counter_network_endianess, 4);
+      memcpy (&setpoint_x_data[12], &counter_network_endianess, 4);
 
-      return setpoint_data;
+      return setpoint_x_data;
+   }
+   else if (submodule_id == APP_GSDML_SUBMOD_ID_SETPOINT_Y)
+   {
+      *size = APP_GSDML_INPUT_DATA_SETPOINT_SIZE;
+      *iops = PNET_IOXS_GOOD;
+      return setpoint_y_data;
    }
 
    /* Automated RT Tester scenario 2 - unsupported (sub)module */
@@ -179,33 +180,65 @@ int app_data_from_plc (
       return -1;
    }
 
-   if (submodule_id == APP_GSDML_SUBMOD_ID_ECHO)
+   if (submodule_id == APP_GSDML_SUBMOD_ID_SETPOINT_X)
    {
-      if (size == APP_GSDML_OUTPUT_DATA_ECHO_SIZE)
+      if (size == APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE)
       {
-         //         if (!are_arrays_equal (
-         //                data,
-         //                size,
-         //                actual_data,
-         //                APP_GSDML_OUTPUT_DATA_ECHO_SIZE))
-         //         {
-         uint32_t actual_position = combine_bytes_to_uint32 (&actual_data[0]);
-         uint32_t actual_speed = combine_bytes_to_uint32 (&actual_data[4]);
-         uint32_t actual_acc = combine_bytes_to_uint32 (&actual_data[8]);
-         uint32_t loop_in = combine_bytes_to_uint32 (&actual_data[12]);
-         uint32_t time = combine_bytes_to_uint32 (&actual_data[16]);
+         if (!are_arrays_equal (
+                data,
+                size,
+                actual_x_data,
+                APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE))
+         {
+            uint32_t actual_position =
+               combine_bytes_to_uint32 (&actual_x_data[0]);
+            uint32_t actual_speed = combine_bytes_to_uint32 (&actual_x_data[4]);
+            uint32_t actual_acc = combine_bytes_to_uint32 (&actual_x_data[8]);
+            uint32_t loop_in = combine_bytes_to_uint32 (&actual_x_data[12]);
+            uint32_t time = combine_bytes_to_uint32 (&actual_x_data[16]);
 
-         APP_LOG_DEBUG (
-            "Counter %u, Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: %i\tOut 5:% "
-            "i\n ",
-            counter,
-            actual_position,
-            actual_speed,
-            actual_acc,
-            loop_in,
-            time);
-         //         }
-         memcpy (actual_data, data, size);
+            APP_LOG_DEBUG (
+               "X -- Counter: %i, Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: "
+               "%i\tOut "
+               "5:% i\n ",
+               counter,
+               actual_position,
+               actual_speed,
+               actual_acc,
+               loop_in,
+               time);
+         }
+         memcpy (actual_x_data, data, size);
+
+         return 0;
+      }
+   }
+   else if (submodule_id == APP_GSDML_SUBMOD_ID_SETPOINT_Y)
+   {
+      if (size == APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE)
+      {
+         if (!are_arrays_equal (
+                data,
+                size,
+                actual_y_data,
+                APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE))
+         {
+            uint32_t actual_position =
+               combine_bytes_to_uint32 (&actual_y_data[0]);
+            uint32_t actual_speed = combine_bytes_to_uint32 (&actual_y_data[4]);
+            uint32_t actual_acc = combine_bytes_to_uint32 (&actual_y_data[8]);
+            uint32_t loop_in = combine_bytes_to_uint32 (&actual_y_data[12]);
+            uint32_t time = combine_bytes_to_uint32 (&actual_y_data[16]);
+
+            APP_LOG_DEBUG (
+               "Y -- Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: %i\tOut 5:% i\n ",
+               actual_position,
+               actual_speed,
+               actual_acc,
+               loop_in,
+               time);
+         }
+         memcpy (actual_y_data, data, size);
 
          return 0;
       }
