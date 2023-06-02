@@ -48,6 +48,8 @@ static uint32_t app_param_echo_gain = 1; /* Network endianness */
 static uint8_t setpoint_data[APP_GSDML_INPUT_DATA_ECHO_SIZE] = {0};
 static uint8_t actual_data[APP_GSDML_OUTPUT_DATA_ECHO_SIZE] = {0};
 
+static int32_t counter = 0;
+
 union Sint32 get_x_position()
 {
    union Sint32 x_pos;
@@ -153,6 +155,11 @@ uint8_t * app_data_to_plc (
    {
       *size = APP_GSDML_INPUT_DATA_ECHO_SIZE;
       *iops = PNET_IOXS_GOOD;
+
+      counter += 1;
+      uint32_t counter_network_endianess = CC_TO_BE32 (counter);
+      memcpy (&setpoint_data[12], &counter_network_endianess, 4);
+
       return setpoint_data;
    }
 
@@ -176,27 +183,28 @@ int app_data_from_plc (
    {
       if (size == APP_GSDML_OUTPUT_DATA_ECHO_SIZE)
       {
-         if (!are_arrays_equal (
-                data,
-                size,
-                actual_data,
-                APP_GSDML_OUTPUT_DATA_ECHO_SIZE))
-         {
-            uint32_t actual_position =
-               combine_bytes_to_uint32 (&actual_data[0]);
-            uint32_t actual_speed = combine_bytes_to_uint32 (&actual_data[4]);
-            uint32_t actual_acc = combine_bytes_to_uint32 (&actual_data[8]);
-            uint32_t loop_in = combine_bytes_to_uint32 (&actual_data[8]);
-            uint32_t time = combine_bytes_to_uint32 (&actual_data[16]);
+         //         if (!are_arrays_equal (
+         //                data,
+         //                size,
+         //                actual_data,
+         //                APP_GSDML_OUTPUT_DATA_ECHO_SIZE))
+         //         {
+         uint32_t actual_position = combine_bytes_to_uint32 (&actual_data[0]);
+         uint32_t actual_speed = combine_bytes_to_uint32 (&actual_data[4]);
+         uint32_t actual_acc = combine_bytes_to_uint32 (&actual_data[8]);
+         uint32_t loop_in = combine_bytes_to_uint32 (&actual_data[12]);
+         uint32_t time = combine_bytes_to_uint32 (&actual_data[16]);
 
-            APP_LOG_DEBUG (
-               "Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: %i\tOut 5:% i\n ",
-               actual_position,
-               actual_speed,
-               actual_acc,
-               loop_in,
-               time);
-         }
+         APP_LOG_DEBUG (
+            "Counter %u, Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: %i\tOut 5:% "
+            "i\n ",
+            counter,
+            actual_position,
+            actual_speed,
+            actual_acc,
+            loop_in,
+            time);
+         //         }
          memcpy (actual_data, data, size);
 
          return 0;
