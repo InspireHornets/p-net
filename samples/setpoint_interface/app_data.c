@@ -151,9 +151,9 @@ uint8_t * app_data_to_plc (
       *size = APP_GSDML_INPUT_DATA_SETPOINT_SIZE;
       *iops = PNET_IOXS_GOOD;
 
-      counter += 1;
-      uint32_t counter_network_endianess = CC_TO_BE32 (counter);
-      memcpy (&setpoint_x_data[12], &counter_network_endianess, 4);
+      //      counter += 1;
+      //      uint32_t counter_network_endianess = CC_TO_BE32 (counter);
+      //      memcpy (&setpoint_x_data[12], &counter_network_endianess, 4);
 
       return setpoint_x_data;
    }
