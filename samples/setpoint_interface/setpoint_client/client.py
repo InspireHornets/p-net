@@ -125,6 +125,43 @@ class SetpointClient:
         )
         self._send(command)
 
+    def get_y_position(self) -> int:
+        return self.get_command(CommandType.GET_Y_POSITION_UM)[0]
+
+    def get_y_speed(self) -> int:
+        return self.get_command(CommandType.GET_Y_SPEED_UM_S)[0]
+
+    def get_y_acceleration(self) -> int:
+        return self.get_command(CommandType.GET_Y_ACCELERATION_UM_S2)[0]
+
+    def get_y_power(self) -> int:
+        return self.get_command(CommandType.GET_Y_POWER)[0]
+
+    def get_y_temperature(self) -> int:
+        return self.get_command(CommandType.GET_Y_TEMPERATURE)[0]
+
+    def get_y_trajectory(self) -> TrajectoryPoint:
+        trajectory = self.get_command(CommandType.GET_Y_TRAJECTORY_POINT)
+
+        return TrajectoryPoint(position=trajectory[0], speed=trajectory[1], acceleration=trajectory[2])
+
+    def set_y_position(self, setpoint: int) -> None:
+        command = set_command(CommandType.SET_Y_POSITION_UM, setpoint)
+        self._send(command)
+
+    def set_y_state(self, state: int) -> None:
+        command = set_command(CommandType.SET_Y_STATE, state)
+        self._send(command)
+
+    def set_y_trajectory(self, trajectory_point: TrajectoryPoint) -> None:
+        command = set_command(
+            CommandType.SET_Y_TRAJECTORY_POINT,
+            trajectory_point.position,
+            trajectory_point.speed,
+            trajectory_point.acceleration,
+        )
+        self._send(command)
+
     def _send(self, command: bytes) -> None:
         self.socket.sendto(command, (self.host, self.port))
 
