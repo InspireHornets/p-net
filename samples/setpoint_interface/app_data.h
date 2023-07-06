@@ -76,6 +76,10 @@ union Sint32 get_x_speed();
 union Sint32 get_x_acceleration();
 union Sint32 get_x_power();
 union Sint32 get_x_temperature();
+app_actual_data_t get_y_trajectory();
+union Sint32 get_y_position();
+union Sint32 get_y_speed();
+union Sint32 get_y_acceleration();
 
 void set_x_position (int32_t setpoint);
 void set_x_state (int32_t state);

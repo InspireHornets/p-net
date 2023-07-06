@@ -134,6 +134,49 @@ void set_trajectory_point (app_setpoint_data_t trajectory)
       CC_TO_BE32 (trajectory.acceleration_mm_min2);
 }
 
+union Sint32 get_y_position()
+{
+   union Sint32 y_pos;
+   y_pos.bytes[0] = actual_y_data[3];
+   y_pos.bytes[1] = actual_y_data[2];
+   y_pos.bytes[2] = actual_y_data[1];
+   y_pos.bytes[3] = actual_y_data[0];
+
+   return y_pos;
+}
+
+union Sint32 get_y_speed()
+{
+   union Sint32 y_speed;
+   y_speed.bytes[0] = actual_y_data[7];
+   y_speed.bytes[1] = actual_y_data[6];
+   y_speed.bytes[2] = actual_y_data[5];
+   y_speed.bytes[3] = actual_y_data[4];
+
+   return y_speed;
+}
+
+union Sint32 get_y_acceleration()
+{
+   union Sint32 y_acceleration;
+   y_acceleration.bytes[0] = actual_y_data[11];
+   y_acceleration.bytes[1] = actual_y_data[10];
+   y_acceleration.bytes[2] = actual_y_data[9];
+   y_acceleration.bytes[3] = actual_y_data[8];
+
+   return y_acceleration;
+}
+
+app_actual_data_t get_y_trajectory()
+{
+   app_actual_data_t trajectory;
+   trajectory.position_um = get_y_position().sint32;
+   trajectory.speed_mm_min = get_y_speed().sint32;
+   trajectory.acceleration_mm_min2 = get_y_acceleration().sint32;
+
+   return trajectory;
+}
+
 uint8_t * app_data_to_plc (
    uint16_t slot_nbr,
    uint16_t subslot_nbr,
