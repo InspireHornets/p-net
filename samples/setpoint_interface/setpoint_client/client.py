@@ -44,6 +44,8 @@ class CommandType(Enum):
     SET_Y_TRAJECTORY_POINT = 0x51
     SET_Z_TRAJECTORY_POINT = 0x52
 
+    SET_XYZ_TRAJECTORY_POINT = 0x60
+
     INVALID_COMMAND = 0xFF
 
 
@@ -56,6 +58,12 @@ class TrajectoryPoint(ValueObject):
     position: um
     speed: um_s
     acceleration: um_s2
+
+
+class CartesianState(ValueObject):
+    x: TrajectoryPoint
+    y: TrajectoryPoint
+    z: TrajectoryPoint
 
 
 def set_command(command: CommandType, *setpoints: int) -> bytes:
@@ -159,6 +167,21 @@ class SetpointClient:
             trajectory_point.position,
             trajectory_point.speed,
             trajectory_point.acceleration,
+        )
+        self._send(command)
+
+    def set_xyz_trajectory(self, robot_state: CartesianState) -> None:
+        command = set_command(
+            CommandType.SET_XYZ_TRAJECTORY_POINT,
+            robot_state.x.position,
+            robot_state.x.speed,
+            robot_state.x.acceleration,
+            robot_state.y.position,
+            robot_state.y.speed,
+            robot_state.y.acceleration,
+            robot_state.z.position,
+            robot_state.z.speed,
+            robot_state.z.acceleration,
         )
         self._send(command)
 

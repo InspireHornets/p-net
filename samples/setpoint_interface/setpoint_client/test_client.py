@@ -3,7 +3,7 @@ import struct
 from unittest.mock import patch
 
 from assertpy import assert_that
-from client import CommandType, SetpointClient, TrajectoryPoint, get_command, set_command
+from client import CartesianState, CommandType, SetpointClient, TrajectoryPoint, get_command, set_command
 
 
 def test_set_command():
@@ -329,22 +329,22 @@ def test_get_y_trajectory(mock_socket):
 
 
 @patch("socket.socket")
-def test_get_y_acceleration(mock_socket):
-    mock_send = mock_socket.return_value.sendto
-    mock_receive = mock_socket.return_value.recvfrom
-
-    expected_response = struct.pack("<Bi", CommandType.GET_Y_ACCELERATION_UM_S2.value, 123)
-    mock_receive.return_value = (expected_response, None)
-
-    with SetpointClient("localhost", 1234) as client:
-        y_acceleration = client.get_y_acceleration()
-
-        mock_send.assert_called_once_with(
-            struct.pack(">B", CommandType.GET_Y_ACCELERATION_UM_S2.value), ("localhost", 1234)
+def test_set_xyz_trajectory(mock_socket):
+    with SetpointClient("127.0.0.1", 12345) as client:
+        trajectory_point = CartesianState(
+            x=TrajectoryPoint(position=100, speed=10, acceleration=5),
+            y=TrajectoryPoint(position=200, speed=20, acceleration=15),
+            z=TrajectoryPoint(position=300, speed=30, acceleration=25),
         )
-        mock_receive.assert_called_once_with(1024)
+        client.set_xyz_trajectory(trajectory_point)
 
-        assert_that(y_acceleration).is_equal_to(123)
+        mock_socket.assert_called_once_with(socket.AF_INET, socket.SOCK_DGRAM)
+        mock_socket.return_value.sendto.assert_called_once()
+
+        expected_command = struct.pack(
+            "<Biiiiiiiii", CommandType.SET_XYZ_TRAJECTORY_POINT.value, 100, 10, 5, 200, 20, 15, 300, 30, 25
+        )
+        mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
 
 
 @patch("socket.socket")
@@ -354,18 +354,18 @@ def test_get_command_with_wrong_return_command(mock_socket):
     mock_receive = mock_socket.return_value.recvfrom
 
     # Set the expected response from the PLC
-    actual_response = struct.pack("<Bi", CommandType.GET_X_POSITION_UM.value, 123)
+    actual_response = struct.pack("<Biii", CommandType.GET_Y_TRAJECTORY_POINT.value, 123, 456, 78)
     mock_receive.return_value = (actual_response, None)
 
     # Create the client and call the method
     with SetpointClient("localhost", 1234) as client:
-        assert_that(client.get_x_acceleration).raises(AssertionError).when_called_with().is_equal_to(
-            "PLC returned CommandType.GET_X_POSITION_UM, but expected CommandType.GET_X_ACCELERATION_UM_S2."
+        assert_that(client.get_x_trajectory).raises(AssertionError).when_called_with().is_equal_to(
+            "PLC returned CommandType.GET_Y_TRAJECTORY_POINT, but expected CommandType.GET_X_TRAJECTORY_POINT."
         )
 
         # Check that the socket methods were called with the expected commands
         mock_send.assert_called_once_with(
-            struct.pack(">B", CommandType.GET_X_ACCELERATION_UM_S2.value), ("localhost", 1234)
+            struct.pack(">B", CommandType.GET_X_TRAJECTORY_POINT.value), ("localhost", 1234)
         )
         mock_receive.assert_called_once_with(1024)
 
