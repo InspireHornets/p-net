@@ -9,15 +9,6 @@ from hat.ddd import ValueObject
 class CommandType(Enum):
     NO_COMMAND = 0x00
 
-    GET_X_POSITION_UM = 0x10
-    GET_Y_POSITION_UM = 0x11
-    GET_Z_POSITION_UM = 0x12
-    GET_X_SPEED_UM_S = 0x13
-    GET_Y_SPEED_UM_S = 0x14
-    GET_Z_SPEED_UM_S = 0x15
-    GET_X_ACCELERATION_UM_S2 = 0x16
-    GET_Y_ACCELERATION_UM_S2 = 0x17
-    GET_Z_ACCELERATION_UM_S2 = 0x18
     GET_X_POWER = 0x19
     GET_Y_POWER = 0x1A
     GET_Z_POWER = 0x1B
@@ -28,15 +19,6 @@ class CommandType(Enum):
     GET_Y_TRAJECTORY_POINT = 0x21
     GET_Z_TRAJECTORY_POINT = 0x22
 
-    SET_X_POSITION_UM = 0x40
-    SET_Y_POSITION_UM = 0x41
-    SET_Z_POSITION_UM = 0x42
-    SET_X_SPEED_UM_S = 0x43
-    SET_Y_SPEED_UM_S = 0x44
-    SET_Z_SPEED_UM_S = 0x45
-    SET_X_ACCELERATION_UM_S2 = 0x46
-    SET_Y_ACCELERATION_UM_S2 = 0x47
-    SET_Z_ACCELERATION_UM_S2 = 0x48
     SET_X_STATE = 0x49
     SET_Y_STATE = 0x4A
     SET_Z_STATE = 0x4B
@@ -96,15 +78,6 @@ class SetpointClient:
 
         return answer[1:]
 
-    def get_x_position(self) -> int:
-        return self.get_command(CommandType.GET_X_POSITION_UM)[0]
-
-    def get_x_speed(self) -> int:
-        return self.get_command(CommandType.GET_X_SPEED_UM_S)[0]
-
-    def get_x_acceleration(self) -> int:
-        return self.get_command(CommandType.GET_X_ACCELERATION_UM_S2)[0]
-
     def get_x_power(self) -> int:
         return self.get_command(CommandType.GET_X_POWER)[0]
 
@@ -116,14 +89,6 @@ class SetpointClient:
 
         return TrajectoryPoint(position=trajectory[0], speed=trajectory[1], acceleration=trajectory[2])
 
-    def set_x_position(self, setpoint: int) -> None:
-        command = set_command(CommandType.SET_X_POSITION_UM, setpoint)
-        self._send(command)
-
-    def set_x_state(self, state: int) -> None:
-        command = set_command(CommandType.SET_X_STATE, state)
-        self._send(command)
-
     def set_x_trajectory(self, trajectory_point: TrajectoryPoint) -> None:
         command = set_command(
             CommandType.SET_X_TRAJECTORY_POINT,
@@ -132,15 +97,6 @@ class SetpointClient:
             trajectory_point.acceleration,
         )
         self._send(command)
-
-    def get_y_position(self) -> int:
-        return self.get_command(CommandType.GET_Y_POSITION_UM)[0]
-
-    def get_y_speed(self) -> int:
-        return self.get_command(CommandType.GET_Y_SPEED_UM_S)[0]
-
-    def get_y_acceleration(self) -> int:
-        return self.get_command(CommandType.GET_Y_ACCELERATION_UM_S2)[0]
 
     def get_y_power(self) -> int:
         return self.get_command(CommandType.GET_Y_POWER)[0]
@@ -152,14 +108,6 @@ class SetpointClient:
         trajectory = self.get_command(CommandType.GET_Y_TRAJECTORY_POINT)
 
         return TrajectoryPoint(position=trajectory[0], speed=trajectory[1], acceleration=trajectory[2])
-
-    def set_y_position(self, setpoint: int) -> None:
-        command = set_command(CommandType.SET_Y_POSITION_UM, setpoint)
-        self._send(command)
-
-    def set_y_state(self, state: int) -> None:
-        command = set_command(CommandType.SET_Y_STATE, state)
-        self._send(command)
 
     def set_y_trajectory(self, trajectory_point: TrajectoryPoint) -> None:
         command = set_command(

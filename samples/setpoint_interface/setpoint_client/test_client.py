@@ -21,42 +21,6 @@ def test_get_command():
 
 
 @patch("socket.socket")
-def test_set_x_position(mock_socket):
-    with SetpointClient("127.0.0.1", 12345) as client:
-        client.set_x_position(0)
-
-        mock_socket.assert_called_once_with(socket.AF_INET, socket.SOCK_DGRAM)
-        mock_socket.return_value.sendto.assert_called_once()
-
-        expected_command = struct.pack("<Bi", CommandType.SET_X_POSITION_UM.value, 0)
-        mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
-
-        client.set_x_position(1337)
-        expected_command = struct.pack("<Bi", CommandType.SET_X_POSITION_UM.value, 1337)
-        mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
-
-        client.set_x_position(-12354567)
-        expected_command = struct.pack("<Bi", CommandType.SET_X_POSITION_UM.value, -12354567)
-        mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
-
-
-@patch("socket.socket")
-def test_set_x_state(mock_socket):
-    with SetpointClient("127.0.0.1", 12345) as client:
-        client.set_x_state(1337)
-
-        mock_socket.assert_called_once_with(socket.AF_INET, socket.SOCK_DGRAM)
-        mock_socket.return_value.sendto.assert_called_once()
-
-        expected_command = struct.pack("<Bi", CommandType.SET_X_STATE.value, 1337)
-        mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
-
-        client.set_x_state(-1234)
-        expected_command = struct.pack("<Bi", CommandType.SET_X_STATE.value, -1234)
-        mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
-
-
-@patch("socket.socket")
 def test_set_x_trajectory_point(mock_socket):
     with SetpointClient("127.0.0.1", 12345) as client:
         trajectory = TrajectoryPoint(position=123, speed=35, acceleration=98)
@@ -67,53 +31,6 @@ def test_set_x_trajectory_point(mock_socket):
 
         expected_command = struct.pack("<Biii", CommandType.SET_X_TRAJECTORY_POINT.value, 123, 35, 98)
         mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
-
-
-@patch("socket.socket")
-def test_get_x_position(mock_socket):
-    # Mock the send and receive methods of the socket
-    mock_send = mock_socket.return_value.sendto
-    mock_receive = mock_socket.return_value.recvfrom
-
-    # Set the expected response from the PLC
-    expected_response = struct.pack("<Bi", CommandType.GET_X_POSITION_UM.value, 123)
-    mock_receive.return_value = (expected_response, None)
-
-    # Create the client and call the method
-    with SetpointClient("localhost", 1234) as client:
-        x_position = client.get_x_position()
-
-        # Check that the socket methods were called with the expected commands
-        mock_send.assert_called_once_with(struct.pack(">B", CommandType.GET_X_POSITION_UM.value), ("localhost", 1234))
-        mock_receive.assert_called_once_with(1024)
-
-        assert_that(x_position).is_equal_to(123)
-
-        expected_response = struct.pack("<Bi", CommandType.GET_X_POSITION_UM.value, -123)
-        mock_receive.return_value = (expected_response, None)
-        x_position = client.get_x_position()
-        assert_that(x_position).is_equal_to(-123)
-
-
-@patch("socket.socket")
-def test_get_x_speed(mock_socket):
-    # Mock the send and receive methods of the socket
-    mock_send = mock_socket.return_value.sendto
-    mock_receive = mock_socket.return_value.recvfrom
-
-    # Set the expected response from the PLC
-    expected_response = struct.pack("<Bi", CommandType.GET_X_SPEED_UM_S.value, 123)
-    mock_receive.return_value = (expected_response, None)
-
-    # Create the client and call the method
-    with SetpointClient("localhost", 1234) as client:
-        x_speed = client.get_x_speed()
-
-        # Check that the socket methods were called with the expected commands
-        mock_send.assert_called_once_with(struct.pack(">B", CommandType.GET_X_SPEED_UM_S.value), ("localhost", 1234))
-        mock_receive.assert_called_once_with(1024)
-
-        assert_that(x_speed).is_equal_to(123)
 
 
 @patch("socket.socket")
@@ -182,53 +99,6 @@ def test_get_x_trajectory(mock_socket):
 
 
 @patch("socket.socket")
-def test_get_x_acceleration(mock_socket):
-    # Mock the send and receive methods of the socket
-    mock_send = mock_socket.return_value.sendto
-    mock_receive = mock_socket.return_value.recvfrom
-
-    # Set the expected response from the PLC
-    expected_response = struct.pack("<Bi", CommandType.GET_X_ACCELERATION_UM_S2.value, 123)
-    mock_receive.return_value = (expected_response, None)
-
-    # Create the client and call the method
-    with SetpointClient("localhost", 1234) as client:
-        x_acceleration = client.get_x_acceleration()
-
-        # Check that the socket methods were called with the expected commands
-        mock_send.assert_called_once_with(
-            struct.pack(">B", CommandType.GET_X_ACCELERATION_UM_S2.value), ("localhost", 1234)
-        )
-        mock_receive.assert_called_once_with(1024)
-
-        assert_that(x_acceleration).is_equal_to(123)
-
-
-@patch("socket.socket")
-def test_set_y_position(mock_socket):
-    with SetpointClient("127.0.0.1", 12345) as client:
-        client.set_y_position(0)
-
-        mock_socket.assert_called_once_with(socket.AF_INET, socket.SOCK_DGRAM)
-        mock_socket.return_value.sendto.assert_called_once()
-
-        expected_command = struct.pack("<Bi", CommandType.SET_Y_POSITION_UM.value, 0)
-        mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
-
-
-@patch("socket.socket")
-def test_set_y_state(mock_socket):
-    with SetpointClient("127.0.0.1", 12345) as client:
-        client.set_y_state(1337)
-
-        mock_socket.assert_called_once_with(socket.AF_INET, socket.SOCK_DGRAM)
-        mock_socket.return_value.sendto.assert_called_once()
-
-        expected_command = struct.pack("<Bi", CommandType.SET_Y_STATE.value, 1337)
-        mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
-
-
-@patch("socket.socket")
 def test_set_y_trajectory_point(mock_socket):
     with SetpointClient("127.0.0.1", 12345) as client:
         trajectory = TrajectoryPoint(position=123, speed=35, acceleration=98)
@@ -239,40 +109,6 @@ def test_set_y_trajectory_point(mock_socket):
 
         expected_command = struct.pack("<Biii", CommandType.SET_Y_TRAJECTORY_POINT.value, 123, 35, 98)
         mock_socket.return_value.sendto.assert_called_with(expected_command, ("127.0.0.1", 12345))
-
-
-@patch("socket.socket")
-def test_get_y_position(mock_socket):
-    mock_send = mock_socket.return_value.sendto
-    mock_receive = mock_socket.return_value.recvfrom
-
-    expected_response = struct.pack("<Bi", CommandType.GET_Y_POSITION_UM.value, 123)
-    mock_receive.return_value = (expected_response, None)
-
-    with SetpointClient("localhost", 1234) as client:
-        y_position = client.get_y_position()
-
-        mock_send.assert_called_once_with(struct.pack(">B", CommandType.GET_Y_POSITION_UM.value), ("localhost", 1234))
-        mock_receive.assert_called_once_with(1024)
-
-        assert_that(y_position).is_equal_to(123)
-
-
-@patch("socket.socket")
-def test_get_y_speed(mock_socket):
-    mock_send = mock_socket.return_value.sendto
-    mock_receive = mock_socket.return_value.recvfrom
-
-    expected_response = struct.pack("<Bi", CommandType.GET_Y_SPEED_UM_S.value, 123)
-    mock_receive.return_value = (expected_response, None)
-
-    with SetpointClient("localhost", 1234) as client:
-        y_speed = client.get_y_speed()
-
-        mock_send.assert_called_once_with(struct.pack(">B", CommandType.GET_Y_SPEED_UM_S.value), ("localhost", 1234))
-        mock_receive.assert_called_once_with(1024)
-
-        assert_that(y_speed).is_equal_to(123)
 
 
 @patch("socket.socket")
@@ -372,6 +208,7 @@ def test_get_command_with_wrong_return_command(mock_socket):
 
 def test_with_magic_methods():
     with SetpointClient("127.0.0.1", 12345) as client:
-        client.set_x_position(123)
+        point = TrajectoryPoint(position=12, speed=23, acceleration=98)
+        client.set_x_trajectory(point)
 
-    assert_that(client.set_x_position).raises(OSError).when_called_with(123)
+    assert_that(client.set_x_trajectory).raises(OSError).when_called_with(point)
