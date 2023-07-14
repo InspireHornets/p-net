@@ -83,7 +83,9 @@ union Sint32 get_y_acceleration();
 
 void set_x_position (int32_t setpoint);
 void set_x_state (int32_t state);
-void set_trajectory_point (app_setpoint_data_t trajectory);
+void set_x_trajectory_point (app_setpoint_data_t trajectory);
+
+void set_y_trajectory_point (app_setpoint_data_t trajectory);
 
 /**
  * Get application specific PNIO input data (for sending to PLC)

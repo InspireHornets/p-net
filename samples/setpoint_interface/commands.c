@@ -124,7 +124,7 @@ void handle_command (
          setpoint.position_um,
          setpoint.speed_mm_min,
          setpoint.acceleration_mm_min2);
-      set_trajectory_point (setpoint);
+      set_x_trajectory_point (setpoint);
       break;
    case GET_Y_TRAJECTORY_POINT:
       actual = get_y_trajectory();
@@ -138,6 +138,15 @@ void handle_command (
       memcpy (buffer + 1, &actual, 12);
 
       respond (buffer, 13, client_addr, socket_desc);
+      break;
+   case SET_Y_TRAJECTORY_POINT:
+      memcpy (&setpoint, input + 1, 4 * 3);
+      APP_LOG_DEBUG (
+         "New y position %i, x speed %i, x acceleration: %i\n",
+         setpoint.position_um,
+         setpoint.speed_mm_min,
+         setpoint.acceleration_mm_min2);
+      set_y_trajectory_point (setpoint);
       break;
    default:
       APP_LOG_ERROR ("Invalid command: %i", input[0]);

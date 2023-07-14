@@ -124,7 +124,7 @@ void set_x_state (int32_t state)
    p_setpoint_data->state = CC_TO_BE32 (state);
 }
 
-void set_trajectory_point (app_setpoint_data_t trajectory)
+void set_x_trajectory_point (app_setpoint_data_t trajectory)
 {
    app_setpoint_data_t * p_setpoint_data =
       (app_setpoint_data_t *)&setpoint_x_data;
@@ -175,6 +175,16 @@ app_actual_data_t get_y_trajectory()
    trajectory.acceleration_mm_min2 = get_y_acceleration().sint32;
 
    return trajectory;
+}
+
+void set_y_trajectory_point (app_setpoint_data_t trajectory)
+{
+   app_setpoint_data_t * p_setpoint_data =
+      (app_setpoint_data_t *)&setpoint_y_data;
+   p_setpoint_data->position_um = CC_TO_BE32 (trajectory.position_um);
+   p_setpoint_data->speed_mm_min = CC_TO_BE32 (trajectory.speed_mm_min);
+   p_setpoint_data->acceleration_mm_min2 =
+      CC_TO_BE32 (trajectory.acceleration_mm_min2);
 }
 
 uint8_t * app_data_to_plc (
