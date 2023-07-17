@@ -37,6 +37,9 @@ void handle_command (
    app_setpoint_data_t setpoint;
    app_actual_data_t actual;
    uint8_t buffer[13];
+   size_t INT32_SIZE = sizeof (int32_t);
+   size_t TRAJECTORY_POINT1 = 3;
+   //   size_t TRAJECTORY_POINT3 = TRAJECTORY_POINT1 * 3;
 
    APP_LOG_DEBUG ("UDP server: received command %x\n", input[0]);
 
@@ -63,7 +66,7 @@ void handle_command (
       APP_LOG_DEBUG ("Current x power: %u\n", plc_output.sint32);
 
       buffer[0] = GET_X_POWER;
-      memcpy (buffer + 1, &plc_output.bytes, 4);
+      memcpy (buffer + 1, &plc_output.bytes, INT32_SIZE);
 
       respond (buffer, 5, client_addr, socket_desc);
       break;
@@ -73,17 +76,17 @@ void handle_command (
       APP_LOG_DEBUG ("Current x temperature: %i\n", plc_output.sint32);
 
       buffer[0] = GET_X_TEMPERATURE;
-      memcpy (buffer + 1, &plc_output.bytes, 4);
+      memcpy (buffer + 1, &plc_output.bytes, INT32_SIZE);
 
       respond (buffer, 5, client_addr, socket_desc);
       break;
    case SET_X_STATE:
-      memcpy (plc_input.bytes, input + 1, 4);
+      memcpy (plc_input.bytes, input + 1, INT32_SIZE);
       APP_LOG_DEBUG ("New x state %i\n", plc_input.sint32);
       set_x_state (plc_input.sint32);
       break;
    case SET_X_TRAJECTORY_POINT:
-      memcpy (&setpoint, input + 1, 4 * 3);
+      memcpy (&setpoint, input + 1, INT32_SIZE * TRAJECTORY_POINT1);
       APP_LOG_DEBUG (
          "New x position %i, x speed %i, x acceleration: %i\n",
          setpoint.position_um,
@@ -100,12 +103,12 @@ void handle_command (
          actual.acceleration_mm_min2);
 
       buffer[0] = GET_Y_TRAJECTORY_POINT;
-      memcpy (buffer + 1, &actual, 12);
+      memcpy (buffer + 1, &actual, INT32_SIZE * TRAJECTORY_POINT1);
 
       respond (buffer, 13, client_addr, socket_desc);
       break;
    case SET_Y_TRAJECTORY_POINT:
-      memcpy (&setpoint, input + 1, 4 * 3);
+      memcpy (&setpoint, input + 1, INT32_SIZE * TRAJECTORY_POINT1);
       APP_LOG_DEBUG (
          "New y position %i, x speed %i, x acceleration: %i\n",
          setpoint.position_um,
