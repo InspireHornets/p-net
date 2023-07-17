@@ -106,8 +106,8 @@ app_actual_data_t get_x_trajectory()
 {
    app_actual_data_t trajectory;
    trajectory.position_um = get_position (actual_x_data).sint32;
-   trajectory.speed_mm_min = get_speed (actual_x_data).sint32;
-   trajectory.acceleration_mm_min2 = get_acceleration (actual_x_data).sint32;
+   trajectory.speed_um_s = get_speed (actual_x_data).sint32;
+   trajectory.acceleration_um_s2 = get_acceleration (actual_x_data).sint32;
 
    return trajectory;
 }
@@ -131,17 +131,17 @@ void set_x_trajectory_point (app_setpoint_data_t trajectory)
    app_setpoint_data_t * p_setpoint_data =
       (app_setpoint_data_t *)&setpoint_x_data;
    p_setpoint_data->position_um = CC_TO_BE32 (trajectory.position_um);
-   p_setpoint_data->speed_mm_min = CC_TO_BE32 (trajectory.speed_mm_min);
-   p_setpoint_data->acceleration_mm_min2 =
-      CC_TO_BE32 (trajectory.acceleration_mm_min2);
+   p_setpoint_data->speed_um_s = CC_TO_BE32 (trajectory.speed_um_s);
+   p_setpoint_data->acceleration_um_s2 =
+      CC_TO_BE32 (trajectory.acceleration_um_s2);
 }
 
 app_actual_data_t get_y_trajectory()
 {
    app_actual_data_t trajectory;
    trajectory.position_um = get_position (actual_y_data).sint32;
-   trajectory.speed_mm_min = get_speed (actual_y_data).sint32;
-   trajectory.acceleration_mm_min2 = get_acceleration (actual_z_data).sint32;
+   trajectory.speed_um_s = get_speed (actual_y_data).sint32;
+   trajectory.acceleration_um_s2 = get_acceleration (actual_z_data).sint32;
 
    return trajectory;
 }
@@ -150,8 +150,8 @@ app_actual_data_t get_z_trajectory()
 {
    app_actual_data_t trajectory;
    trajectory.position_um = get_position (actual_z_data).sint32;
-   trajectory.speed_mm_min = get_speed (actual_z_data).sint32;
-   trajectory.acceleration_mm_min2 = get_acceleration (actual_z_data).sint32;
+   trajectory.speed_um_s = get_speed (actual_z_data).sint32;
+   trajectory.acceleration_um_s2 = get_acceleration (actual_z_data).sint32;
 
    return trajectory;
 }
@@ -161,9 +161,9 @@ void set_y_trajectory_point (app_setpoint_data_t trajectory)
    app_setpoint_data_t * p_setpoint_data =
       (app_setpoint_data_t *)&setpoint_y_data;
    p_setpoint_data->position_um = CC_TO_BE32 (trajectory.position_um);
-   p_setpoint_data->speed_mm_min = CC_TO_BE32 (trajectory.speed_mm_min);
-   p_setpoint_data->acceleration_mm_min2 =
-      CC_TO_BE32 (trajectory.acceleration_mm_min2);
+   p_setpoint_data->speed_um_s = CC_TO_BE32 (trajectory.speed_um_s);
+   p_setpoint_data->acceleration_um_s2 =
+      CC_TO_BE32 (trajectory.acceleration_um_s2);
 }
 
 void set_z_trajectory_point (app_setpoint_data_t trajectory)
@@ -171,9 +171,9 @@ void set_z_trajectory_point (app_setpoint_data_t trajectory)
    app_setpoint_data_t * p_setpoint_data =
       (app_setpoint_data_t *)&setpoint_z_data;
    p_setpoint_data->position_um = CC_TO_BE32 (trajectory.position_um);
-   p_setpoint_data->speed_mm_min = CC_TO_BE32 (trajectory.speed_mm_min);
-   p_setpoint_data->acceleration_mm_min2 =
-      CC_TO_BE32 (trajectory.acceleration_mm_min2);
+   p_setpoint_data->speed_um_s = CC_TO_BE32 (trajectory.speed_um_s);
+   p_setpoint_data->acceleration_um_s2 =
+      CC_TO_BE32 (trajectory.acceleration_um_s2);
 }
 
 app_actual3_data_t get_xyz_trajectory()

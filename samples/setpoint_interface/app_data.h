@@ -43,8 +43,8 @@ typedef struct CC_PACKED app_actual_data
 {
    /* Network endianness */
    int32_t position_um;
-   int32_t speed_mm_min;
-   int32_t acceleration_mm_min2;
+   int32_t speed_um_s;
+   int32_t acceleration_um_s2;
    int32_t power;
    int32_t temperature;
 } app_actual_data_t;
@@ -69,8 +69,8 @@ typedef struct CC_PACKED app_setpoint_data
 {
    /* Network endianness */
    int32_t position_um;
-   int32_t speed_mm_min;
-   int32_t acceleration_mm_min2;
+   int32_t speed_um_s;
+   int32_t acceleration_um_s2;
    int32_t state;
 } app_setpoint_data_t;
 CC_PACKED_END

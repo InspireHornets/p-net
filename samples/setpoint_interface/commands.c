@@ -54,8 +54,8 @@ void handle_command (
       APP_LOG_DEBUG (
          "Current x position: %i, x speed: %i, x acceleration: %i\n",
          actual.position_um,
-         actual.speed_mm_min,
-         actual.acceleration_mm_min2);
+         actual.speed_um_s,
+         actual.acceleration_um_s2);
 
       buffer[0] = GET_X_TRAJECTORY_POINT;
       memcpy (buffer + 1, &actual, 12);
@@ -92,8 +92,8 @@ void handle_command (
       APP_LOG_DEBUG (
          "New x position %i, x speed %i, x acceleration: %i\n",
          setpoint.position_um,
-         setpoint.speed_mm_min,
-         setpoint.acceleration_mm_min2);
+         setpoint.speed_um_s,
+         setpoint.acceleration_um_s2);
       set_x_trajectory_point (setpoint);
       break;
    case GET_Y_TRAJECTORY_POINT:
@@ -101,8 +101,8 @@ void handle_command (
       APP_LOG_DEBUG (
          "Current y position: %i, y speed: %i, y acceleration: %i\n",
          actual.position_um,
-         actual.speed_mm_min,
-         actual.acceleration_mm_min2);
+         actual.speed_um_s,
+         actual.acceleration_um_s2);
 
       buffer[0] = GET_Y_TRAJECTORY_POINT;
       memcpy (buffer + 1, &actual, INT32_SIZE * TRAJECTORY_POINT1);
@@ -114,8 +114,8 @@ void handle_command (
       APP_LOG_DEBUG (
          "New y position %i, x speed %i, x acceleration: %i\n",
          setpoint.position_um,
-         setpoint.speed_mm_min,
-         setpoint.acceleration_mm_min2);
+         setpoint.speed_um_s,
+         setpoint.acceleration_um_s2);
       set_y_trajectory_point (setpoint);
       break;
    case GET_XYZ_TRAJECTORY_POINT:
@@ -123,18 +123,18 @@ void handle_command (
       APP_LOG_DEBUG (
          "Current x position: %i, x speed: %i, x acceleration: %i\n",
          actual3.x.position_um,
-         actual3.y.speed_mm_min,
-         actual3.z.acceleration_mm_min2);
+         actual3.y.speed_um_s,
+         actual3.z.acceleration_um_s2);
       APP_LOG_DEBUG (
          "Current y position: %i, y speed: %i, y acceleration: %i\n",
          actual3.x.position_um,
-         actual3.y.speed_mm_min,
-         actual3.z.acceleration_mm_min2);
+         actual3.y.speed_um_s,
+         actual3.z.acceleration_um_s2);
       APP_LOG_DEBUG (
          "Current z position: %i, z speed: %i, z acceleration: %i\n",
          actual3.x.position_um,
-         actual3.y.speed_mm_min,
-         actual3.z.acceleration_mm_min2);
+         actual3.y.speed_um_s,
+         actual3.z.acceleration_um_s2);
 
       buffer[0] = GET_XYZ_TRAJECTORY_POINT;
       memcpy (buffer + 1, &actual3, INT32_SIZE * TRAJECTORY_POINT3);
@@ -146,18 +146,18 @@ void handle_command (
       APP_LOG_DEBUG (
          "New x position %i, x speed %i, x acceleration: %i\n",
          setpoint3.x.position_um,
-         setpoint3.x.speed_mm_min,
-         setpoint3.x.acceleration_mm_min2);
+         setpoint3.x.speed_um_s,
+         setpoint3.x.acceleration_um_s2);
       APP_LOG_DEBUG (
          "New y position %i, y speed %i, y acceleration: %i\n",
          setpoint3.y.position_um,
-         setpoint3.y.speed_mm_min,
-         setpoint3.y.acceleration_mm_min2);
+         setpoint3.y.speed_um_s,
+         setpoint3.y.acceleration_um_s2);
       APP_LOG_DEBUG (
          "New z position %i, z speed %i, z acceleration: %i\n",
          setpoint3.z.position_um,
-         setpoint3.z.speed_mm_min,
-         setpoint3.z.acceleration_mm_min2);
+         setpoint3.z.speed_um_s,
+         setpoint3.z.acceleration_um_s2);
       set_xyz_trajectory_point (setpoint3);
       break;
    default:
