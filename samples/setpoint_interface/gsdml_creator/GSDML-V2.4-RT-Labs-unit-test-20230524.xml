@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ISO15745Profile xmlns="http://www.profibus.com/GSDML/2003/11/DeviceProfile" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.profibus.com/GSDML/2003/11/DeviceProfile ..\xsd\GSDML-DeviceProfile-V2.4.xsd">
+   <ProfileHeader>
+      <ProfileIdentification>PROFINET Device Profile</ProfileIdentification>
+      <ProfileRevision>1.00</ProfileRevision>
+      <ProfileName>Device Profile for PROFINET Devices</ProfileName>
+      <ProfileSource>PROFIBUS Nutzerorganisation e. V. (PNO)</ProfileSource>
+      <ProfileClassID>Device</ProfileClassID>
+      <ISO15745Reference>
+         <ISO15745Part>4</ISO15745Part>
+         <ISO15745Edition>1</ISO15745Edition>
+         <ProfileTechnology>GSDML</ProfileTechnology>
+      </ISO15745Reference>
+   </ProfileHeader>
+</ISO15745Profile>
