@@ -36,7 +36,8 @@ void handle_command (
    union Sint32 plc_input;
    app_setpoint_data_t setpoint;
    app_actual_data_t actual;
-   struct app_actual3_data actual3;
+   app_actual3_data_t actual3;
+   app_setpoint3_data_t setpoint3;
    uint8_t buffer[13];
    size_t INT32_SIZE = sizeof (int32_t);
    size_t TRAJECTORY_POINT1 = 3;
@@ -139,6 +140,25 @@ void handle_command (
       memcpy (buffer + 1, &actual3, INT32_SIZE * TRAJECTORY_POINT3);
 
       respond (buffer, 13, client_addr, socket_desc);
+      break;
+   case SET_XYZ_TRAJECTORY_POINT:
+      memcpy (&setpoint3, input + 1, INT32_SIZE * TRAJECTORY_POINT3);
+      APP_LOG_DEBUG (
+         "New x position %i, x speed %i, x acceleration: %i\n",
+         setpoint3.x.position_um,
+         setpoint3.x.speed_mm_min,
+         setpoint3.x.acceleration_mm_min2);
+      APP_LOG_DEBUG (
+         "New y position %i, y speed %i, y acceleration: %i\n",
+         setpoint3.y.position_um,
+         setpoint3.y.speed_mm_min,
+         setpoint3.y.acceleration_mm_min2);
+      APP_LOG_DEBUG (
+         "New z position %i, z speed %i, z acceleration: %i\n",
+         setpoint3.z.position_um,
+         setpoint3.z.speed_mm_min,
+         setpoint3.z.acceleration_mm_min2);
+      set_xyz_trajectory_point (setpoint3);
       break;
    default:
       APP_LOG_ERROR ("Invalid command: %i", input[0]);

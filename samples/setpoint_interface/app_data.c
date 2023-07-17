@@ -42,7 +42,7 @@ static uint8_t setpoint_x_data[APP_GSDML_INPUT_DATA_SETPOINT_SIZE] = {0};
 static uint8_t actual_x_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
 static uint8_t setpoint_y_data[APP_GSDML_INPUT_DATA_SETPOINT_SIZE] = {0};
 static uint8_t actual_y_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
-// static uint8_t setpoint_z_data[APP_GSDML_INPUT_DATA_SETPOINT_SIZE] = {0};
+static uint8_t setpoint_z_data[APP_GSDML_INPUT_DATA_SETPOINT_SIZE] = {0};
 static uint8_t actual_z_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
 
 static int32_t counter = 0;
@@ -166,14 +166,31 @@ void set_y_trajectory_point (app_setpoint_data_t trajectory)
       CC_TO_BE32 (trajectory.acceleration_mm_min2);
 }
 
-app_setpoint3_data_t get_xyz_trajectory()
+void set_z_trajectory_point (app_setpoint_data_t trajectory)
 {
-   app_setpoint3_data_t trajectory;
+   app_setpoint_data_t * p_setpoint_data =
+      (app_setpoint_data_t *)&setpoint_z_data;
+   p_setpoint_data->position_um = CC_TO_BE32 (trajectory.position_um);
+   p_setpoint_data->speed_mm_min = CC_TO_BE32 (trajectory.speed_mm_min);
+   p_setpoint_data->acceleration_mm_min2 =
+      CC_TO_BE32 (trajectory.acceleration_mm_min2);
+}
+
+app_actual3_data_t get_xyz_trajectory()
+{
+   app_actual3_data_t trajectory;
    trajectory.x = get_x_trajectory();
    trajectory.y = get_y_trajectory();
    trajectory.z = get_z_trajectory();
 
    return trajectory;
+}
+
+void set_xyz_trajectory_point (app_setpoint3_data_t trajectory3)
+{
+   set_x_trajectory_point (trajectory3.x);
+   set_y_trajectory_point (trajectory3.y);
+   set_z_trajectory_point (trajectory3.z);
 }
 
 uint8_t * app_data_to_plc (
