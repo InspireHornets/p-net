@@ -165,6 +165,33 @@ def test_get_y_trajectory(mock_socket):
 
 
 @patch("socket.socket")
+def test_get_xyz_trajectory(mock_socket):
+    mock_send = mock_socket.return_value.sendto
+    mock_receive = mock_socket.return_value.recvfrom
+
+    expected_response = struct.pack(
+        "<Biiiiiiiii", CommandType.GET_XYZ_TRAJECTORY_POINT.value, 100, 10, 5, 200, 20, 15, 300, 30, 25
+    )
+    mock_receive.return_value = (expected_response, None)
+
+    with SetpointClient("localhost", 1234) as client:
+        xyz_trajectory = client.get_xyz_trajectory()
+
+        mock_send.assert_called_once_with(
+            struct.pack(">B", CommandType.GET_XYZ_TRAJECTORY_POINT.value), ("localhost", 1234)
+        )
+        mock_receive.assert_called_once_with(1024)
+
+        expected_trajectory = CartesianState(
+            x=TrajectoryPoint(position=100, speed=10, acceleration=5),
+            y=TrajectoryPoint(position=200, speed=20, acceleration=15),
+            z=TrajectoryPoint(position=300, speed=30, acceleration=25),
+        )
+
+        assert_that(xyz_trajectory.dict()).is_equal_to(expected_trajectory.dict())
+
+
+@patch("socket.socket")
 def test_set_xyz_trajectory(mock_socket):
     with SetpointClient("127.0.0.1", 12345) as client:
         trajectory_point = CartesianState(

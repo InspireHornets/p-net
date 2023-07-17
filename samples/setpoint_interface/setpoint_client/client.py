@@ -18,6 +18,7 @@ class CommandType(Enum):
     GET_X_TRAJECTORY_POINT = 0x20
     GET_Y_TRAJECTORY_POINT = 0x21
     GET_Z_TRAJECTORY_POINT = 0x22
+    GET_XYZ_TRAJECTORY_POINT = 0x30
 
     SET_X_STATE = 0x49
     SET_Y_STATE = 0x4A
@@ -25,10 +26,23 @@ class CommandType(Enum):
     SET_X_TRAJECTORY_POINT = 0x50
     SET_Y_TRAJECTORY_POINT = 0x51
     SET_Z_TRAJECTORY_POINT = 0x52
-
     SET_XYZ_TRAJECTORY_POINT = 0x60
 
     INVALID_COMMAND = 0xFF
+
+
+def get_command_return_values(command_type: CommandType) -> int:
+    """Return the number of ints returned by get commands. X, Y, Z trajectory points are 3, XYZ is 9, other are 1."""
+    if command_type == CommandType.GET_XYZ_TRAJECTORY_POINT:
+        return 9
+    elif command_type == CommandType.GET_X_TRAJECTORY_POINT:
+        return 3
+    elif command_type == CommandType.GET_Y_TRAJECTORY_POINT:
+        return 3
+    elif command_type == CommandType.GET_Z_TRAJECTORY_POINT:
+        return 3
+    else:
+        return 1
 
 
 um = int
@@ -71,7 +85,7 @@ class SetpointClient:
         command = struct.pack(">B", command_type.value)
         self._send(command)
 
-        return_value_size = 3 if command_type.value >= CommandType.GET_X_TRAJECTORY_POINT.value else 1
+        return_value_size = get_command_return_values(command_type)
         format = "<B" + ("i" * return_value_size)
         answer = struct.unpack(format, self._receive())
         assert answer[0] == command_type.value, f"PLC returned {CommandType(answer[0])}, but expected {command_type}."
@@ -117,6 +131,15 @@ class SetpointClient:
             trajectory_point.acceleration,
         )
         self._send(command)
+
+    def get_xyz_trajectory(self) -> CartesianState:
+        xyz_trajectory = self.get_command(CommandType.GET_XYZ_TRAJECTORY_POINT)
+
+        x_point = TrajectoryPoint(position=xyz_trajectory[0], speed=xyz_trajectory[1], acceleration=xyz_trajectory[2])
+        y_point = TrajectoryPoint(position=xyz_trajectory[3], speed=xyz_trajectory[4], acceleration=xyz_trajectory[5])
+        z_point = TrajectoryPoint(position=xyz_trajectory[6], speed=xyz_trajectory[7], acceleration=xyz_trajectory[8])
+
+        return CartesianState(x=x_point, y=y_point, z=z_point)
 
     def set_xyz_trajectory(self, robot_state: CartesianState) -> None:
         command = set_command(
