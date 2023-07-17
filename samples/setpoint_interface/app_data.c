@@ -42,40 +42,42 @@ static uint8_t setpoint_x_data[APP_GSDML_INPUT_DATA_SETPOINT_SIZE] = {0};
 static uint8_t actual_x_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
 static uint8_t setpoint_y_data[APP_GSDML_INPUT_DATA_SETPOINT_SIZE] = {0};
 static uint8_t actual_y_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
+// static uint8_t setpoint_z_data[APP_GSDML_INPUT_DATA_SETPOINT_SIZE] = {0};
+static uint8_t actual_z_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
 
 static int32_t counter = 0;
 
-union Sint32 get_x_position()
+union Sint32 get_position (const uint8_t * actual_data)
 {
-   union Sint32 x_pos;
-   x_pos.bytes[0] = actual_x_data[3];
-   x_pos.bytes[1] = actual_x_data[2];
-   x_pos.bytes[2] = actual_x_data[1];
-   x_pos.bytes[3] = actual_x_data[0];
+   union Sint32 position;
+   position.bytes[0] = actual_data[3];
+   position.bytes[1] = actual_data[2];
+   position.bytes[2] = actual_data[1];
+   position.bytes[3] = actual_data[0];
 
-   return x_pos;
+   return position;
 }
 
-union Sint32 get_x_speed()
+union Sint32 get_speed (const uint8_t * actual_data)
 {
-   union Sint32 x_speed;
-   x_speed.bytes[0] = actual_x_data[7];
-   x_speed.bytes[1] = actual_x_data[6];
-   x_speed.bytes[2] = actual_x_data[5];
-   x_speed.bytes[3] = actual_x_data[4];
+   union Sint32 speed;
+   speed.bytes[0] = actual_data[7];
+   speed.bytes[1] = actual_data[6];
+   speed.bytes[2] = actual_data[5];
+   speed.bytes[3] = actual_data[4];
 
-   return x_speed;
+   return speed;
 }
 
-union Sint32 get_x_acceleration()
+union Sint32 get_acceleration (const uint8_t * actual_data)
 {
-   union Sint32 x_acceleration;
-   x_acceleration.bytes[0] = actual_x_data[11];
-   x_acceleration.bytes[1] = actual_x_data[10];
-   x_acceleration.bytes[2] = actual_x_data[9];
-   x_acceleration.bytes[3] = actual_x_data[8];
+   union Sint32 acceleration;
+   acceleration.bytes[0] = actual_data[11];
+   acceleration.bytes[1] = actual_data[10];
+   acceleration.bytes[2] = actual_data[9];
+   acceleration.bytes[3] = actual_data[8];
 
-   return x_acceleration;
+   return acceleration;
 }
 
 union Sint32 get_x_power()
@@ -103,9 +105,9 @@ union Sint32 get_x_temperature()
 app_actual_data_t get_x_trajectory()
 {
    app_actual_data_t trajectory;
-   trajectory.position_um = get_x_position().sint32;
-   trajectory.speed_mm_min = get_x_speed().sint32;
-   trajectory.acceleration_mm_min2 = get_x_acceleration().sint32;
+   trajectory.position_um = get_position (actual_x_data).sint32;
+   trajectory.speed_mm_min = get_speed (actual_x_data).sint32;
+   trajectory.acceleration_mm_min2 = get_acceleration (actual_x_data).sint32;
 
    return trajectory;
 }
@@ -134,45 +136,22 @@ void set_x_trajectory_point (app_setpoint_data_t trajectory)
       CC_TO_BE32 (trajectory.acceleration_mm_min2);
 }
 
-union Sint32 get_y_position()
-{
-   union Sint32 y_pos;
-   y_pos.bytes[0] = actual_y_data[3];
-   y_pos.bytes[1] = actual_y_data[2];
-   y_pos.bytes[2] = actual_y_data[1];
-   y_pos.bytes[3] = actual_y_data[0];
-
-   return y_pos;
-}
-
-union Sint32 get_y_speed()
-{
-   union Sint32 y_speed;
-   y_speed.bytes[0] = actual_y_data[7];
-   y_speed.bytes[1] = actual_y_data[6];
-   y_speed.bytes[2] = actual_y_data[5];
-   y_speed.bytes[3] = actual_y_data[4];
-
-   return y_speed;
-}
-
-union Sint32 get_y_acceleration()
-{
-   union Sint32 y_acceleration;
-   y_acceleration.bytes[0] = actual_y_data[11];
-   y_acceleration.bytes[1] = actual_y_data[10];
-   y_acceleration.bytes[2] = actual_y_data[9];
-   y_acceleration.bytes[3] = actual_y_data[8];
-
-   return y_acceleration;
-}
-
 app_actual_data_t get_y_trajectory()
 {
    app_actual_data_t trajectory;
-   trajectory.position_um = get_y_position().sint32;
-   trajectory.speed_mm_min = get_y_speed().sint32;
-   trajectory.acceleration_mm_min2 = get_y_acceleration().sint32;
+   trajectory.position_um = get_position (actual_y_data).sint32;
+   trajectory.speed_mm_min = get_speed (actual_y_data).sint32;
+   trajectory.acceleration_mm_min2 = get_acceleration (actual_z_data).sint32;
+
+   return trajectory;
+}
+
+app_actual_data_t get_z_trajectory()
+{
+   app_actual_data_t trajectory;
+   trajectory.position_um = get_position (actual_z_data).sint32;
+   trajectory.speed_mm_min = get_speed (actual_z_data).sint32;
+   trajectory.acceleration_mm_min2 = get_acceleration (actual_z_data).sint32;
 
    return trajectory;
 }
@@ -185,6 +164,16 @@ void set_y_trajectory_point (app_setpoint_data_t trajectory)
    p_setpoint_data->speed_mm_min = CC_TO_BE32 (trajectory.speed_mm_min);
    p_setpoint_data->acceleration_mm_min2 =
       CC_TO_BE32 (trajectory.acceleration_mm_min2);
+}
+
+app_setpoint3_data_t get_xyz_trajectory()
+{
+   app_setpoint3_data_t trajectory;
+   trajectory.x = get_x_trajectory();
+   trajectory.y = get_y_trajectory();
+   trajectory.z = get_z_trajectory();
+
+   return trajectory;
 }
 
 uint8_t * app_data_to_plc (

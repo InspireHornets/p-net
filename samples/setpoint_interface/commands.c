@@ -36,10 +36,11 @@ void handle_command (
    union Sint32 plc_input;
    app_setpoint_data_t setpoint;
    app_actual_data_t actual;
+   struct app_actual3_data actual3;
    uint8_t buffer[13];
    size_t INT32_SIZE = sizeof (int32_t);
    size_t TRAJECTORY_POINT1 = 3;
-   //   size_t TRAJECTORY_POINT3 = TRAJECTORY_POINT1 * 3;
+   size_t TRAJECTORY_POINT3 = TRAJECTORY_POINT1 * 3;
 
    APP_LOG_DEBUG ("UDP server: received command %x\n", input[0]);
 
@@ -115,6 +116,29 @@ void handle_command (
          setpoint.speed_mm_min,
          setpoint.acceleration_mm_min2);
       set_y_trajectory_point (setpoint);
+      break;
+   case GET_XYZ_TRAJECTORY_POINT:
+      actual3 = get_xyz_trajectory();
+      APP_LOG_DEBUG (
+         "Current x position: %i, x speed: %i, x acceleration: %i\n",
+         actual3.x.position_um,
+         actual3.y.speed_mm_min,
+         actual3.z.acceleration_mm_min2);
+      APP_LOG_DEBUG (
+         "Current y position: %i, y speed: %i, y acceleration: %i\n",
+         actual3.x.position_um,
+         actual3.y.speed_mm_min,
+         actual3.z.acceleration_mm_min2);
+      APP_LOG_DEBUG (
+         "Current z position: %i, z speed: %i, z acceleration: %i\n",
+         actual3.x.position_um,
+         actual3.y.speed_mm_min,
+         actual3.z.acceleration_mm_min2);
+
+      buffer[0] = GET_XYZ_TRAJECTORY_POINT;
+      memcpy (buffer + 1, &actual3, INT32_SIZE * TRAJECTORY_POINT3);
+
+      respond (buffer, 13, client_addr, socket_desc);
       break;
    default:
       APP_LOG_ERROR ("Invalid command: %i", input[0]);
