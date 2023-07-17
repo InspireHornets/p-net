@@ -38,6 +38,27 @@ class GSDML:
 
         return profile_header
 
+    def create_profile_body(self):
+        profile_body = ET.Element("ProfileBody")
+
+        device_identity = ET.SubElement(profile_body, "DeviceIdentity")
+        device_identity.set("VendorID", "0x0493")
+        device_identity.set("DeviceID", "0x0002")
+
+        info_text = ET.SubElement(device_identity, "InfoText")
+        info_text.set("TextId", "IDT_INFO_Device")
+
+        vendor_name = ET.SubElement(device_identity, "VendorName")
+        vendor_name.set("Value", "RT-Labs")
+
+        device_function = ET.SubElement(profile_body, "DeviceFunction")
+
+        family = ET.SubElement(device_function, "Family")
+        family.set("MainFamily", "I/O")
+        family.set("ProductFamily", "P-Net Samples")
+
+        return profile_body
+
     def __init__(self):
         self.root = ET.Element("ISO15745Profile")
         self.root.set("xmlns", "http://www.profibus.com/GSDML/2003/11/DeviceProfile")
@@ -49,6 +70,9 @@ class GSDML:
 
         self.profile_header = self.create_profile_header()
         self.root.append(self.profile_header)
+
+        self.profile_body = self.create_profile_body()
+        self.root.append(self.profile_body)
 
     def write_xml(self, file_path):
         tree = ET.ElementTree(self.root)

@@ -12,4 +12,13 @@
          <ProfileTechnology>GSDML</ProfileTechnology>
       </ISO15745Reference>
    </ProfileHeader>
+   <ProfileBody>
+      <DeviceIdentity VendorID="0x0493" DeviceID="0x0002">
+         <InfoText TextId="IDT_INFO_Device" />
+         <VendorName Value="RT-Labs" />
+      </DeviceIdentity>
+      <DeviceFunction>
+         <Family MainFamily="I/O" ProductFamily="P-Net Samples" />
+      </DeviceFunction>
+   </ProfileBody>
 </ISO15745Profile>
