@@ -15,13 +15,15 @@ Web resources
 
 Converting examples for your own usage
 -------------------------------------
-Convert p-net to use it with your own datatypes and GSDML file.
+Convert p-net to use it with your own datatypes and GSDML file. There is now a [GSDML creator](https://github.com/InspireHornets/gsdml-creator)
+it can do some of these steps.
 
 1. Copy the GSML file that is found in the `p-net/samples/pn_dev/GSDML-V2.4-RT-Labs-P-Net-Sample-App-20220324.xml`
     Note: I tried to create my own profinet device with TwinCAT or with CODESYS and export a GSDML file.
     But I never got this to work and I don´t know why.
 2. Manually adjust the GSDML file as needed, for example:
    - the company name, name of the device etc.
+        > NOTE: when you change the dns name, make sure to run the app with the `-f` flag once. This resets the device to factory settings.
    - size of IO, datatypes of IO and number of modules
    - also make sure all submodules have a unique ID (not sure if needed).
 1. Duplicate the `samples/pn_simple_example` folder and content and rename the `pn_simple_example` folder, for example to `pn_my_app`
