@@ -37,7 +37,7 @@ extern "C" {
 #define APP_PROFINET_SIGNAL_LED_ID 2
 
 #define APP_TICKS_READ_BUTTONS 10
-#define APP_TICKS_UPDATE_DATA  100
+#define APP_TICKS_UPDATE_DATA  32
 
 /** HW Offload configuration. */
 typedef enum

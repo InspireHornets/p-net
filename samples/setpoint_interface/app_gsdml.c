@@ -48,6 +48,11 @@ static const app_gsdml_module_t setpoint_y_module = {
    .name = "Setpoint y interface module",
    .submodules = {APP_GSDML_SUBMOD_ID_SETPOINT_Y, 0}};
 
+static const app_gsdml_module_t setpoint_z_module = {
+   .id = APP_GSDML_MOD_ID_SETPOINT_Z,
+   .name = "Setpoint Z interface module",
+   .submodules = {APP_GSDML_SUBMOD_ID_SETPOINT_Z, 0}};
+
 /******************* Supported submodules ************************/
 
 static const app_gsdml_submodule_t dap_indentity_1 = {
@@ -122,11 +127,22 @@ static const app_gsdml_submodule_t submod_setpoint_y = {
    .outsize = APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE,
    .parameters = {APP_GSDML_PARAMETER_ECHO_IDX, 0}};
 
+static const app_gsdml_submodule_t submod_setpoint_z = {
+   .id = APP_GSDML_SUBMOD_ID_SETPOINT_Z,
+   .name = "Setpoint interface for z-axis",
+   .api = APP_GSDML_API,
+   .data_dir = PNET_DIR_IO,
+   .insize = APP_GSDML_INPUT_DATA_SETPOINT_SIZE,
+   .outsize = APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE,
+   .parameters = {APP_GSDML_PARAMETER_ECHO_IDX, 0}};
+
 /** List of supported modules */
 static const app_gsdml_module_t * app_gsdml_modules[] = {
    &dap_1,
    &setpoint_x_module,
-   &setpoint_y_module};
+   &setpoint_y_module,
+   &setpoint_z_module,
+};
 
 /** List of supported submodules */
 static const app_gsdml_submodule_t * app_gsdml_submodules[] = {
@@ -139,6 +155,7 @@ static const app_gsdml_submodule_t * app_gsdml_submodules[] = {
 
    &submod_setpoint_x,
    &submod_setpoint_y,
+   &submod_setpoint_z,
 };
 
 /* List of supported parameters.

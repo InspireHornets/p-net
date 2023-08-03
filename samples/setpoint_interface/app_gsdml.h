@@ -39,13 +39,19 @@ extern "C" {
 
 #define APP_GSDML_API 0
 
-#define APP_GSDML_DEFAULT_STATION_NAME "rt-labs-dev"
+#define APP_GSDML_DEFAULT_STATION_NAME "acc-setpoint-interface"
+#define APP_GSDML_VENDOR_ID            0x9999
+#define APP_GSDML_DEVICE_ID            0x0001
+#define APP_GSDML_ORDER_ID             "1"
+#define APP_GSDML_PRODUCT_NAME         "Setpoint interface app"
+#define APP_GSDML_MIN_DEVICE_INTERVAL  32 /* 1 ms */
 
-/* GSDML tag: VendorID */
-#define APP_GSDML_VENDOR_ID 0x0493
-
-/* GSDML tag: DeviceID */
-#define APP_GSDML_DEVICE_ID 0x0002
+#define APP_GSDML_MOD_ID_SETPOINT_X    0x00000040
+#define APP_GSDML_SUBMOD_ID_SETPOINT_X 0x0140
+#define APP_GSDML_MOD_ID_SETPOINT_Y    0x00000041
+#define APP_GSDML_SUBMOD_ID_SETPOINT_Y 0x0141
+#define APP_GSDML_MOD_ID_SETPOINT_Z    0x00000042
+#define APP_GSDML_SUBMOD_ID_SETPOINT_Z 0x0142
 
 /* Used in DCP communication */
 #define APP_GSDML_OEM_VENDOR_ID 0xcafe
@@ -75,15 +81,6 @@ extern "C" {
 /* GSDML tag: Writeable_IM_Records */
 #define APP_GSDML_IM_SUPPORTED                                                 \
    (PNET_SUPPORTED_IM1 | PNET_SUPPORTED_IM2 | PNET_SUPPORTED_IM3)
-
-/* GSDML tag: OrderNumber */
-#define APP_GSDML_ORDER_ID "12345 Abcdefghijk"
-
-/* GSDML tag: ModuleInfo / Name */
-#define APP_GSDML_PRODUCT_NAME "P-Net Sample Application"
-
-/* GSDML tag: MinDeviceInterval */
-#define APP_GSDML_MIN_DEVICE_INTERVAL 32 /* 1 ms */
 
 #define APP_GSDML_DIAG_CUSTOM_USI 0x1234
 
@@ -138,10 +135,6 @@ typedef struct
    uint16_t length;
 } app_gsdml_param_t;
 
-#define APP_GSDML_MOD_ID_SETPOINT_X         0x00000040
-#define APP_GSDML_SUBMOD_ID_SETPOINT_X      0x00000140
-#define APP_GSDML_MOD_ID_SETPOINT_Y         0x00000041
-#define APP_GSDML_SUBMOD_ID_SETPOINT_Y      0x00000141
 #define APP_GSDML_INPUT_DATA_SETPOINT_SIZE  16 /* bytes */
 #define APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE 20 /* bytes */
 #define APP_GSDML_ALARM_PAYLOAD_SIZE        1  /* bytes */

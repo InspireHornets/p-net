@@ -222,6 +222,12 @@ uint8_t * app_data_to_plc (
       *iops = PNET_IOXS_GOOD;
       return setpoint_y_data;
    }
+   else if (submodule_id == APP_GSDML_SUBMOD_ID_SETPOINT_Z)
+   {
+      *size = APP_GSDML_INPUT_DATA_SETPOINT_SIZE;
+      *iops = PNET_IOXS_GOOD;
+      return setpoint_z_data;
+   }
 
    /* Automated RT Tester scenario 2 - unsupported (sub)module */
    return NULL;
@@ -298,6 +304,36 @@ int app_data_from_plc (
                time);
          }
          memcpy (actual_y_data, data, size);
+
+         return 0;
+      }
+   }
+   else if (submodule_id == APP_GSDML_SUBMOD_ID_SETPOINT_Z)
+   {
+      if (size == APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE)
+      {
+         if (!are_arrays_equal (
+                data,
+                size,
+                actual_z_data,
+                APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE))
+         {
+            uint32_t actual_position =
+               combine_bytes_to_uint32 (&actual_z_data[0]);
+            uint32_t actual_speed = combine_bytes_to_uint32 (&actual_z_data[4]);
+            uint32_t actual_acc = combine_bytes_to_uint32 (&actual_z_data[8]);
+            uint32_t loop_in = combine_bytes_to_uint32 (&actual_z_data[12]);
+            uint32_t time = combine_bytes_to_uint32 (&actual_z_data[16]);
+
+            APP_LOG_DEBUG (
+               "Z -- Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: %i\tOut 5:% i\n ",
+               actual_position,
+               actual_speed,
+               actual_acc,
+               loop_in,
+               time);
+         }
+         memcpy (actual_z_data, data, size);
 
          return 0;
       }
