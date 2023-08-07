@@ -53,16 +53,26 @@ CC_STATIC_ASSERT (
    sizeof (app_actual_data_t) == APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE);
 
 CC_PACKED_BEGIN
+typedef struct CC_PACKED app_trajectory_data
+{
+   /* Network endianness */
+   int32_t position_um;
+   int32_t speed_um_s;
+   int32_t acceleration_um_s2;
+} app_trajectory_data_t;
+CC_PACKED_END
+CC_STATIC_ASSERT (sizeof (app_trajectory_data_t) == 12);
+
+CC_PACKED_BEGIN
 typedef struct CC_PACKED app_actual3_data
 {
    /* Network endianness */
-   app_actual_data_t x;
-   app_actual_data_t y;
-   app_actual_data_t z;
+   app_trajectory_data_t x;
+   app_trajectory_data_t y;
+   app_trajectory_data_t z;
 } app_actual3_data_t;
 CC_PACKED_END
-CC_STATIC_ASSERT (
-   sizeof (app_actual3_data_t) == 3 * APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE);
+CC_STATIC_ASSERT (sizeof (app_actual3_data_t) == 3 * 12);
 
 CC_PACKED_BEGIN
 typedef struct CC_PACKED app_setpoint_data
@@ -94,10 +104,10 @@ union Sint32
    uint8_t bytes[4];
    int32_t sint32;
 };
-app_actual_data_t get_x_trajectory();
+app_trajectory_data_t get_x_trajectory();
 union Sint32 get_x_power();
 union Sint32 get_x_temperature();
-app_actual_data_t get_y_trajectory();
+app_trajectory_data_t get_y_trajectory();
 app_actual3_data_t get_xyz_trajectory();
 void set_x_state (int32_t state);
 void set_x_trajectory_point (app_setpoint_data_t trajectory);

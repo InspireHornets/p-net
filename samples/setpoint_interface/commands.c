@@ -4,6 +4,7 @@
 #include "commands.h"
 #include "app_data.h"
 #include "app_log.h"
+#include "sampleapp_common.h"
 
 void respond (
    const uint8_t * response,
@@ -35,13 +36,16 @@ void handle_command (
    union Sint32 plc_output;
    union Sint32 plc_input;
    app_setpoint_data_t setpoint;
-   app_actual_data_t actual;
+   app_trajectory_data_t actual;
    app_actual3_data_t actual3;
    app_setpoint3_data_t setpoint3;
-   uint8_t buffer[13];
-   size_t INT32_SIZE = sizeof (int32_t);
-   size_t TRAJECTORY_POINT1 = 3;
-   size_t TRAJECTORY_POINT3 = TRAJECTORY_POINT1 * 3;
+   uint8_t buffer[APP_UDP_MESSAGE_LENGTH];
+   int INT32_SIZE = sizeof (int32_t);
+   int TRAJECTORY_POINT1 = 3;
+   int TRAJECTORY1_SIZE = TRAJECTORY_POINT1 * INT32_SIZE;
+   int TRAJECTORY_POINT3 = TRAJECTORY_POINT1 * 3;
+   int TRAJECTORY3_SIZE = TRAJECTORY_POINT3 * INT32_SIZE;
+   int COMMAND_SIZE = 1;
 
    APP_LOG_DEBUG ("UDP server: received command %x\n", input[0]);
 
@@ -58,9 +62,13 @@ void handle_command (
          actual.acceleration_um_s2);
 
       buffer[0] = GET_X_TRAJECTORY_POINT;
-      memcpy (buffer + 1, &actual, 12);
+      memcpy (buffer + 1, &actual, TRAJECTORY1_SIZE);
 
-      respond (buffer, 13, client_addr, socket_desc);
+      respond (
+         buffer,
+         COMMAND_SIZE + TRAJECTORY1_SIZE,
+         client_addr,
+         socket_desc);
       break;
    case GET_X_POWER:
       plc_output = get_x_power();
@@ -68,9 +76,9 @@ void handle_command (
       APP_LOG_DEBUG ("Current x power: %u\n", plc_output.sint32);
 
       buffer[0] = GET_X_POWER;
-      memcpy (buffer + 1, &plc_output.bytes, INT32_SIZE);
+      memcpy (buffer + 1, &plc_output.bytes, COMMAND_SIZE);
 
-      respond (buffer, 5, client_addr, socket_desc);
+      respond (buffer, COMMAND_SIZE + INT32_SIZE, client_addr, socket_desc);
       break;
    case GET_X_TEMPERATURE:
       plc_output = get_x_temperature();
@@ -80,7 +88,7 @@ void handle_command (
       buffer[0] = GET_X_TEMPERATURE;
       memcpy (buffer + 1, &plc_output.bytes, INT32_SIZE);
 
-      respond (buffer, 5, client_addr, socket_desc);
+      respond (buffer, COMMAND_SIZE + INT32_SIZE, client_addr, socket_desc);
       break;
    case SET_X_STATE:
       memcpy (plc_input.bytes, input + 1, INT32_SIZE);
@@ -88,7 +96,7 @@ void handle_command (
       set_x_state (plc_input.sint32);
       break;
    case SET_X_TRAJECTORY_POINT:
-      memcpy (&setpoint, input + 1, INT32_SIZE * TRAJECTORY_POINT1);
+      memcpy (&setpoint, input + 1, TRAJECTORY1_SIZE);
       APP_LOG_DEBUG (
          "New x position %i, x speed %i, x acceleration: %i\n",
          setpoint.position_um,
@@ -105,12 +113,16 @@ void handle_command (
          actual.acceleration_um_s2);
 
       buffer[0] = GET_Y_TRAJECTORY_POINT;
-      memcpy (buffer + 1, &actual, INT32_SIZE * TRAJECTORY_POINT1);
+      memcpy (buffer + 1, &actual, TRAJECTORY1_SIZE);
 
-      respond (buffer, 13, client_addr, socket_desc);
+      respond (
+         buffer,
+         COMMAND_SIZE + TRAJECTORY1_SIZE,
+         client_addr,
+         socket_desc);
       break;
    case SET_Y_TRAJECTORY_POINT:
-      memcpy (&setpoint, input + 1, INT32_SIZE * TRAJECTORY_POINT1);
+      memcpy (&setpoint, input + 1, TRAJECTORY1_SIZE);
       APP_LOG_DEBUG (
          "New y position %i, x speed %i, x acceleration: %i\n",
          setpoint.position_um,
@@ -123,26 +135,30 @@ void handle_command (
       APP_LOG_DEBUG (
          "Current x position: %i, x speed: %i, x acceleration: %i\n",
          actual3.x.position_um,
-         actual3.y.speed_um_s,
-         actual3.z.acceleration_um_s2);
+         actual3.x.speed_um_s,
+         actual3.x.acceleration_um_s2);
       APP_LOG_DEBUG (
          "Current y position: %i, y speed: %i, y acceleration: %i\n",
-         actual3.x.position_um,
+         actual3.y.position_um,
          actual3.y.speed_um_s,
-         actual3.z.acceleration_um_s2);
+         actual3.y.acceleration_um_s2);
       APP_LOG_DEBUG (
          "Current z position: %i, z speed: %i, z acceleration: %i\n",
-         actual3.x.position_um,
-         actual3.y.speed_um_s,
+         actual3.z.position_um,
+         actual3.z.speed_um_s,
          actual3.z.acceleration_um_s2);
 
       buffer[0] = GET_XYZ_TRAJECTORY_POINT;
-      memcpy (buffer + 1, &actual3, INT32_SIZE * TRAJECTORY_POINT3);
+      memcpy (buffer + 1, &actual3, TRAJECTORY3_SIZE);
 
-      respond (buffer, 13, client_addr, socket_desc);
+      respond (
+         buffer,
+         COMMAND_SIZE + TRAJECTORY3_SIZE,
+         client_addr,
+         socket_desc);
       break;
    case SET_XYZ_TRAJECTORY_POINT:
-      memcpy (&setpoint3, input + 1, INT32_SIZE * TRAJECTORY_POINT3);
+      memcpy (&setpoint3, input + 1, TRAJECTORY3_SIZE);
       APP_LOG_DEBUG (
          "New x position %i, x speed %i, x acceleration: %i\n",
          setpoint3.x.position_um,
