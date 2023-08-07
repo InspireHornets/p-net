@@ -37,9 +37,24 @@ it can do some of these steps.
    1. add a static struct where in/output data can be stored into.
       - `static uint8_t inputdata[APP_GSDML_INPUT_DATA_DIGITAL_SIZE] = {0};`
       - Floats are saved as unsigned integers, because of endian conversion. Profinet data has [network endianess](https://en.wikipedia.org/wiki/Endianness#Networking) (Big endian), whereas C uses little endian ?
-  1. add a `typedef struct` to store I/O data
+   1. add a `typedef struct` to store I/O data
+   2. Add the modules you added to the if statement in `app_data_from_plc`, identified by their submodule number
+   3. Add the modules you added to `app_data_to_plc`, identified by their submodule number
+   4. (Optional) if you added a module parameter add the parameter to `app_data_write_parameter`, identified by their parameter index
 
 Endianess = The attribute of a system that indicates whether integers are represented with the most significant byte stored at the lowest address (big endian) or at the highest address (little endian)
+
+In case you see the following error message while connecting
+
+```
+Event indication PNET_EVENT_ABORT   AREP: 1
+    Error class: 0x00 Not decoded
+    Error code:  0x00 Not decoded
+Connection closed
+Waiting for PLC connect request
+```
+
+try to restart the VM. There seems to be a older instance still running in the background.
 
 p-net
 -----
