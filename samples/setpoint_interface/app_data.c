@@ -45,8 +45,6 @@ static uint8_t actual_y_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
 static uint8_t setpoint_z_data[APP_GSDML_INPUT_DATA_SETPOINT_SIZE] = {0};
 static uint8_t actual_z_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
 
-static int32_t counter = 0;
-
 union Sint32 get_position (const uint8_t * actual_data)
 {
    union Sint32 position;
@@ -102,9 +100,9 @@ union Sint32 get_x_temperature()
    return x_temperature;
 }
 
-app_actual_data_t get_x_trajectory()
+app_trajectory_data_t get_x_trajectory()
 {
-   app_actual_data_t trajectory;
+   app_trajectory_data_t trajectory;
    trajectory.position_um = get_position (actual_x_data).sint32;
    trajectory.speed_um_s = get_speed (actual_x_data).sint32;
    trajectory.acceleration_um_s2 = get_acceleration (actual_x_data).sint32;
@@ -136,19 +134,19 @@ void set_x_trajectory_point (app_setpoint_data_t trajectory)
       CC_TO_BE32 (trajectory.acceleration_um_s2);
 }
 
-app_actual_data_t get_y_trajectory()
+app_trajectory_data_t get_y_trajectory()
 {
-   app_actual_data_t trajectory;
+   app_trajectory_data_t trajectory;
    trajectory.position_um = get_position (actual_y_data).sint32;
    trajectory.speed_um_s = get_speed (actual_y_data).sint32;
-   trajectory.acceleration_um_s2 = get_acceleration (actual_z_data).sint32;
+   trajectory.acceleration_um_s2 = get_acceleration (actual_y_data).sint32;
 
    return trajectory;
 }
 
-app_actual_data_t get_z_trajectory()
+app_trajectory_data_t get_z_trajectory()
 {
-   app_actual_data_t trajectory;
+   app_trajectory_data_t trajectory;
    trajectory.position_um = get_position (actual_z_data).sint32;
    trajectory.speed_um_s = get_speed (actual_z_data).sint32;
    trajectory.acceleration_um_s2 = get_acceleration (actual_z_data).sint32;
@@ -210,10 +208,6 @@ uint8_t * app_data_to_plc (
       *size = APP_GSDML_INPUT_DATA_SETPOINT_SIZE;
       *iops = PNET_IOXS_GOOD;
 
-      //      counter += 1;
-      //      uint32_t counter_network_endianess = CC_TO_BE32 (counter);
-      //      memcpy (&setpoint_x_data[12], &counter_network_endianess, 4);
-
       return setpoint_x_data;
    }
    else if (submodule_id == APP_GSDML_SUBMOD_ID_SETPOINT_Y)
@@ -263,10 +257,9 @@ int app_data_from_plc (
             uint32_t time = combine_bytes_to_uint32 (&actual_x_data[16]);
 
             APP_LOG_DEBUG (
-               "X -- Counter: %i, Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: "
+               "X -- Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: "
                "%i\tOut "
-               "5:% i\n ",
-               counter,
+               "5:% i\n",
                actual_position,
                actual_speed,
                actual_acc,
@@ -296,7 +289,7 @@ int app_data_from_plc (
             uint32_t time = combine_bytes_to_uint32 (&actual_y_data[16]);
 
             APP_LOG_DEBUG (
-               "Y -- Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: %i\tOut 5:% i\n ",
+               "Y -- Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: %i\tOut 5:% i\n",
                actual_position,
                actual_speed,
                actual_acc,
@@ -326,7 +319,7 @@ int app_data_from_plc (
             uint32_t time = combine_bytes_to_uint32 (&actual_z_data[16]);
 
             APP_LOG_DEBUG (
-               "Z -- Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: %i\tOut 5:% i\n ",
+               "Z -- Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: %i\tOut 5:% i\n",
                actual_position,
                actual_speed,
                actual_acc,
