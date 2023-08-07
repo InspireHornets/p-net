@@ -110,13 +110,6 @@ app_trajectory_data_t get_x_trajectory()
    return trajectory;
 }
 
-void set_x_position (int32_t setpoint)
-{
-   app_setpoint_data_t * p_setpoint_data =
-      (app_setpoint_data_t *)&setpoint_x_data;
-   p_setpoint_data->position_um = CC_TO_BE32 (setpoint);
-}
-
 void set_x_state (int32_t state)
 {
    app_setpoint_data_t * p_setpoint_data =
