@@ -69,10 +69,6 @@ def set_command(command: CommandType, *setpoints: int) -> bytes:
     return command_type + command_data
 
 
-def get_command(command: CommandType) -> bytes:
-    return struct.pack(">B", command.value)
-
-
 # TODO when calling plc.get_x_temperature() followed by plc.get_x_power(), it gives an assertion error after the
 # second command. You need to call plc.get_x_power() a few times before the pn device returns CommandType GET_X_POWER.
 class SetpointClient:
