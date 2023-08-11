@@ -41,7 +41,7 @@ void handle_command (
    app_setpoint3_data_t setpoint3;
    uint8_t buffer[APP_UDP_MESSAGE_LENGTH];
    int INT32_SIZE = sizeof (int32_t);
-   int TRAJECTORY_POINT1 = 3;
+   int TRAJECTORY_POINT1 = 4;
    int TRAJECTORY1_SIZE = TRAJECTORY_POINT1 * INT32_SIZE;
    int TRAJECTORY_POINT3 = TRAJECTORY_POINT1 * 3;
    int TRAJECTORY3_SIZE = TRAJECTORY_POINT3 * INT32_SIZE;
