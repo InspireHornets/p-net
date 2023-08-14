@@ -38,10 +38,14 @@ void handle_command (
    app_setpoint_data_t setpoint;
    app_trajectory_data_t actual;
    app_actual3_data_t actual3;
-   app_setpoint3_data_t setpoint3;
+   app_setpoint3_data_t setpoint3 = {
+      .x = {0}, // Initialize x members to 0
+      .y = {0}, // Initialize y members to 0
+      .z = {0}  // Initialize z members to 0
+   };
    uint8_t buffer[APP_UDP_MESSAGE_LENGTH];
    int INT32_SIZE = sizeof (int32_t);
-   int TRAJECTORY_POINT1 = 4;
+   int TRAJECTORY_POINT1 = 3;
    int TRAJECTORY1_SIZE = TRAJECTORY_POINT1 * INT32_SIZE;
    int TRAJECTORY_POINT3 = TRAJECTORY_POINT1 * 3;
    int TRAJECTORY3_SIZE = TRAJECTORY_POINT3 * INT32_SIZE;
