@@ -100,9 +100,9 @@ union Sint32 get_x_temperature()
    return x_temperature;
 }
 
-app_trajectory_data_t get_x_trajectory()
+app_actual_data_t get_x_trajectory()
 {
-   app_trajectory_data_t trajectory;
+   app_actual_data_t trajectory;
    trajectory.position_um = get_position (actual_x_data).sint32;
    trajectory.speed_um_s = get_speed (actual_x_data).sint32;
    trajectory.acceleration_um_s2 = get_acceleration (actual_x_data).sint32;
@@ -127,9 +127,9 @@ void set_x_trajectory_point (app_setpoint_data_t trajectory)
       CC_TO_BE32 (trajectory.acceleration_um_s2);
 }
 
-app_trajectory_data_t get_y_trajectory()
+app_actual_data_t get_y_trajectory()
 {
-   app_trajectory_data_t trajectory;
+   app_actual_data_t trajectory;
    trajectory.position_um = get_position (actual_y_data).sint32;
    trajectory.speed_um_s = get_speed (actual_y_data).sint32;
    trajectory.acceleration_um_s2 = get_acceleration (actual_y_data).sint32;
@@ -137,9 +137,9 @@ app_trajectory_data_t get_y_trajectory()
    return trajectory;
 }
 
-app_trajectory_data_t get_z_trajectory()
+app_actual_data_t get_z_trajectory()
 {
-   app_trajectory_data_t trajectory;
+   app_actual_data_t trajectory;
    trajectory.position_um = get_position (actual_z_data).sint32;
    trajectory.speed_um_s = get_speed (actual_z_data).sint32;
    trajectory.acceleration_um_s2 = get_acceleration (actual_z_data).sint32;

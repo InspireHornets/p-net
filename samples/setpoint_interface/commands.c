@@ -35,8 +35,9 @@ void handle_command (
 {
    union Sint32 plc_output;
    union Sint32 plc_input;
+   int INT32_SIZE = sizeof (int32_t);
    app_setpoint_data_t setpoint;
-   app_trajectory_data_t actual;
+   app_actual_data_t actual;
    app_actual3_data_t actual3;
    app_setpoint3_data_t setpoint3 = {
       .x = {0}, // Initialize x members to 0
@@ -44,11 +45,6 @@ void handle_command (
       .z = {0}  // Initialize z members to 0
    };
    uint8_t buffer[APP_UDP_MESSAGE_LENGTH];
-   int INT32_SIZE = sizeof (int32_t);
-   int TRAJECTORY_POINT1 = 3;
-   int TRAJECTORY1_SIZE = TRAJECTORY_POINT1 * INT32_SIZE;
-   int TRAJECTORY_POINT3 = TRAJECTORY_POINT1 * 3;
-   int TRAJECTORY3_SIZE = TRAJECTORY_POINT3 * INT32_SIZE;
    int COMMAND_SIZE = 1;
 
    APP_LOG_DEBUG ("UDP server: received command %x\n", input[0]);
@@ -66,11 +62,11 @@ void handle_command (
          actual.acceleration_um_s2);
 
       buffer[0] = GET_X_TRAJECTORY_POINT;
-      memcpy (buffer + 1, &actual, TRAJECTORY1_SIZE);
+      memcpy (buffer + 1, &actual, APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE);
 
       respond (
          buffer,
-         COMMAND_SIZE + TRAJECTORY1_SIZE,
+         COMMAND_SIZE + APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE,
          client_addr,
          socket_desc);
       break;
@@ -100,7 +96,7 @@ void handle_command (
       set_x_state (plc_input.sint32);
       break;
    case SET_X_TRAJECTORY_POINT:
-      memcpy (&setpoint, input + 1, TRAJECTORY1_SIZE);
+      memcpy (&setpoint, input + 1, APP_GSDML_INPUT_DATA_SETPOINT_SIZE);
       APP_LOG_DEBUG (
          "New x position %i, x speed %i, x acceleration: %i\n",
          setpoint.position_um,
@@ -117,16 +113,16 @@ void handle_command (
          actual.acceleration_um_s2);
 
       buffer[0] = GET_Y_TRAJECTORY_POINT;
-      memcpy (buffer + 1, &actual, TRAJECTORY1_SIZE);
+      memcpy (buffer + 1, &actual, APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE);
 
       respond (
          buffer,
-         COMMAND_SIZE + TRAJECTORY1_SIZE,
+         COMMAND_SIZE + APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE,
          client_addr,
          socket_desc);
       break;
    case SET_Y_TRAJECTORY_POINT:
-      memcpy (&setpoint, input + 1, TRAJECTORY1_SIZE);
+      memcpy (&setpoint, input + 1, APP_GSDML_INPUT_DATA_SETPOINT_SIZE);
       APP_LOG_DEBUG (
          "New y position %i, x speed %i, x acceleration: %i\n",
          setpoint.position_um,
@@ -153,16 +149,16 @@ void handle_command (
          actual3.z.acceleration_um_s2);
 
       buffer[0] = GET_XYZ_TRAJECTORY_POINT;
-      memcpy (buffer + 1, &actual3, TRAJECTORY3_SIZE);
+      memcpy (buffer + 1, &actual3, 3 * APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE);
 
       respond (
          buffer,
-         COMMAND_SIZE + TRAJECTORY3_SIZE,
+         COMMAND_SIZE + 3 * APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE,
          client_addr,
          socket_desc);
       break;
    case SET_XYZ_TRAJECTORY_POINT:
-      memcpy (&setpoint3, input + 1, TRAJECTORY3_SIZE);
+      memcpy (&setpoint3, input + 1, 3 * APP_GSDML_INPUT_DATA_SETPOINT_SIZE);
       APP_LOG_DEBUG (
          "New x position %i, x speed %i, x acceleration: %i\n",
          setpoint3.x.position_um,
