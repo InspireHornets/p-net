@@ -78,28 +78,6 @@ union Sint32 get_acceleration (const uint8_t * actual_data)
    return acceleration;
 }
 
-union Sint32 get_x_power()
-{
-   union Sint32 x_power;
-   x_power.bytes[0] = actual_x_data[15];
-   x_power.bytes[1] = actual_x_data[14];
-   x_power.bytes[2] = actual_x_data[13];
-   x_power.bytes[3] = actual_x_data[12];
-
-   return x_power;
-}
-
-union Sint32 get_x_temperature()
-{
-   union Sint32 x_temperature;
-   x_temperature.bytes[0] = actual_x_data[19];
-   x_temperature.bytes[1] = actual_x_data[18];
-   x_temperature.bytes[2] = actual_x_data[17];
-   x_temperature.bytes[3] = actual_x_data[16];
-
-   return x_temperature;
-}
-
 app_actual_data_t get_x_trajectory()
 {
    app_actual_data_t trajectory;
@@ -108,13 +86,6 @@ app_actual_data_t get_x_trajectory()
    trajectory.acceleration_um_s2 = get_acceleration (actual_x_data).sint32;
 
    return trajectory;
-}
-
-void set_x_state (int32_t state)
-{
-   app_setpoint_data_t * p_setpoint_data =
-      (app_setpoint_data_t *)&setpoint_x_data;
-   p_setpoint_data->state = CC_TO_BE32 (state);
 }
 
 void set_x_trajectory_point (app_setpoint_data_t trajectory)

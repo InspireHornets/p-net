@@ -33,11 +33,6 @@ void handle_command (
    struct sockaddr_in client_addr,
    int socket_desc)
 {
-   union Sint32 plc_output;
-   union Sint32 plc_input;
-   int INT32_SIZE = sizeof (int32_t);
-   app_setpoint_data_t setpoint;
-   app_actual_data_t actual;
    app_actual3_data_t actual3;
    app_setpoint3_data_t setpoint3 = {
       .x = {0}, // Initialize x members to 0
@@ -52,83 +47,6 @@ void handle_command (
    switch (input[0])
    {
    case NO_COMMAND:
-      break;
-   case GET_X_TRAJECTORY_POINT:
-      actual = get_x_trajectory();
-      APP_LOG_DEBUG (
-         "Current x position: %i, x speed: %i, x acceleration: %i\n",
-         actual.position_um,
-         actual.speed_um_s,
-         actual.acceleration_um_s2);
-
-      buffer[0] = GET_X_TRAJECTORY_POINT;
-      memcpy (buffer + 1, &actual, APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE);
-
-      respond (
-         buffer,
-         COMMAND_SIZE + APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE,
-         client_addr,
-         socket_desc);
-      break;
-   case GET_X_POWER:
-      plc_output = get_x_power();
-
-      APP_LOG_DEBUG ("Current x power: %u\n", plc_output.sint32);
-
-      buffer[0] = GET_X_POWER;
-      memcpy (buffer + 1, &plc_output.bytes, COMMAND_SIZE);
-
-      respond (buffer, COMMAND_SIZE + INT32_SIZE, client_addr, socket_desc);
-      break;
-   case GET_X_TEMPERATURE:
-      plc_output = get_x_temperature();
-
-      APP_LOG_DEBUG ("Current x temperature: %i\n", plc_output.sint32);
-
-      buffer[0] = GET_X_TEMPERATURE;
-      memcpy (buffer + 1, &plc_output.bytes, INT32_SIZE);
-
-      respond (buffer, COMMAND_SIZE + INT32_SIZE, client_addr, socket_desc);
-      break;
-   case SET_X_STATE:
-      memcpy (plc_input.bytes, input + 1, INT32_SIZE);
-      APP_LOG_DEBUG ("New x state %i\n", plc_input.sint32);
-      set_x_state (plc_input.sint32);
-      break;
-   case SET_X_TRAJECTORY_POINT:
-      memcpy (&setpoint, input + 1, APP_GSDML_INPUT_DATA_SETPOINT_SIZE);
-      APP_LOG_DEBUG (
-         "New x position %i, x speed %i, x acceleration: %i\n",
-         setpoint.position_um,
-         setpoint.speed_um_s,
-         setpoint.acceleration_um_s2);
-      set_x_trajectory_point (setpoint);
-      break;
-   case GET_Y_TRAJECTORY_POINT:
-      actual = get_y_trajectory();
-      APP_LOG_DEBUG (
-         "Current y position: %i, y speed: %i, y acceleration: %i\n",
-         actual.position_um,
-         actual.speed_um_s,
-         actual.acceleration_um_s2);
-
-      buffer[0] = GET_Y_TRAJECTORY_POINT;
-      memcpy (buffer + 1, &actual, APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE);
-
-      respond (
-         buffer,
-         COMMAND_SIZE + APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE,
-         client_addr,
-         socket_desc);
-      break;
-   case SET_Y_TRAJECTORY_POINT:
-      memcpy (&setpoint, input + 1, APP_GSDML_INPUT_DATA_SETPOINT_SIZE);
-      APP_LOG_DEBUG (
-         "New y position %i, x speed %i, x acceleration: %i\n",
-         setpoint.position_um,
-         setpoint.speed_um_s,
-         setpoint.acceleration_um_s2);
-      set_y_trajectory_point (setpoint);
       break;
    case GET_XYZ_TRAJECTORY_POINT:
       actual3 = get_xyz_trajectory();

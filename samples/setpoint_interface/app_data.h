@@ -94,14 +94,7 @@ union Sint32
    uint8_t bytes[4];
    int32_t sint32;
 };
-app_actual_data_t get_x_trajectory();
-union Sint32 get_x_power();
-union Sint32 get_x_temperature();
-app_actual_data_t get_y_trajectory();
 app_actual3_data_t get_xyz_trajectory();
-void set_x_state (int32_t state);
-void set_x_trajectory_point (app_setpoint_data_t trajectory);
-void set_y_trajectory_point (app_setpoint_data_t trajectory);
 void set_xyz_trajectory_point (app_setpoint3_data_t trajectory);
 
 /**
