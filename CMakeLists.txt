@@ -168,7 +168,6 @@ configure_file(
 # Add platform-dependent targets early, so they can be configured by
 # platform
 add_library(profinet "")
-add_executable(pn_dev "")
 
 if (PNET_OPTION_DRIVER_ENABLE)
     include(${CMAKE_CURRENT_SOURCE_DIR}/src/drivers/drivers.cmake)
@@ -184,11 +183,6 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${CMAKE_SYSTEM_NAME}.cmake)
 generate_export_header(profinet
         BASE_NAME pnet
         EXPORT_FILE_NAME ${PROFINET_BINARY_DIR}/include/pnet_export.h
-        )
-
-set_target_properties(profinet pn_dev
-        PROPERTIES
-        C_STANDARD 99
         )
 
 target_compile_features(profinet PUBLIC c_std_99)
@@ -227,8 +221,6 @@ install(FILES
         )
 
 add_subdirectory(src)
-add_subdirectory(samples/pn_dev)
-add_subdirectory(samples/pn_dev_counter)
 add_subdirectory(samples/setpoint_interface)
 
 if (CMAKE_PROJECT_NAME STREQUAL PROFINET AND BUILD_TESTING)
