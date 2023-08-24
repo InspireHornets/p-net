@@ -1161,7 +1161,7 @@ static int app_set_initial_data_and_ioxs (app_data_t * app)
    return 0;
 }
 
-// TODO review this implementaiton with Thomas
+// TODO Roald: Is this the way to handle udp communication?
 void app_handle_udp_communication (int socket_desc, uint8_t * client_message)
 {
    struct sockaddr_in client_addr;
@@ -1211,6 +1211,7 @@ static void app_handle_cyclic_data (app_data_t * app)
    memset (read_buffer, 0, sizeof (read_buffer));
 
    app_utils_cyclic_data_poll (&app->main_api);
+   // TODO Roald: is this a good point to handle the udp communication?
    app_handle_udp_communication (app->socket_desc, read_buffer);
 }
 

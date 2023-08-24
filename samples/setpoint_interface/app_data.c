@@ -45,6 +45,8 @@ static uint8_t actual_y_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
 static uint8_t setpoint_z_data[APP_GSDML_INPUT_DATA_SETPOINT_SIZE] = {0};
 static uint8_t actual_z_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
 
+// TODO Roald: is this a good way to convert the actual data into position?
+//  same for speed and acceleration.
 union Sint32 get_position (const uint8_t * actual_data)
 {
    union Sint32 position;
