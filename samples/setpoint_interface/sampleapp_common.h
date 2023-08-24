@@ -37,7 +37,8 @@ extern "C" {
 #define APP_PROFINET_SIGNAL_LED_ID 2
 
 #define APP_TICKS_READ_BUTTONS 10
-#define APP_TICKS_UPDATE_DATA  8
+// half the PLC cycle time to give the UDP time to update
+#define APP_TICKS_UPDATE_DATA 8
 
 #define APP_UDP_MESSAGE_LENGTH 64
 #define APP_UDP_HOST_ADDRESS   "127.0.0.1"
