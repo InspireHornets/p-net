@@ -80,12 +80,63 @@ union Sint32 get_acceleration (const uint8_t * actual_data)
    return acceleration;
 }
 
+union Sint32 get_torque (const uint8_t * actual_data)
+{
+   union Sint32 torque;
+   torque.bytes[0] = actual_data[15];
+   torque.bytes[1] = actual_data[14];
+   torque.bytes[2] = actual_data[13];
+   torque.bytes[3] = actual_data[12];
+
+   return torque;
+}
+
+union Sint32 get_temperature (const uint8_t * actual_data)
+{
+   union Sint32 temperature;
+   temperature.bytes[0] = actual_data[19];
+   temperature.bytes[1] = actual_data[18];
+   temperature.bytes[2] = actual_data[17];
+   temperature.bytes[3] = actual_data[16];
+
+   return temperature;
+}
+
+union Sint32 get_state (const uint8_t * actual_data)
+{
+   union Sint32 state;
+   state.bytes[0] = actual_data[23];
+   state.bytes[1] = actual_data[22];
+   state.bytes[2] = actual_data[21];
+   state.bytes[3] = actual_data[20];
+
+   return state;
+}
+
 app_actual_x_data_t get_x_trajectory()
 {
    app_actual_x_data_t trajectory;
-   trajectory.x1_position_um = get_position (actual_x_data).sint32;
-   trajectory.x1_speed_um_s = get_speed (actual_x_data).sint32;
-   trajectory.x1_acceleration_um_s2 = get_acceleration (actual_x_data).sint32;
+
+   uint8_t actual_x1_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
+   memcpy (actual_x1_data, actual_x_data, APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE);
+   trajectory.x1_position_um = get_position (actual_x1_data).sint32;
+   trajectory.x1_speed_um_s = get_speed (actual_x1_data).sint32;
+   trajectory.x1_acceleration_um_s2 = get_acceleration (actual_x1_data).sint32;
+   trajectory.x1_torque_mNm = get_torque (actual_x1_data).sint32;
+   trajectory.x1_temperature_C = get_temperature (actual_x1_data).sint32;
+   trajectory.x1_state = get_state (actual_x1_data).sint32;
+
+   uint8_t actual_x2_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
+   memcpy (
+      actual_x2_data,
+      actual_x_data + APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE,
+      APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE);
+   trajectory.x2_position_um = get_position (actual_x2_data).sint32;
+   trajectory.x2_speed_um_s = get_speed (actual_x2_data).sint32;
+   trajectory.x2_acceleration_um_s2 = get_acceleration (actual_x2_data).sint32;
+   trajectory.x2_torque_mNm = get_torque (actual_x2_data).sint32;
+   trajectory.x2_temperature_C = get_temperature (actual_x2_data).sint32;
+   trajectory.x2_state = get_state (actual_x2_data).sint32;
 
    return trajectory;
 }
@@ -98,6 +149,7 @@ void set_x_trajectory_point (app_setpoint_data_t trajectory)
    p_setpoint_data->speed_um_s = CC_TO_BE32 (trajectory.speed_um_s);
    p_setpoint_data->acceleration_um_s2 =
       CC_TO_BE32 (trajectory.acceleration_um_s2);
+   p_setpoint_data->state = CC_TO_BE32 (trajectory.state);
 }
 
 app_actual_data_t get_y_trajectory()
@@ -106,6 +158,9 @@ app_actual_data_t get_y_trajectory()
    trajectory.position_um = get_position (actual_y_data).sint32;
    trajectory.speed_um_s = get_speed (actual_y_data).sint32;
    trajectory.acceleration_um_s2 = get_acceleration (actual_y_data).sint32;
+   trajectory.torque_mNm = get_torque (actual_y_data).sint32;
+   trajectory.temperature_C = get_temperature (actual_y_data).sint32;
+   trajectory.state = get_state (actual_y_data).sint32;
 
    return trajectory;
 }
@@ -116,6 +171,9 @@ app_actual_data_t get_z_trajectory()
    trajectory.position_um = get_position (actual_z_data).sint32;
    trajectory.speed_um_s = get_speed (actual_z_data).sint32;
    trajectory.acceleration_um_s2 = get_acceleration (actual_z_data).sint32;
+   trajectory.torque_mNm = get_torque (actual_z_data).sint32;
+   trajectory.temperature_C = get_temperature (actual_z_data).sint32;
+   trajectory.state = get_state (actual_z_data).sint32;
 
    return trajectory;
 }
@@ -126,6 +184,9 @@ app_actual_data_t get_c_trajectory()
    trajectory.position_um = get_position (actual_c_data).sint32;
    trajectory.speed_um_s = get_speed (actual_c_data).sint32;
    trajectory.acceleration_um_s2 = get_acceleration (actual_c_data).sint32;
+   trajectory.torque_mNm = get_torque (actual_c_data).sint32;
+   trajectory.temperature_C = get_temperature (actual_c_data).sint32;
+   trajectory.state = get_state (actual_c_data).sint32;
 
    return trajectory;
 }
@@ -138,6 +199,7 @@ void set_y_trajectory_point (app_setpoint_data_t trajectory)
    p_setpoint_data->speed_um_s = CC_TO_BE32 (trajectory.speed_um_s);
    p_setpoint_data->acceleration_um_s2 =
       CC_TO_BE32 (trajectory.acceleration_um_s2);
+   p_setpoint_data->state = CC_TO_BE32 (trajectory.state);
 }
 
 void set_z_trajectory_point (app_setpoint_data_t trajectory)
@@ -158,6 +220,7 @@ void set_c_trajectory_point (app_setpoint_data_t trajectory)
    p_setpoint_data->speed_um_s = CC_TO_BE32 (trajectory.speed_um_s);
    p_setpoint_data->acceleration_um_s2 =
       CC_TO_BE32 (trajectory.acceleration_um_s2);
+   p_setpoint_data->state = CC_TO_BE32 (trajectory.state);
 }
 
 app_actual4_data_t get_xyzc_trajectory()
@@ -166,6 +229,7 @@ app_actual4_data_t get_xyzc_trajectory()
    trajectory.x = get_x_trajectory();
    trajectory.y = get_y_trajectory();
    trajectory.z = get_z_trajectory();
+   trajectory.c = get_c_trajectory();
 
    return trajectory;
 }

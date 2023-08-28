@@ -166,6 +166,30 @@
                                 <Output Consistency="All items consistency">
                                     <DataItem
                     DataType="Integer32"
+                    TextId="TOK_Output_X1_Position_Integer32"
+                  />
+                                    <DataItem
+                    DataType="Integer32"
+                    TextId="TOK_Output_X1_Speed_Integer32"
+                  />
+                                    <DataItem
+                    DataType="Integer32"
+                    TextId="TOK_Output_X1_Acceleration_Integer32"
+                  />
+                                    <DataItem
+                    DataType="Integer32"
+                    TextId="TOK_Output_X1_Torque_Integer32"
+                  />
+                                    <DataItem
+                    DataType="Integer32"
+                    TextId="TOK_Output_X1_Temperature_Integer32"
+                  />
+                                    <DataItem
+                    DataType="Integer32"
+                    TextId="TOK_Output_X1_State_Integer32"
+                  />
+                                    <DataItem
+                    DataType="Integer32"
                     TextId="TOK_Output_X2_Position_Integer32"
                   />
                                     <DataItem
@@ -542,6 +566,30 @@
                     <Text
             TextId="TOK_Output_C_Torque_Integer32"
             Value="Actual c-axis torque (mNm)"
+          />
+                    <Text
+            TextId="TOK_Output_X1_Acceleration_Integer32"
+            Value="Actual x1-axis acceleration (um/s2)"
+          />
+                    <Text
+            TextId="TOK_Output_X1_Position_Integer32"
+            Value="Actual x1-axis position (um)"
+          />
+                    <Text
+            TextId="TOK_Output_X1_Speed_Integer32"
+            Value="Actual x1-axis speed (um/s)"
+          />
+                    <Text
+            TextId="TOK_Output_X1_State_Integer32"
+            Value="State of the X1-axis"
+          />
+                    <Text
+            TextId="TOK_Output_X1_Temperature_Integer32"
+            Value="Actual x1-axis temperature (C)"
+          />
+                    <Text
+            TextId="TOK_Output_X1_Torque_Integer32"
+            Value="Actual x1-axis torque (mNm)"
           />
                     <Text
             TextId="TOK_Output_X2_Acceleration_Integer32"

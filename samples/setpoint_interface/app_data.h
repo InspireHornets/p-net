@@ -45,8 +45,8 @@ typedef struct CC_PACKED app_actual_data
    int32_t position_um;
    int32_t speed_um_s;
    int32_t acceleration_um_s2;
-   int32_t torque;
-   int32_t temperature;
+   int32_t torque_mNm;
+   int32_t temperature_C;
    int32_t state;
 } app_actual_data_t;
 CC_PACKED_END
@@ -58,16 +58,16 @@ typedef struct CC_PACKED app_actual_x_data
 {
    /* Network endianness */
    int32_t x1_position_um;
-   int32_t x2_position_um;
    int32_t x1_speed_um_s;
-   int32_t x2_speed_um_s;
    int32_t x1_acceleration_um_s2;
-   int32_t x2_acceleration_um_s2;
-   int32_t x1_torque;
-   int32_t x2_torque;
-   int32_t x1_temperature;
-   int32_t x2_temperature;
+   int32_t x1_torque_mNm;
+   int32_t x1_temperature_C;
    int32_t x1_state;
+   int32_t x2_position_um;
+   int32_t x2_speed_um_s;
+   int32_t x2_acceleration_um_s2;
+   int32_t x2_torque_mNm;
+   int32_t x2_temperature_C;
    int32_t x2_state;
 } app_actual_x_data_t;
 CC_PACKED_END
