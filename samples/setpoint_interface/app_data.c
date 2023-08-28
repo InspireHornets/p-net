@@ -220,6 +220,35 @@ uint8_t * app_data_to_plc (
    return NULL;
 }
 
+void log_on_change (
+   const uint8_t * new_data,
+   uint16_t size,
+   const uint8_t * old_data,
+   char * prepend_log_msg)
+{
+   if (!are_arrays_equal (
+          new_data,
+          size,
+          old_data,
+          APP_GSDML_OUTPUT_DATA_SETPOINT_X_SIZE))
+   {
+      uint32_t actual_position = combine_bytes_to_uint32 (&old_data[0]);
+      uint32_t actual_speed = combine_bytes_to_uint32 (&old_data[4]);
+      uint32_t actual_acceleration = combine_bytes_to_uint32 (&old_data[8]);
+      uint32_t actual_torque = combine_bytes_to_uint32 (&old_data[12]);
+      uint32_t actual_temperature = combine_bytes_to_uint32 (&old_data[16]);
+
+      APP_LOG_DEBUG (
+         "%s -- Position: %i\tVelocity: %i\tAcceleration: %i\tTorque: "
+         "%i\tTemperature: %i\n",
+         prepend_log_msg,
+         actual_position,
+         actual_speed,
+         actual_acceleration,
+         actual_torque,
+         actual_temperature);
+   }
+}
 int app_data_from_plc (
    uint16_t slot_nbr,
    uint16_t subslot_nbr,
@@ -236,29 +265,7 @@ int app_data_from_plc (
    {
       if (size == APP_GSDML_OUTPUT_DATA_SETPOINT_X_SIZE)
       {
-         if (!are_arrays_equal (
-                data,
-                size,
-                actual_x_data,
-                APP_GSDML_OUTPUT_DATA_SETPOINT_X_SIZE))
-         {
-            uint32_t actual_position =
-               combine_bytes_to_uint32 (&actual_x_data[0]);
-            uint32_t actual_speed = combine_bytes_to_uint32 (&actual_x_data[4]);
-            uint32_t actual_acc = combine_bytes_to_uint32 (&actual_x_data[8]);
-            uint32_t loop_in = combine_bytes_to_uint32 (&actual_x_data[12]);
-            uint32_t time = combine_bytes_to_uint32 (&actual_x_data[16]);
-
-            APP_LOG_DEBUG (
-               "X -- Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: "
-               "%i\tOut "
-               "5:% i\n",
-               actual_position,
-               actual_speed,
-               actual_acc,
-               loop_in,
-               time);
-         }
+         log_on_change (data, size, actual_x_data, "X");
          memcpy (actual_x_data, data, size);
 
          return 0;
@@ -268,27 +275,7 @@ int app_data_from_plc (
    {
       if (size == APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE)
       {
-         if (!are_arrays_equal (
-                data,
-                size,
-                actual_y_data,
-                APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE))
-         {
-            uint32_t actual_position =
-               combine_bytes_to_uint32 (&actual_y_data[0]);
-            uint32_t actual_speed = combine_bytes_to_uint32 (&actual_y_data[4]);
-            uint32_t actual_acc = combine_bytes_to_uint32 (&actual_y_data[8]);
-            uint32_t loop_in = combine_bytes_to_uint32 (&actual_y_data[12]);
-            uint32_t time = combine_bytes_to_uint32 (&actual_y_data[16]);
-
-            APP_LOG_DEBUG (
-               "Y -- Pos: %i\tVel: %i\tAcc: %i\tOut 4: %i\tOut 5:% i\n",
-               actual_position,
-               actual_speed,
-               actual_acc,
-               loop_in,
-               time);
-         }
+         log_on_change (data, size, actual_y_data, "Y");
          memcpy (actual_y_data, data, size);
 
          return 0;
@@ -298,27 +285,7 @@ int app_data_from_plc (
    {
       if (size == APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE)
       {
-         if (!are_arrays_equal (
-                data,
-                size,
-                actual_z_data,
-                APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE))
-         {
-            uint32_t actual_position =
-               combine_bytes_to_uint32 (&actual_z_data[0]);
-            uint32_t actual_speed = combine_bytes_to_uint32 (&actual_z_data[4]);
-            uint32_t actual_acc = combine_bytes_to_uint32 (&actual_z_data[8]);
-            uint32_t loop_in = combine_bytes_to_uint32 (&actual_z_data[12]);
-            uint32_t time = combine_bytes_to_uint32 (&actual_z_data[16]);
-
-            APP_LOG_DEBUG (
-               "Z -- Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: %i\tOut 5:% i\n",
-               actual_position,
-               actual_speed,
-               actual_acc,
-               loop_in,
-               time);
-         }
+         log_on_change (data, size, actual_z_data, "Z");
          memcpy (actual_z_data, data, size);
 
          return 0;
@@ -328,27 +295,10 @@ int app_data_from_plc (
    {
       if (size == APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE)
       {
-         if (!are_arrays_equal (
-                data,
-                size,
-                actual_c_data,
-                APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE))
-         {
-            uint32_t actual_position =
-               combine_bytes_to_uint32 (&actual_c_data[0]);
-            uint32_t actual_speed = combine_bytes_to_uint32 (&actual_c_data[4]);
-            uint32_t actual_acc = combine_bytes_to_uint32 (&actual_c_data[8]);
-            uint32_t loop_in = combine_bytes_to_uint32 (&actual_c_data[12]);
-            uint32_t time = combine_bytes_to_uint32 (&actual_c_data[16]);
+         log_on_change (data, size, actual_c_data, "C");
+         memcpy (actual_c_data, data, size);
 
-            APP_LOG_DEBUG (
-               "C -- Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: %i\tOut 5:% i\n",
-               actual_position,
-               actual_speed,
-               actual_acc,
-               loop_in,
-               time);
-         }
+         return 0;
       }
    }
 
