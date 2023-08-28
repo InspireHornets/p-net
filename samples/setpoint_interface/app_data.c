@@ -123,7 +123,7 @@ app_actual_x_data_t get_x_trajectory()
    trajectory.x1_speed_um_s = get_speed (actual_x1_data).sint32;
    trajectory.x1_acceleration_um_s2 = get_acceleration (actual_x1_data).sint32;
    trajectory.x1_torque_mNm = get_torque (actual_x1_data).sint32;
-   trajectory.x1_temperature_C = get_temperature (actual_x1_data).sint32;
+   trajectory.x1_temperature_mC = get_temperature (actual_x1_data).sint32;
    trajectory.x1_state = get_state (actual_x1_data).sint32;
 
    uint8_t actual_x2_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
@@ -135,7 +135,7 @@ app_actual_x_data_t get_x_trajectory()
    trajectory.x2_speed_um_s = get_speed (actual_x2_data).sint32;
    trajectory.x2_acceleration_um_s2 = get_acceleration (actual_x2_data).sint32;
    trajectory.x2_torque_mNm = get_torque (actual_x2_data).sint32;
-   trajectory.x2_temperature_C = get_temperature (actual_x2_data).sint32;
+   trajectory.x2_temperature_mC = get_temperature (actual_x2_data).sint32;
    trajectory.x2_state = get_state (actual_x2_data).sint32;
 
    return trajectory;
@@ -159,7 +159,7 @@ app_actual_data_t get_y_trajectory()
    trajectory.speed_um_s = get_speed (actual_y_data).sint32;
    trajectory.acceleration_um_s2 = get_acceleration (actual_y_data).sint32;
    trajectory.torque_mNm = get_torque (actual_y_data).sint32;
-   trajectory.temperature_C = get_temperature (actual_y_data).sint32;
+   trajectory.temperature_mC = get_temperature (actual_y_data).sint32;
    trajectory.state = get_state (actual_y_data).sint32;
 
    return trajectory;
@@ -172,7 +172,7 @@ app_actual_data_t get_z_trajectory()
    trajectory.speed_um_s = get_speed (actual_z_data).sint32;
    trajectory.acceleration_um_s2 = get_acceleration (actual_z_data).sint32;
    trajectory.torque_mNm = get_torque (actual_z_data).sint32;
-   trajectory.temperature_C = get_temperature (actual_z_data).sint32;
+   trajectory.temperature_mC = get_temperature (actual_z_data).sint32;
    trajectory.state = get_state (actual_z_data).sint32;
 
    return trajectory;
@@ -185,7 +185,7 @@ app_actual_data_t get_c_trajectory()
    trajectory.speed_um_s = get_speed (actual_c_data).sint32;
    trajectory.acceleration_um_s2 = get_acceleration (actual_c_data).sint32;
    trajectory.torque_mNm = get_torque (actual_c_data).sint32;
-   trajectory.temperature_C = get_temperature (actual_c_data).sint32;
+   trajectory.temperature_mC = get_temperature (actual_c_data).sint32;
    trajectory.state = get_state (actual_c_data).sint32;
 
    return trajectory;
