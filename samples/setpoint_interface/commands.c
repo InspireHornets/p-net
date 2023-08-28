@@ -33,12 +33,8 @@ void handle_command (
    struct sockaddr_in client_addr,
    int socket_desc)
 {
-   app_actual3_data_t actual3;
-   app_setpoint3_data_t setpoint3 = {
-      .x = {0}, // Initialize x members to 0
-      .y = {0}, // Initialize y members to 0
-      .z = {0}  // Initialize z members to 0
-   };
+   app_actual4_data_t actual4;
+   app_setpoint4_data_t setpoint4 = {.x = {0}, .y = {0}, .z = {0}, .c = {0}};
    uint8_t buffer[APP_UDP_MESSAGE_LENGTH];
    int COMMAND_SIZE = 1;
 
@@ -49,50 +45,60 @@ void handle_command (
    case NO_COMMAND:
       break;
    case GET_XYZ_TRAJECTORY_POINT:
-      actual3 = get_xyz_trajectory();
+      actual4 = get_xyzc_trajectory();
       APP_LOG_DEBUG (
-         "Current x position: %i, x speed: %i, x acceleration: %i\n",
-         actual3.x.position_um,
-         actual3.x.speed_um_s,
-         actual3.x.acceleration_um_s2);
+         "UDP: Current x1 position: %i, x1 speed: %i, x1 acceleration: %i\n",
+         actual4.x.x1_position_um,
+         actual4.x.x1_speed_um_s,
+         actual4.x.x1_acceleration_um_s2);
       APP_LOG_DEBUG (
-         "Current y position: %i, y speed: %i, y acceleration: %i\n",
-         actual3.y.position_um,
-         actual3.y.speed_um_s,
-         actual3.y.acceleration_um_s2);
+         "UDP: Current y position: %i, y speed: %i, y acceleration: %i\n",
+         actual4.y.position_um,
+         actual4.y.speed_um_s,
+         actual4.y.acceleration_um_s2);
       APP_LOG_DEBUG (
-         "Current z position: %i, z speed: %i, z acceleration: %i\n",
-         actual3.z.position_um,
-         actual3.z.speed_um_s,
-         actual3.z.acceleration_um_s2);
+         "UDP: Current z position: %i, z speed: %i, z acceleration: %i\n",
+         actual4.z.position_um,
+         actual4.z.speed_um_s,
+         actual4.z.acceleration_um_s2);
+      APP_LOG_DEBUG (
+         "UDP: Current c position: %i, c speed: %i, c acceleration: %i\n",
+         actual4.c.position_um,
+         actual4.c.speed_um_s,
+         actual4.c.acceleration_um_s2);
 
       buffer[0] = GET_XYZ_TRAJECTORY_POINT;
-      memcpy (buffer + 1, &actual3, 3 * APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE);
+      memcpy (
+         buffer + 1,
+         &actual4,
+         3 * APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE +
+            APP_GSDML_OUTPUT_DATA_SETPOINT_X_SIZE);
 
       respond (
          buffer,
-         COMMAND_SIZE + 3 * APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE,
+         COMMAND_SIZE + 3 * APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE +
+            APP_GSDML_OUTPUT_DATA_SETPOINT_X_SIZE,
          client_addr,
          socket_desc);
       break;
    case SET_XYZ_TRAJECTORY_POINT:
-      memcpy (&setpoint3, input + 1, 3 * APP_GSDML_INPUT_DATA_SETPOINT_SIZE);
+      memcpy (&setpoint4, input + 1, 4 * APP_GSDML_INPUT_DATA_SETPOINT_SIZE);
       APP_LOG_DEBUG (
-         "New x position %i, x speed %i, x acceleration: %i\n",
-         setpoint3.x.position_um,
-         setpoint3.x.speed_um_s,
-         setpoint3.x.acceleration_um_s2);
+         "UDP: New x position %i, x speed %i, x acceleration: %i\n",
+         setpoint4.x.position_um,
+         setpoint4.x.speed_um_s,
+         setpoint4.x.acceleration_um_s2);
       APP_LOG_DEBUG (
-         "New y position %i, y speed %i, y acceleration: %i\n",
-         setpoint3.y.position_um,
-         setpoint3.y.speed_um_s,
-         setpoint3.y.acceleration_um_s2);
+         "UDP: New y position %i, y speed %i, y acceleration: %i\n",
+         setpoint4.y.position_um,
+         setpoint4.y.speed_um_s,
+         setpoint4.y.acceleration_um_s2);
       APP_LOG_DEBUG (
-         "New z position %i, z speed %i, z acceleration: %i\n",
-         setpoint3.z.position_um,
-         setpoint3.z.speed_um_s,
-         setpoint3.z.acceleration_um_s2);
-      set_xyz_trajectory_point (setpoint3);
+         "UDP: New z position %i, z speed %i, z acceleration: %i\n",
+         setpoint4.z.position_um,
+         setpoint4.z.speed_um_s,
+         setpoint4.z.acceleration_um_s2);
+      set_xyzc_trajectory_point (setpoint4);
       break;
    default:
       APP_LOG_ERROR ("Invalid command: %i", input[0]);

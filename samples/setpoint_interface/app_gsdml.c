@@ -45,13 +45,18 @@ static const app_gsdml_module_t setpoint_x_module = {
 
 static const app_gsdml_module_t setpoint_y_module = {
    .id = APP_GSDML_MOD_ID_SETPOINT_Y,
-   .name = "Setpoint y interface module",
+   .name = "Setpoint Y interface module",
    .submodules = {APP_GSDML_SUBMOD_ID_SETPOINT_Y, 0}};
 
 static const app_gsdml_module_t setpoint_z_module = {
    .id = APP_GSDML_MOD_ID_SETPOINT_Z,
    .name = "Setpoint Z interface module",
    .submodules = {APP_GSDML_SUBMOD_ID_SETPOINT_Z, 0}};
+
+static const app_gsdml_module_t setpoint_c_module = {
+   .id = APP_GSDML_MOD_ID_SETPOINT_C,
+   .name = "Setpoint C interface module",
+   .submodules = {APP_GSDML_SUBMOD_ID_SETPOINT_C, 0}};
 
 /******************* Supported submodules ************************/
 
@@ -111,30 +116,39 @@ static const app_gsdml_submodule_t dap_port_4 = {
 
 static const app_gsdml_submodule_t submod_setpoint_x = {
    .id = APP_GSDML_SUBMOD_ID_SETPOINT_X,
-   .name = "Setpoint interface for x-axis",
+   .name = "Setpoint interface for X-axis",
    .api = APP_GSDML_API,
    .data_dir = PNET_DIR_IO,
    .insize = APP_GSDML_INPUT_DATA_SETPOINT_SIZE,
-   .outsize = APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE,
-   .parameters = {APP_GSDML_PARAMETER_ECHO_IDX, 0}};
+   .outsize = APP_GSDML_OUTPUT_DATA_SETPOINT_X_SIZE,
+   .parameters = {0}};
 
 static const app_gsdml_submodule_t submod_setpoint_y = {
    .id = APP_GSDML_SUBMOD_ID_SETPOINT_Y,
-   .name = "Setpoint interface for y-axis",
+   .name = "Setpoint interface for Y-axis",
    .api = APP_GSDML_API,
    .data_dir = PNET_DIR_IO,
    .insize = APP_GSDML_INPUT_DATA_SETPOINT_SIZE,
    .outsize = APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE,
-   .parameters = {APP_GSDML_PARAMETER_ECHO_IDX, 0}};
+   .parameters = {0}};
 
 static const app_gsdml_submodule_t submod_setpoint_z = {
    .id = APP_GSDML_SUBMOD_ID_SETPOINT_Z,
-   .name = "Setpoint interface for z-axis",
+   .name = "Setpoint interface for Z-axis",
    .api = APP_GSDML_API,
    .data_dir = PNET_DIR_IO,
    .insize = APP_GSDML_INPUT_DATA_SETPOINT_SIZE,
    .outsize = APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE,
-   .parameters = {APP_GSDML_PARAMETER_ECHO_IDX, 0}};
+   .parameters = {0}};
+
+static const app_gsdml_submodule_t submod_setpoint_c = {
+   .id = APP_GSDML_SUBMOD_ID_SETPOINT_C,
+   .name = "Setpoint interface for C-axis",
+   .api = APP_GSDML_API,
+   .data_dir = PNET_DIR_IO,
+   .insize = APP_GSDML_INPUT_DATA_SETPOINT_SIZE,
+   .outsize = APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE,
+   .parameters = {0}};
 
 /** List of supported modules */
 static const app_gsdml_module_t * app_gsdml_modules[] = {
@@ -142,6 +156,7 @@ static const app_gsdml_module_t * app_gsdml_modules[] = {
    &setpoint_x_module,
    &setpoint_y_module,
    &setpoint_z_module,
+   &setpoint_c_module,
 };
 
 /** List of supported submodules */
@@ -156,6 +171,7 @@ static const app_gsdml_submodule_t * app_gsdml_submodules[] = {
    &submod_setpoint_x,
    &submod_setpoint_y,
    &submod_setpoint_z,
+   &submod_setpoint_c,
 };
 
 /* List of supported parameters.
@@ -173,11 +189,6 @@ static app_gsdml_param_t app_gsdml_parameters[] = {
    {
       .index = APP_GSDML_PARAMETER_2_IDX,
       .name = "Demo 2",
-      .length = APP_GSDML_PARAMETER_LENGTH,
-   },
-   {
-      .index = APP_GSDML_PARAMETER_ECHO_IDX,
-      .name = "Echo gain setting",
       .length = APP_GSDML_PARAMETER_LENGTH,
    }};
 

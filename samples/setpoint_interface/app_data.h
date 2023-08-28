@@ -45,24 +45,48 @@ typedef struct CC_PACKED app_actual_data
    int32_t position_um;
    int32_t speed_um_s;
    int32_t acceleration_um_s2;
-   int32_t power;
+   int32_t torque;
    int32_t temperature;
+   int32_t state;
 } app_actual_data_t;
 CC_PACKED_END
 CC_STATIC_ASSERT (
    sizeof (app_actual_data_t) == APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE);
 
 CC_PACKED_BEGIN
-typedef struct CC_PACKED app_actual3_data
+typedef struct CC_PACKED app_actual_x_data
 {
    /* Network endianness */
-   app_actual_data_t x;
-   app_actual_data_t y;
-   app_actual_data_t z;
-} app_actual3_data_t;
+   int32_t x1_position_um;
+   int32_t x2_position_um;
+   int32_t x1_speed_um_s;
+   int32_t x2_speed_um_s;
+   int32_t x1_acceleration_um_s2;
+   int32_t x2_acceleration_um_s2;
+   int32_t x1_torque;
+   int32_t x2_torque;
+   int32_t x1_temperature;
+   int32_t x2_temperature;
+   int32_t x1_state;
+   int32_t x2_state;
+} app_actual_x_data_t;
 CC_PACKED_END
 CC_STATIC_ASSERT (
-   sizeof (app_actual3_data_t) == 3 * APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE);
+   sizeof (app_actual_x_data_t) == APP_GSDML_OUTPUT_DATA_SETPOINT_X_SIZE);
+
+CC_PACKED_BEGIN
+typedef struct CC_PACKED app_actual4_data
+{
+   /* Network endianness */
+   app_actual_x_data_t x;
+   app_actual_data_t y;
+   app_actual_data_t z;
+   app_actual_data_t c;
+} app_actual4_data_t;
+CC_PACKED_END
+CC_STATIC_ASSERT (
+   sizeof (app_actual4_data_t) == 3 * APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE +
+                                     APP_GSDML_OUTPUT_DATA_SETPOINT_X_SIZE);
 
 CC_PACKED_BEGIN
 typedef struct CC_PACKED app_setpoint_data
@@ -78,24 +102,25 @@ CC_STATIC_ASSERT (
    sizeof (app_setpoint_data_t) == APP_GSDML_INPUT_DATA_SETPOINT_SIZE);
 
 CC_PACKED_BEGIN
-typedef struct CC_PACKED app_setpoint3_data
+typedef struct CC_PACKED app_setpoint4_data
 {
    /* Network endianness */
    app_setpoint_data_t x;
    app_setpoint_data_t y;
    app_setpoint_data_t z;
-} app_setpoint3_data_t;
+   app_setpoint_data_t c;
+} app_setpoint4_data_t;
 CC_PACKED_END
 CC_STATIC_ASSERT (
-   sizeof (app_setpoint3_data_t) == 3 * APP_GSDML_INPUT_DATA_SETPOINT_SIZE);
+   sizeof (app_setpoint4_data_t) == 4 * APP_GSDML_INPUT_DATA_SETPOINT_SIZE);
 
 union Sint32
 {
    uint8_t bytes[4];
    int32_t sint32;
 };
-app_actual3_data_t get_xyz_trajectory();
-void set_xyz_trajectory_point (app_setpoint3_data_t trajectory);
+app_actual4_data_t get_xyzc_trajectory();
+void set_xyzc_trajectory_point (app_setpoint4_data_t trajectory);
 
 /**
  * Get application specific PNIO input data (for sending to PLC)

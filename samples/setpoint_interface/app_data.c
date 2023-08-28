@@ -39,11 +39,13 @@ static uint32_t app_param_echo_gain = 1; /* Network endianness */
 
 /* Network endianness */
 static uint8_t setpoint_x_data[APP_GSDML_INPUT_DATA_SETPOINT_SIZE] = {0};
-static uint8_t actual_x_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
+static uint8_t actual_x_data[APP_GSDML_OUTPUT_DATA_SETPOINT_X_SIZE] = {0};
 static uint8_t setpoint_y_data[APP_GSDML_INPUT_DATA_SETPOINT_SIZE] = {0};
 static uint8_t actual_y_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
 static uint8_t setpoint_z_data[APP_GSDML_INPUT_DATA_SETPOINT_SIZE] = {0};
 static uint8_t actual_z_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
+static uint8_t setpoint_c_data[APP_GSDML_INPUT_DATA_SETPOINT_SIZE] = {0};
+static uint8_t actual_c_data[APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE] = {0};
 
 union Sint32 get_position (const uint8_t * actual_data)
 {
@@ -78,12 +80,12 @@ union Sint32 get_acceleration (const uint8_t * actual_data)
    return acceleration;
 }
 
-app_actual_data_t get_x_trajectory()
+app_actual_x_data_t get_x_trajectory()
 {
-   app_actual_data_t trajectory;
-   trajectory.position_um = get_position (actual_x_data).sint32;
-   trajectory.speed_um_s = get_speed (actual_x_data).sint32;
-   trajectory.acceleration_um_s2 = get_acceleration (actual_x_data).sint32;
+   app_actual_x_data_t trajectory;
+   trajectory.x1_position_um = get_position (actual_x_data).sint32;
+   trajectory.x1_speed_um_s = get_speed (actual_x_data).sint32;
+   trajectory.x1_acceleration_um_s2 = get_acceleration (actual_x_data).sint32;
 
    return trajectory;
 }
@@ -118,6 +120,16 @@ app_actual_data_t get_z_trajectory()
    return trajectory;
 }
 
+app_actual_data_t get_c_trajectory()
+{
+   app_actual_data_t trajectory;
+   trajectory.position_um = get_position (actual_c_data).sint32;
+   trajectory.speed_um_s = get_speed (actual_c_data).sint32;
+   trajectory.acceleration_um_s2 = get_acceleration (actual_c_data).sint32;
+
+   return trajectory;
+}
+
 void set_y_trajectory_point (app_setpoint_data_t trajectory)
 {
    app_setpoint_data_t * p_setpoint_data =
@@ -138,9 +150,19 @@ void set_z_trajectory_point (app_setpoint_data_t trajectory)
       CC_TO_BE32 (trajectory.acceleration_um_s2);
 }
 
-app_actual3_data_t get_xyz_trajectory()
+void set_c_trajectory_point (app_setpoint_data_t trajectory)
 {
-   app_actual3_data_t trajectory;
+   app_setpoint_data_t * p_setpoint_data =
+      (app_setpoint_data_t *)&setpoint_c_data;
+   p_setpoint_data->position_um = CC_TO_BE32 (trajectory.position_um);
+   p_setpoint_data->speed_um_s = CC_TO_BE32 (trajectory.speed_um_s);
+   p_setpoint_data->acceleration_um_s2 =
+      CC_TO_BE32 (trajectory.acceleration_um_s2);
+}
+
+app_actual4_data_t get_xyzc_trajectory()
+{
+   app_actual4_data_t trajectory;
    trajectory.x = get_x_trajectory();
    trajectory.y = get_y_trajectory();
    trajectory.z = get_z_trajectory();
@@ -148,11 +170,12 @@ app_actual3_data_t get_xyz_trajectory()
    return trajectory;
 }
 
-void set_xyz_trajectory_point (app_setpoint3_data_t trajectory3)
+void set_xyzc_trajectory_point (app_setpoint4_data_t trajectory)
 {
-   set_x_trajectory_point (trajectory3.x);
-   set_y_trajectory_point (trajectory3.y);
-   set_z_trajectory_point (trajectory3.z);
+   set_x_trajectory_point (trajectory.x);
+   set_y_trajectory_point (trajectory.y);
+   set_z_trajectory_point (trajectory.z);
+   set_c_trajectory_point (trajectory.c);
 }
 
 uint8_t * app_data_to_plc (
@@ -186,6 +209,12 @@ uint8_t * app_data_to_plc (
       *iops = PNET_IOXS_GOOD;
       return setpoint_z_data;
    }
+   else if (submodule_id == APP_GSDML_SUBMOD_ID_SETPOINT_C)
+   {
+      *size = APP_GSDML_INPUT_DATA_SETPOINT_SIZE;
+      *iops = PNET_IOXS_GOOD;
+      return setpoint_c_data;
+   }
 
    /* Automated RT Tester scenario 2 - unsupported (sub)module */
    return NULL;
@@ -205,13 +234,13 @@ int app_data_from_plc (
 
    if (submodule_id == APP_GSDML_SUBMOD_ID_SETPOINT_X)
    {
-      if (size == APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE)
+      if (size == APP_GSDML_OUTPUT_DATA_SETPOINT_X_SIZE)
       {
          if (!are_arrays_equal (
                 data,
                 size,
                 actual_x_data,
-                APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE))
+                APP_GSDML_OUTPUT_DATA_SETPOINT_X_SIZE))
          {
             uint32_t actual_position =
                combine_bytes_to_uint32 (&actual_x_data[0]);
@@ -253,7 +282,7 @@ int app_data_from_plc (
             uint32_t time = combine_bytes_to_uint32 (&actual_y_data[16]);
 
             APP_LOG_DEBUG (
-               "Y -- Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: %i\tOut 5:% i\n",
+               "Y -- Pos: %i\tVel: %i\tAcc: %i\tOut 4: %i\tOut 5:% i\n",
                actual_position,
                actual_speed,
                actual_acc,
@@ -293,6 +322,33 @@ int app_data_from_plc (
          memcpy (actual_z_data, data, size);
 
          return 0;
+      }
+   }
+   else if (submodule_id == APP_GSDML_SUBMOD_ID_SETPOINT_C)
+   {
+      if (size == APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE)
+      {
+         if (!are_arrays_equal (
+                data,
+                size,
+                actual_c_data,
+                APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE))
+         {
+            uint32_t actual_position =
+               combine_bytes_to_uint32 (&actual_c_data[0]);
+            uint32_t actual_speed = combine_bytes_to_uint32 (&actual_c_data[4]);
+            uint32_t actual_acc = combine_bytes_to_uint32 (&actual_c_data[8]);
+            uint32_t loop_in = combine_bytes_to_uint32 (&actual_c_data[12]);
+            uint32_t time = combine_bytes_to_uint32 (&actual_c_data[16]);
+
+            APP_LOG_DEBUG (
+               "C -- Out 1: %i\tOut 2: %i\tOut 3: %i\tOut 4: %i\tOut 5:% i\n",
+               actual_position,
+               actual_speed,
+               actual_acc,
+               loop_in,
+               time);
+         }
       }
    }
 

@@ -52,6 +52,8 @@ extern "C" {
 #define APP_GSDML_SUBMOD_ID_SETPOINT_Y 0x0141
 #define APP_GSDML_MOD_ID_SETPOINT_Z    0x00000042
 #define APP_GSDML_SUBMOD_ID_SETPOINT_Z 0x0142
+#define APP_GSDML_MOD_ID_SETPOINT_C    0x00000043
+#define APP_GSDML_SUBMOD_ID_SETPOINT_C 0x0143
 
 /* Used in DCP communication */
 #define APP_GSDML_OEM_VENDOR_ID 0xcafe
@@ -135,9 +137,17 @@ typedef struct
    uint16_t length;
 } app_gsdml_param_t;
 
-#define APP_GSDML_INPUT_DATA_SETPOINT_SIZE  16 /* bytes */
-#define APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE 20 /* bytes */
-#define APP_GSDML_ALARM_PAYLOAD_SIZE        1  /* bytes */
+#define APP_GSDML_SINGLE_DATA_SETPOINT_SIZE 4 /* bytes */
+#define APP_GSDML_OUTPUTS                   6
+#define APP_GSDML_INPUTS                    4
+#define APP_GSDML_INPUT_DATA_SETPOINT_SIZE                                     \
+   APP_GSDML_INPUTS * APP_GSDML_SINGLE_DATA_SETPOINT_SIZE /* bytes */
+#define APP_GSDML_OUTPUT_DATA_SETPOINT_SIZE                                    \
+   APP_GSDML_OUTPUTS * APP_GSDML_SINGLE_DATA_SETPOINT_SIZE /* bytes */
+#define APP_GSDML_X_OUTPUTS 12
+#define APP_GSDML_OUTPUT_DATA_SETPOINT_X_SIZE                                  \
+   APP_GSDML_X_OUTPUTS * APP_GSDML_SINGLE_DATA_SETPOINT_SIZE /* bytes */
+#define APP_GSDML_ALARM_PAYLOAD_SIZE 1                       /* bytes */
 
 /**
  * Get module configuration from module ID

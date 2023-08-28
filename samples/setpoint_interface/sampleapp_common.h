@@ -36,7 +36,7 @@ extern "C" {
 // half the PLC cycle time to give the UDP time to update
 #define APP_TICKS_UPDATE_DATA 8
 
-#define APP_UDP_MESSAGE_LENGTH 64
+#define APP_UDP_MESSAGE_LENGTH 128
 #define APP_UDP_HOST_ADDRESS   "127.0.0.1"
 #define APP_UDP_PORT           2000
 
