@@ -259,7 +259,7 @@ static int app_ccontrol_cnf (
    pnet_result_t * p_result)
 {
    APP_LOG_DEBUG (
-      "PLC ccontrol message confirmation (The PLC has received our Application "
+      "PLC control message confirmation (The PLC has received our Application "
       "Ready message). AREP: %u  Status codes: %d %d %d %d\n",
       arep,
       p_result->pnio_status.error_code,
