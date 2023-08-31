@@ -15,13 +15,15 @@ Web resources
 
 Converting examples for your own usage
 -------------------------------------
-Convert p-net to use it with your own datatypes and GSDML file.
+Convert p-net to use it with your own datatypes and GSDML file. There is now a [GSDML creator](https://github.com/InspireHornets/gsdml-creator)
+it can do some of these steps.
 
 1. Copy the GSML file that is found in the `p-net/samples/pn_dev/GSDML-V2.4-RT-Labs-P-Net-Sample-App-20220324.xml`
     Note: I tried to create my own profinet device with TwinCAT or with CODESYS and export a GSDML file.
     But I never got this to work and I don´t know why.
 2. Manually adjust the GSDML file as needed, for example:
    - the company name, name of the device etc.
+        > NOTE: when you change the dns name, make sure to run the app with the `-f` flag once. This resets the device to factory settings.
    - size of IO, datatypes of IO and number of modules
    - also make sure all submodules have a unique ID (not sure if needed).
 1. Duplicate the `samples/pn_simple_example` folder and content and rename the `pn_simple_example` folder, for example to `pn_my_app`
@@ -35,9 +37,24 @@ Convert p-net to use it with your own datatypes and GSDML file.
    1. add a static struct where in/output data can be stored into.
       - `static uint8_t inputdata[APP_GSDML_INPUT_DATA_DIGITAL_SIZE] = {0};`
       - Floats are saved as unsigned integers, because of endian conversion. Profinet data has [network endianess](https://en.wikipedia.org/wiki/Endianness#Networking) (Big endian), whereas C uses little endian ?
-  1. add a `typedef struct` to store I/O data
+   1. add a `typedef struct` to store I/O data
+   2. Add the modules you added to the if statement in `app_data_from_plc`, identified by their submodule number
+   3. Add the modules you added to `app_data_to_plc`, identified by their submodule number
+   4. (Optional) if you added a module parameter add the parameter to `app_data_write_parameter`, identified by their parameter index
 
 Endianess = The attribute of a system that indicates whether integers are represented with the most significant byte stored at the lowest address (big endian) or at the highest address (little endian)
+
+In case you see the following error message while connecting
+
+```
+Event indication PNET_EVENT_ABORT   AREP: 1
+    Error class: 0x00 Not decoded
+    Error code:  0x00 Not decoded
+Connection closed
+Waiting for PLC connect request
+```
+
+try to restart the VM. There seems to be a older instance still running in the background.
 
 p-net
 -----

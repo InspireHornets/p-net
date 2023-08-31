@@ -63,37 +63,6 @@ target_link_libraries(profinet
   $<$<CONFIG:Coverage>:--coverage>
   )
 
-target_include_directories(pn_dev
-  PRIVATE
-  samples/pn_dev
-  src/ports/linux
-  )
-
-target_sources(pn_dev
-  PRIVATE
-  samples/pn_dev/sampleapp_common.c
-  samples/pn_dev/app_utils.c
-  samples/pn_dev/app_log.c
-  samples/pn_dev/app_gsdml.c
-  samples/pn_dev/app_data.c
-  src/ports/linux/sampleapp_main.c
-  )
-
-target_compile_options(pn_dev
-  PRIVATE
-  -Wall
-  -Wextra
-  -Werror
-  -Wno-unused-parameter
-  -ffunction-sections
-  -fdata-sections
-  )
-
-target_link_options(pn_dev
-   PRIVATE
-   -Wl,--gc-sections
-)
-
 install (FILES
   src/ports/linux/pnal_config.h
   DESTINATION include
