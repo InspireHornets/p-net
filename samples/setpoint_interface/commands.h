@@ -7,14 +7,10 @@
 enum CommandType
 {
    NO_COMMAND = 0x00,
-
-   GET_XYZ_TRAJECTORY_POINT = 0x10,
-
-   SET_XYZ_TRAJECTORY_POINT = 0x20,
-
+   GET_XYZC_TRAJECTORY_POINT = 0x10,
+   SET_XYZC_TRAJECTORY_POINT = 0x20,
    // TODO add one command to set and get in the same cycle, such that the p-net
    //  app can run at the same rate as the plc instead of at half the cycle time
-
    INVALID_COMMAND = 0xff,
 };
 

@@ -44,7 +44,7 @@ void handle_command (
    {
    case NO_COMMAND:
       break;
-   case GET_XYZ_TRAJECTORY_POINT:
+   case GET_XYZC_TRAJECTORY_POINT:
       actual4 = get_xyzc_trajectory();
       APP_LOG_DEBUG (
          "UDP: Current x1 position: %i, x1 speed: %i, x1 acceleration: %i\n",
@@ -67,7 +67,7 @@ void handle_command (
          actual4.c.speed_um_s,
          actual4.c.acceleration_um_s2);
 
-      buffer[0] = GET_XYZ_TRAJECTORY_POINT;
+      buffer[0] = GET_XYZC_TRAJECTORY_POINT;
       memcpy (
          buffer + 1,
          &actual4,
@@ -81,7 +81,7 @@ void handle_command (
          client_addr,
          socket_desc);
       break;
-   case SET_XYZ_TRAJECTORY_POINT:
+   case SET_XYZC_TRAJECTORY_POINT:
       memcpy (&setpoint4, input + 1, 4 * APP_GSDML_INPUT_DATA_SETPOINT_SIZE);
       APP_LOG_DEBUG (
          "UDP: New x position %i, x speed %i, x acceleration: %i\n",
