@@ -98,6 +98,11 @@ void handle_command (
          setpoint4.z.position_um,
          setpoint4.z.speed_um_s,
          setpoint4.z.acceleration_um_s2);
+      APP_LOG_DEBUG (
+         "UDP: New c position %i, z speed %i, z acceleration: %i\n",
+         setpoint4.c.position_um,
+         setpoint4.c.speed_um_s,
+         setpoint4.c.acceleration_um_s2);
       set_xyzc_trajectory_point (setpoint4);
       break;
    default:
