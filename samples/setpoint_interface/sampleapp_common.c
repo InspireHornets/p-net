@@ -1017,10 +1017,7 @@ static void app_cyclic_data_callback (app_subslot_t * subslot, void * tag)
 
    if (subslot->slot_nbr != PNET_SLOT_DAP_IDENT && subslot->data_cfg.insize > 0)
    {
-      /* Get application specific input data from a submodule (not DAP)
-       *
-       * For the sample application, the data includes a button
-       * state and a counter value. */
+      /* Get application specific input data from a submodule (not DAP) */
       indata = app_data_to_plc (
          subslot->slot_nbr,
          subslot->subslot_nbr,
