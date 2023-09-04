@@ -1158,7 +1158,6 @@ static int app_set_initial_data_and_ioxs (app_data_t * app)
    return 0;
 }
 
-// TODO review this implementaiton with Thomas
 void app_handle_udp_communication (int socket_desc, uint8_t * client_message)
 {
    struct sockaddr_in client_addr;
