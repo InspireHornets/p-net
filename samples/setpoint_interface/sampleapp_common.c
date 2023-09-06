@@ -477,7 +477,7 @@ static int app_state_ind (
    }
    else if (event == PNET_EVENT_DATA)
    {
-      APP_LOG_DEBUG ("Cyclic data transmission started\n\n");
+      APP_LOG_INFO ("Cyclic data transmission started\n\n");
    }
 
    return 0;
@@ -1284,7 +1284,7 @@ void app_loop_forever (void * arg)
 
          app->main_api.arep = UINT32_MAX;
          app->alarm_allowed = true;
-         APP_LOG_DEBUG ("Connection closed\n");
+         APP_LOG_INFO ("Connection closed\n");
          APP_LOG_DEBUG ("Waiting for PLC connect request\n\n");
       }
    }
