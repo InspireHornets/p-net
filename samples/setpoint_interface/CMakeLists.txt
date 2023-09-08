@@ -52,6 +52,8 @@ target_link_options(setpoint_interface
         -Wl,--gc-sections
         )
 
+file(COPY ${PROFINET_SOURCE_DIR}/src/ports/linux/set_network_parameters DESTINATION ${CMAKE_CURRENT_BINARY_DIR} FILE_PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ)
+
 target_link_libraries(setpoint_interface PUBLIC profinet)
 
 install(TARGETS setpoint_interface DESTINATION bin)
