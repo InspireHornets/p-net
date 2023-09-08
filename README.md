@@ -52,449 +52,447 @@ The log level of p-net can be adjusted by changing `LOG_LEVEL_DEBUG` in `#define
 - If you change the dns name of your profinet device, you might need to reset the ethernet adapters settings with `sudo my_pn_app -i ens192 -f`,
    where `-i` is the interface name and `-f` is the flag to reset to the factory settings.
 - Below a difference between the a successful connection with sudo and a failed connection. In order to build and run the non-sudo one, checkout the `no-sudo` branch.
-<details>
-<summary>Difference between a successful and a failed connection.</summary>
-```diff
-diff --git "a/.\\success.txt" "b/.\\fail.txt"
-index 8c11704..2f9d742 100644
---- "a/.\\success.txt"
-+++ "b/.\\fail.txt"
-@@ -16,64 +16,58 @@ Gateway:              192.168.214.1
- Storage directory:    /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface
 
-Init P-Net stack and sample application
--[11:53:19 DEBUG] API(107): Application calls pnet_init()
--[11:53:19 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_im.bin Access time 0 ms.
--[11:53:19 DEBUG] FSPM(307): Did read I&M settings from nvm.
--[11:53:19 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_im.bin Access time 0 ms.
--[11:53:19 DEBUG] FSPM(363): No storing of nvm I&M settings (no changes).
--[11:53:19 DEBUG] FSPM(1417): No user callback for signal LED implemented.
--[11:53:19 DEBUG] CPM(81): Init driver
--[11:53:19 INFO ] CPM_DRIVER_SW(546): Default CPM driver installed
--[11:53:19 DEBUG] PPM(51): Init driver
--[11:53:19 INFO ] PPM_DRIVER_SW(292): Default PPM driver installed
--[11:53:19 DEBUG] ETH(82): Initialising interface "ens65" 6C:B3:11:12:A6:F3 Ethertype 0xFFFF
--[11:53:19 DEBUG] CMINA(177): Setting default configuration. Reset mode: 0
--[11:53:19 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_ip.bin Access time 0 ms.
--[11:53:19 DEBUG] CMINA(212): Did read IP parameters from nvm
--[11:53:19 DEBUG] CMINA(272): Using IP: 0.0.0.0 Netmask: 0.0.0.0 Gateway: 0.0.0.0 Station name: "acc-setpoint-interface"
--[11:53:19 DEBUG] CMINA(509): No IP address available. Will not send any HELLO messages.
--[11:53:19 INFO ] CMINA(417): Setting IP: 0.0.0.0 Netmask: 0.0.0.0 Gateway: 0.0.0.0 Station name: "acc-setpoint-interface" Permanent: 1
--PNAL(168): Command for script: set_network_parameters ens65 0.0.0.0 0.0.0.0 0.0.0.0 acc-setpoint-interface 1
--[11:53:19 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_ip.bin Access time 0 ms.
--[11:53:19 DEBUG] CMINA(143): No storing of nvm IP settings (no changes). IP: 0.0.0.0 Netmask: 0.0.0.0 Gateway: 0.0.0.0 Station name: "acc-setpoint-interface"
--Network script for ens65:  Set IP 0.0.0.0   Netmask 0.0.0.0   Gateway 0.0.0.0   Permanent: 1   Hostname: acc-setpoint-interface   Skip setting hostname: true
--No valid default gateway given. Skipping setting default gateway.
--[11:53:19 DEBUG] DCP(2000): Activate. Register frame handlers.
--[11:53:19 DEBUG] ETH(285): Framehandler is adding FrameId 0xfefc at index 0.
--[11:53:19 DEBUG] ETH(285): Framehandler is adding FrameId 0xfefd at index 1.
--[11:53:19 DEBUG] ETH(285): Framehandler is adding FrameId 0xfefe at index 2.
--[11:53:19 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_pdport_1.bin Access time 0 ms.
--[11:53:19 DEBUG] PDPORT(124): Did read PDPort settings from nvm. No monitoring of peer on port 1.
--[11:53:19 DEBUG] LLDP(1175): Enabling LLDP transmission for port 1
--[11:53:19 DEBUG] LLDP(1011): Send port 1 MAC: 6C:B3:11:12:A6:F3 IP: 0.0.0.0 Chassis ID: "Setpoint interface app    1                    007                  3 V  0  2  0" Port ID: "port-001.acc-setpoint-interface"
-+[11:55:17 DEBUG] API(107): Application calls pnet_init()
-+[11:55:17 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_im.bin Access time 0 ms.
-+[11:55:17 DEBUG] FSPM(307): Did read I&M settings from nvm.
-+[11:55:17 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_im.bin Access time 0 ms.
-+[11:55:17 DEBUG] FSPM(363): No storing of nvm I&M settings (no changes).
-+[11:55:17 DEBUG] FSPM(1417): No user callback for signal LED implemented.
-+[11:55:17 DEBUG] CPM(81): Init driver
-+[11:55:17 INFO ] CPM_DRIVER_SW(546): Default CPM driver installed
-+[11:55:17 DEBUG] PPM(51): Init driver
-+[11:55:17 INFO ] PPM_DRIVER_SW(292): Default PPM driver installed
-+[11:55:17 WARN ] PNAL(168): Failed to join Profinet multicast group
-+[11:55:17 ERROR] Failed to init "ens65"
-+[11:55:17 ERROR] API(69): Failed to initialise network interfaces
-Start sample application main loop
+    ```diff
+    diff --git "a/.\\success.txt" "b/.\\fail.txt"
+    index 8c11704..2f9d742 100644
+    --- "a/.\\success.txt"
+    +++ "b/.\\fail.txt"
+    @@ -16,64 +16,58 @@ Gateway:              192.168.214.1
+     Storage directory:    /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface
 
-Plug DAP module and its submodules
-Module plug indication
-Pull old module.    API: 0 Slot:  0
--[11:53:19 DEBUG] CMDEV(928): No module in slot 0
-+[11:55:17 ERROR] CMDEV(920): API 0 does not exist
-Plug module.        API: 0 Slot:  0 Module ID: 0x1 "DAP 1"
-+[11:55:17 ERROR] CMDEV(622): API 0 does not exist
-+Plug module failed. Ret: 4294967295 API: 0 Slot:  0 Module ID: 0x1
-Submodule plug indication.
-Pull old submodule. API: 0 Slot:  0 Subslot: 1
--[11:53:19 DEBUG] CMDEV(704): No submodule in api_id 0 slot 0 subslot 1
--  Plug submodule.     API: 0 Slot:  0 Module ID: 0x1
-   +[11:55:17 ERROR] CMDEV(688): API 0 does not exist
-  +  Plug submodule.     API: 0 Slot:  0 Module ID: 0x1
-     Subslot: 1 Submodule ID: 0x1 "DAP Identity 1"
-     Data Dir: NO_IO  In: 0 bytes  Out: 0 bytes
-     -[11:53:19 DEBUG] CMDEV(887): Plugged submodule ident 0x00000001 number in api 0 slot 0 subslot 1
-     +[11:55:17 ERROR] CMDEV(749): API 0 does not exist
-     +[11:55:17 ERROR] CMDEV(197): NULL pointer(s)
-     +[11:55:17 ERROR] CMDEV(821): No module in slot 0
-    +  Plug submodule failed. Ret: 4294967295 API: 0 Slot:  0 Subslot 1 Module ID: 0x1 Submodule ID: 0x1
-       Submodule plug indication.
-       Pull old submodule. API: 0 Slot:  0 Subslot: 32768
-       -[11:53:19 DEBUG] CMDEV(704): No submodule in api_id 0 slot 0 subslot 32768
+    Init P-Net stack and sample application
+    -[11:53:19 DEBUG] API(107): Application calls pnet_init()
+    -[11:53:19 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_im.bin Access time 0 ms.
+    -[11:53:19 DEBUG] FSPM(307): Did read I&M settings from nvm.
+    -[11:53:19 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_im.bin Access time 0 ms.
+    -[11:53:19 DEBUG] FSPM(363): No storing of nvm I&M settings (no changes).
+    -[11:53:19 DEBUG] FSPM(1417): No user callback for signal LED implemented.
+    -[11:53:19 DEBUG] CPM(81): Init driver
+    -[11:53:19 INFO ] CPM_DRIVER_SW(546): Default CPM driver installed
+    -[11:53:19 DEBUG] PPM(51): Init driver
+    -[11:53:19 INFO ] PPM_DRIVER_SW(292): Default PPM driver installed
+    -[11:53:19 DEBUG] ETH(82): Initialising interface "ens65" 6C:B3:11:12:A6:F3 Ethertype 0xFFFF
+    -[11:53:19 DEBUG] CMINA(177): Setting default configuration. Reset mode: 0
+    -[11:53:19 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_ip.bin Access time 0 ms.
+    -[11:53:19 DEBUG] CMINA(212): Did read IP parameters from nvm
+    -[11:53:19 DEBUG] CMINA(272): Using IP: 0.0.0.0 Netmask: 0.0.0.0 Gateway: 0.0.0.0 Station name: "acc-setpoint-interface"
+    -[11:53:19 DEBUG] CMINA(509): No IP address available. Will not send any HELLO messages.
+    -[11:53:19 INFO ] CMINA(417): Setting IP: 0.0.0.0 Netmask: 0.0.0.0 Gateway: 0.0.0.0 Station name: "acc-setpoint-interface" Permanent: 1
+    -PNAL(168): Command for script: set_network_parameters ens65 0.0.0.0 0.0.0.0 0.0.0.0 acc-setpoint-interface 1
+    -[11:53:19 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_ip.bin Access time 0 ms.
+    -[11:53:19 DEBUG] CMINA(143): No storing of nvm IP settings (no changes). IP: 0.0.0.0 Netmask: 0.0.0.0 Gateway: 0.0.0.0 Station name: "acc-setpoint-interface"
+    -Network script for ens65:  Set IP 0.0.0.0   Netmask 0.0.0.0   Gateway 0.0.0.0   Permanent: 1   Hostname: acc-setpoint-interface   Skip setting hostname: true
+    -No valid default gateway given. Skipping setting default gateway.
+    -[11:53:19 DEBUG] DCP(2000): Activate. Register frame handlers.
+    -[11:53:19 DEBUG] ETH(285): Framehandler is adding FrameId 0xfefc at index 0.
+    -[11:53:19 DEBUG] ETH(285): Framehandler is adding FrameId 0xfefd at index 1.
+    -[11:53:19 DEBUG] ETH(285): Framehandler is adding FrameId 0xfefe at index 2.
+    -[11:53:19 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_pdport_1.bin Access time 0 ms.
+    -[11:53:19 DEBUG] PDPORT(124): Did read PDPort settings from nvm. No monitoring of peer on port 1.
+    -[11:53:19 DEBUG] LLDP(1175): Enabling LLDP transmission for port 1
+    -[11:53:19 DEBUG] LLDP(1011): Send port 1 MAC: 6C:B3:11:12:A6:F3 IP: 0.0.0.0 Chassis ID: "Setpoint interface app    1                    007                  3 V  0  2  0" Port ID: "port-001.acc-setpoint-interface"
+    +[11:55:17 DEBUG] API(107): Application calls pnet_init()
+    +[11:55:17 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_im.bin Access time 0 ms.
+    +[11:55:17 DEBUG] FSPM(307): Did read I&M settings from nvm.
+    +[11:55:17 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_im.bin Access time 0 ms.
+    +[11:55:17 DEBUG] FSPM(363): No storing of nvm I&M settings (no changes).
+    +[11:55:17 DEBUG] FSPM(1417): No user callback for signal LED implemented.
+    +[11:55:17 DEBUG] CPM(81): Init driver
+    +[11:55:17 INFO ] CPM_DRIVER_SW(546): Default CPM driver installed
+    +[11:55:17 DEBUG] PPM(51): Init driver
+    +[11:55:17 INFO ] PPM_DRIVER_SW(292): Default PPM driver installed
+    +[11:55:17 WARN ] PNAL(168): Failed to join Profinet multicast group
+    +[11:55:17 ERROR] Failed to init "ens65"
+    +[11:55:17 ERROR] API(69): Failed to initialise network interfaces
+    Start sample application main loop
+
+    Plug DAP module and its submodules
+    Module plug indication
+    Pull old module.    API: 0 Slot:  0
+    -[11:53:19 DEBUG] CMDEV(928): No module in slot 0
+    +[11:55:17 ERROR] CMDEV(920): API 0 does not exist
+    Plug module.        API: 0 Slot:  0 Module ID: 0x1 "DAP 1"
+    +[11:55:17 ERROR] CMDEV(622): API 0 does not exist
+    +Plug module failed. Ret: 4294967295 API: 0 Slot:  0 Module ID: 0x1
+    Submodule plug indication.
+    Pull old submodule. API: 0 Slot:  0 Subslot: 1
+    -[11:53:19 DEBUG] CMDEV(704): No submodule in api_id 0 slot 0 subslot 1
     -  Plug submodule.     API: 0 Slot:  0 Module ID: 0x1
        +[11:55:17 ERROR] CMDEV(688): API 0 does not exist
-    +  Plug submodule.     API: 0 Slot:  0 Module ID: 0x1
-       Subslot: 32768 Submodule ID: 0x8000 "DAP Interface 1"
-       Data Dir: NO_IO  In: 0 bytes  Out: 0 bytes
-       -[11:53:19 DEBUG] CMDEV(887): Plugged submodule ident 0x00008000 number in api 0 slot 0 subslot 32768
-       +[11:55:17 ERROR] CMDEV(749): API 0 does not exist
-       +[11:55:17 ERROR] CMDEV(197): NULL pointer(s)
-       +[11:55:17 ERROR] CMDEV(821): No module in slot 0
-    +  Plug submodule failed. Ret: 4294967295 API: 0 Slot:  0 Subslot 32768 Module ID: 0x1 Submodule ID: 0x8000
-       Submodule plug indication.
-       Pull old submodule. API: 0 Slot:  0 Subslot: 32769
-       -[11:53:19 DEBUG] CMDEV(704): No submodule in api_id 0 slot 0 subslot 32769
-    -  Plug submodule.     API: 0 Slot:  0 Module ID: 0x1
-       +[11:55:17 ERROR] CMDEV(688): API 0 does not exist
-    +  Plug submodule.     API: 0 Slot:  0 Module ID: 0x1
-       Subslot: 32769 Submodule ID: 0x8001 "DAP Port 1"
-       Data Dir: NO_IO  In: 0 bytes  Out: 0 bytes
-       -[11:53:19 DEBUG] CMDEV(887): Plugged submodule ident 0x00008001 number in api 0 slot 0 subslot 32769
-       +[11:55:17 ERROR] CMDEV(749): API 0 does not exist
-       +[11:55:17 ERROR] CMDEV(197): NULL pointer(s)
-       +[11:55:17 ERROR] CMDEV(821): No module in slot 0
-    +  Plug submodule failed. Ret: 4294967295 API: 0 Slot:  0 Subslot 32769 Module ID: 0x1 Submodule ID: 0x8001
-       Done plugging DAP
+      +  Plug submodule.     API: 0 Slot:  0 Module ID: 0x1
+         Subslot: 1 Submodule ID: 0x1 "DAP Identity 1"
+         Data Dir: NO_IO  In: 0 bytes  Out: 0 bytes
+         -[11:53:19 DEBUG] CMDEV(887): Plugged submodule ident 0x00000001 number in api 0 slot 0 subslot 1
+         +[11:55:17 ERROR] CMDEV(749): API 0 does not exist
+         +[11:55:17 ERROR] CMDEV(197): NULL pointer(s)
+         +[11:55:17 ERROR] CMDEV(821): No module in slot 0
+        +  Plug submodule failed. Ret: 4294967295 API: 0 Slot:  0 Subslot 1 Module ID: 0x1 Submodule ID: 0x1
+           Submodule plug indication.
+           Pull old submodule. API: 0 Slot:  0 Subslot: 32768
+           -[11:53:19 DEBUG] CMDEV(704): No submodule in api_id 0 slot 0 subslot 32768
+        -  Plug submodule.     API: 0 Slot:  0 Module ID: 0x1
+           +[11:55:17 ERROR] CMDEV(688): API 0 does not exist
+        +  Plug submodule.     API: 0 Slot:  0 Module ID: 0x1
+           Subslot: 32768 Submodule ID: 0x8000 "DAP Interface 1"
+           Data Dir: NO_IO  In: 0 bytes  Out: 0 bytes
+           -[11:53:19 DEBUG] CMDEV(887): Plugged submodule ident 0x00008000 number in api 0 slot 0 subslot 32768
+           +[11:55:17 ERROR] CMDEV(749): API 0 does not exist
+           +[11:55:17 ERROR] CMDEV(197): NULL pointer(s)
+           +[11:55:17 ERROR] CMDEV(821): No module in slot 0
+        +  Plug submodule failed. Ret: 4294967295 API: 0 Slot:  0 Subslot 32768 Module ID: 0x1 Submodule ID: 0x8000
+           Submodule plug indication.
+           Pull old submodule. API: 0 Slot:  0 Subslot: 32769
+           -[11:53:19 DEBUG] CMDEV(704): No submodule in api_id 0 slot 0 subslot 32769
+        -  Plug submodule.     API: 0 Slot:  0 Module ID: 0x1
+           +[11:55:17 ERROR] CMDEV(688): API 0 does not exist
+        +  Plug submodule.     API: 0 Slot:  0 Module ID: 0x1
+           Subslot: 32769 Submodule ID: 0x8001 "DAP Port 1"
+           Data Dir: NO_IO  In: 0 bytes  Out: 0 bytes
+           -[11:53:19 DEBUG] CMDEV(887): Plugged submodule ident 0x00008001 number in api 0 slot 0 subslot 32769
+           +[11:55:17 ERROR] CMDEV(749): API 0 does not exist
+           +[11:55:17 ERROR] CMDEV(197): NULL pointer(s)
+           +[11:55:17 ERROR] CMDEV(821): No module in slot 0
+        +  Plug submodule failed. Ret: 4294967295 API: 0 Slot:  0 Subslot 32769 Module ID: 0x1 Submodule ID: 0x8001
+           Done plugging DAP
 
-Waiting for PLC connect request
-@@ -81,334 +75,7 @@ Waiting for PLC connect request
-UDP server: Socket created successfully
-UDP server: Listening for incoming messages on 127.0.0.1:2000
+    Waiting for PLC connect request
+    @@ -81,334 +75,7 @@ Waiting for PLC connect request
+    UDP server: Socket created successfully
+    UDP server: Listening for incoming messages on 127.0.0.1:2000
 
--[11:53:19 DEBUG] API(145): Too long since pnet_handle_periodic() was called: 4625 microseconds
--[11:53:19 DEBUG] API(145): Too long since pnet_handle_periodic() was called: 4665 microseconds
--[11:53:19 INFO ] PDPORT(1028): Link went up on port 1.
--[11:53:21 INFO ] DCP(1934): Responding to incoming DCP identify request. All: 0 StationName: acc-setpoint-interface Alias:   Delay 0 us. Xid: 50332148
--[11:53:21 DEBUG] DCP(194): Sent a DCP identify response.
--[11:53:23 DEBUG] LLDP(1984): Receive port 1 MAC: EC:1C:5D:BF:45:2B Len: 283 Chassis ID: cs-90k1.pnxriexb2cdac Port ID: port-001
--[11:53:23 INFO ] LLDP(1944): New peer info on port 1 - MAC: EC:1C:5D:BF:45:2B Chassis ID: cs-90k1.pnxriexb2cdac Port ID: port-001
--[11:53:23 DEBUG] PDPORT(989): We do not check peer name or portID, so no port-change diagnosis is triggered.
--[11:53:23 DEBUG] DCP(1025): Incoming DCP Set request. Xid: 50332149
--[11:53:23 DEBUG] CMINA(688): The incoming set request is about changing IP (not DNS). IP: 192.168.214.71 Netmask: 255.255.255.0 Gateway: 192.168.214.71 Temporary: 1
--[11:53:23 DEBUG] DCP(240): Update SAM remote MAC address, and restart timeout.
--[11:53:23 DEBUG] DCP(1107): Sent DCP Get/Set response
--[11:53:23 INFO ] CMINA(417): Setting IP: 192.168.214.71 Netmask: 255.255.255.0 Gateway: 192.168.214.71 Station name: "acc-setpoint-interface" Permanent: 0
--[11:53:23 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_ip.bin Access time 0 ms.
--[11:53:23 DEBUG] CMINA(143): No storing of nvm IP settings (no changes). IP: 0.0.0.0 Netmask: 0.0.0.0 Gateway: 0.0.0.0 Station name: "acc-setpoint-interface"
--PNAL(168): Command for script: set_network_parameters ens65 192.168.214.71 255.255.255.0 192.168.214.71 acc-setpoint-interface 0
--Network script for ens65:  Set IP 192.168.214.71   Netmask 255.255.255.0   Gateway 192.168.214.71   Permanent: 0   Hostname: acc-setpoint-interface   Skip setting hostname: true
--[11:53:23 DEBUG] LLDP(1175): Enabling LLDP transmission for port 1
--[11:53:23 DEBUG] LLDP(1011): Send port 1 MAC: 6C:B3:11:12:A6:F3 IP: 192.168.214.71 Chassis ID: "Setpoint interface app    1                    007                  3 V  0  2  0" Port ID: "port-001.acc-setpoint-interface"
--[11:53:25 INFO ] CMRPC(4986): Received 80 bytes UDP payload from remote 192.168.214.30:54065, on socket 4 for incoming DCE RPC requests.
--[11:53:25 DEBUG] CMRPC(4208): Incoming RPC frame. Seq: 0, Serial: 1, Frag num: 0, Frag Len: 0 Fragment flag: "Not set" Last Fragment flag: "Not set", No fack: "Not set"
--[11:53:25 DEBUG] CMRPC(529): Allocated session 0
--[11:53:25 INFO ] CMRPC(4369): Incoming DCE RPC ping on UDP
--[11:53:25 INFO ] CMRPC(917): Sending 80 bytes on socket 4 to 192.168.214.30:54065 Payload:"PING response" Session from me:0 Session index:0
--[11:53:25 DEBUG] CMRPC(4895): Kill session
--[11:53:25 DEBUG] CMRPC(567): Released session 0
--[11:53:25 INFO ] CMRPC(4986): Received 677 bytes UDP payload from remote 192.168.214.30:54065, on socket 4 for incoming DCE RPC requests.
--[11:53:25 DEBUG] CMRPC(4208): Incoming RPC frame. Seq: 0, Serial: 2, Frag num: 0, Frag Len: 597 Fragment flag: "Not set" Last Fragment flag: "Not set", No fack: "Not set"
--[11:53:25 DEBUG] CMRPC(529): Allocated session 0
--[11:53:25 INFO ] CMRPC(4409): Incoming DCE RPC request on UDP.
--[11:53:25 INFO ] CMRPC(3546): Incoming CONNECT request via DCE RPC on UDP
--[11:53:25 DEBUG] CMRPC(698): Allocate AR 0 (AREP 1)
--[11:53:25 DEBUG] CMRPC(1209): AR type: "Controller AR" Device access: 0 Supervisor takeover: 0 Requested start up mode: "Advanced" Initiator station name: "cs-90k1.pnxriexb2cdac" UDP port: 0x8892 Session: 227 Timeout: 200 x 100 ms
--[11:53:25 DEBUG] CMRPC(1239): Requested send cycle time: 32 (in 1/32 of millisec) AREP 1 CREP 0  INPUT Reduction ratio: 16 Watchdog factor: 6 Data hold factor: 6 FrameID: 0x8000
--[11:53:25 DEBUG] CMRPC(1239): Requested send cycle time: 32 (in 1/32 of millisec) AREP 1 CREP 1 OUTPUT Reduction ratio: 16 Watchdog factor: 6 Data hold factor: 6 FrameID: 0x8001
--[11:53:25 DEBUG] BR(507): Slot 0. Expected module 0x1 with 3 submodules.
--[11:53:25 DEBUG] BR(320):   Subslot 0x0001. Expected submodule 0x1 with direction NO_IO
--[11:53:25 DEBUG] BR(320):   Subslot 0x8000. Expected submodule 0x8000 with direction NO_IO
--[11:53:25 DEBUG] BR(320):   Subslot 0x8001. Expected submodule 0x8001 with direction NO_IO
--[11:53:25 DEBUG] BR(507): Slot 1. Expected module 0x40 with 1 submodules.
--[11:53:25 DEBUG] BR(320):   Subslot 0x0001. Expected submodule 0x140 with direction INPUT_OUTPUT
--[11:53:25 DEBUG] BR(507): Slot 2. Expected module 0x41 with 1 submodules.
--[11:53:25 DEBUG] BR(320):   Subslot 0x0001. Expected submodule 0x141 with direction INPUT_OUTPUT
--[11:53:25 DEBUG] BR(507): Slot 3. Expected module 0x42 with 1 submodules.
--[11:53:25 DEBUG] BR(320):   Subslot 0x0001. Expected submodule 0x142 with direction INPUT_OUTPUT
--[11:53:25 DEBUG] BR(507): Slot 4. Expected module 0x43 with 1 submodules.
--[11:53:25 DEBUG] BR(320):   Subslot 0x0001. Expected submodule 0x143 with direction INPUT_OUTPUT
--[11:53:25 DEBUG] CMRPC(1438): Requested max alarm data length: 256 bytes
--[11:53:25 DEBUG] CMRPC(1622): Connect request num AR param: 1 CR: 2 Input: 1 Output: 1 Alarm: 1 Result: OK
--Module plug indication
--  Pull old module.    API: 0 Slot:  1
-   -[11:53:25 DEBUG] CMDEV(928): No module in slot 1
-  -  Plug module.        API: 0 Slot:  1 Module ID: 0x40 "Setpoint X interface module"
-     -Submodule plug indication.
-    -  Pull old submodule. API: 0 Slot:  1 Subslot: 1
-       -[11:53:25 DEBUG] CMDEV(704): No submodule in api_id 0 slot 1 subslot 1
-    -  Plug submodule.     API: 0 Slot:  1 Module ID: 0x40
-    -                      Subslot: 1 Submodule ID: 0x140 "Setpoint interface for X-axis"
-    -                      Data Dir: INPUT_OUTPUT  In: 16 bytes  Out: 48 bytes
--[11:53:25 INFO ] Alarm(3431): Sending plug alarm. Slot: 1  Subslot: 0x0001
--[11:53:25 INFO ] Alarm(3032): Alarm sending is disabled. Global enable: 1, AR enable: 0.
--[11:53:25 DEBUG] CMDEV(887): Plugged submodule ident 0x00000140 number in api 0 slot 1 subslot 1
--Module plug indication
-    -  Pull old module.    API: 0 Slot:  2
-       -[11:53:25 DEBUG] CMDEV(928): No module in slot 2
-    -  Plug module.        API: 0 Slot:  2 Module ID: 0x41 "Setpoint Y interface module"
-       -Submodule plug indication.
-    -  Pull old submodule. API: 0 Slot:  2 Subslot: 1
-       -[11:53:25 DEBUG] CMDEV(704): No submodule in api_id 0 slot 2 subslot 1
-    -  Plug submodule.     API: 0 Slot:  2 Module ID: 0x41
-    -                      Subslot: 1 Submodule ID: 0x141 "Setpoint interface for Y-axis"
-    -                      Data Dir: INPUT_OUTPUT  In: 16 bytes  Out: 24 bytes
--[11:53:25 INFO ] Alarm(3431): Sending plug alarm. Slot: 2  Subslot: 0x0001
--[11:53:25 INFO ] Alarm(3032): Alarm sending is disabled. Global enable: 1, AR enable: 0.
--[11:53:25 DEBUG] CMDEV(887): Plugged submodule ident 0x00000141 number in api 0 slot 2 subslot 1
--Module plug indication
-    -  Pull old module.    API: 0 Slot:  3
-       -[11:53:25 DEBUG] CMDEV(928): No module in slot 3
-    -  Plug module.        API: 0 Slot:  3 Module ID: 0x42 "Setpoint Z interface module"
-       -Submodule plug indication.
-    -  Pull old submodule. API: 0 Slot:  3 Subslot: 1
-       -[11:53:25 DEBUG] CMDEV(704): No submodule in api_id 0 slot 3 subslot 1
-    -  Plug submodule.     API: 0 Slot:  3 Module ID: 0x42
-    -                      Subslot: 1 Submodule ID: 0x142 "Setpoint interface for Z-axis"
-    -                      Data Dir: INPUT_OUTPUT  In: 16 bytes  Out: 24 bytes
--[11:53:25 INFO ] Alarm(3431): Sending plug alarm. Slot: 3  Subslot: 0x0001
--[11:53:25 INFO ] Alarm(3032): Alarm sending is disabled. Global enable: 1, AR enable: 0.
--[11:53:25 DEBUG] CMDEV(887): Plugged submodule ident 0x00000142 number in api 0 slot 3 subslot 1
--Module plug indication
-    -  Pull old module.    API: 0 Slot:  4
-       -[11:53:25 DEBUG] CMDEV(928): No module in slot 4
-    -  Plug module.        API: 0 Slot:  4 Module ID: 0x43 "Setpoint C interface module"
-       -Submodule plug indication.
-    -  Pull old submodule. API: 0 Slot:  4 Subslot: 1
-       -[11:53:25 DEBUG] CMDEV(704): No submodule in api_id 0 slot 4 subslot 1
-    -  Plug submodule.     API: 0 Slot:  4 Module ID: 0x43
-    -                      Subslot: 1 Submodule ID: 0x143 "Setpoint interface for C-axis"
-    -                      Data Dir: INPUT_OUTPUT  In: 16 bytes  Out: 24 bytes
--[11:53:25 INFO ] Alarm(3431): Sending plug alarm. Slot: 4  Subslot: 0x0001
--[11:53:25 INFO ] Alarm(3032): Alarm sending is disabled. Global enable: 1, AR enable: 0.
--[11:53:25 DEBUG] CMDEV(887): Plugged submodule ident 0x00000143 number in api 0 slot 4 subslot 1
--[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 0 subslot 0x0001 with data direction  input. AREP 1 CREP 0. Data+IOPS+IOCS   0+1+1 bytes
--[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 0 subslot 0x8000 with data direction  input. AREP 1 CREP 0. Data+IOPS+IOCS   0+1+1 bytes
--[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 0 subslot 0x8001 with data direction  input. AREP 1 CREP 0. Data+IOPS+IOCS   0+1+1 bytes
--[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 1 subslot 0x0001 with data direction  input. AREP 1 CREP 0. Data+IOPS+IOCS  16+1+1 bytes
--[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 2 subslot 0x0001 with data direction  input. AREP 1 CREP 0. Data+IOPS+IOCS  16+1+1 bytes
--[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 3 subslot 0x0001 with data direction  input. AREP 1 CREP 0. Data+IOPS+IOCS  16+1+1 bytes
--[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 4 subslot 0x0001 with data direction  input. AREP 1 CREP 0. Data+IOPS+IOCS  16+1+1 bytes
--[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 1 subslot 0x0001 with data direction output. AREP 1 CREP 0. Data+IOPS+IOCS  48+1+1 bytes
--[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 2 subslot 0x0001 with data direction output. AREP 1 CREP 0. Data+IOPS+IOCS  24+1+1 bytes
--[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 3 subslot 0x0001 with data direction output. AREP 1 CREP 0. Data+IOPS+IOCS  24+1+1 bytes
--[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 4 subslot 0x0001 with data direction output. AREP 1 CREP 0. Data+IOPS+IOCS  24+1+1 bytes
--[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 1 subslot 0x0001 with data direction output. AREP 1 CREP 1. Data+IOPS+IOCS  48+1+1 bytes
--[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 2 subslot 0x0001 with data direction output. AREP 1 CREP 1. Data+IOPS+IOCS  24+1+1 bytes
--[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 3 subslot 0x0001 with data direction output. AREP 1 CREP 1. Data+IOPS+IOCS  24+1+1 bytes
--[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 4 subslot 0x0001 with data direction output. AREP 1 CREP 1. Data+IOPS+IOCS  24+1+1 bytes
--[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 0 subslot 0x0001 with data direction  input. AREP 1 CREP 1. Data+IOPS+IOCS   0+1+1 bytes
--[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 0 subslot 0x8000 with data direction  input. AREP 1 CREP 1. Data+IOPS+IOCS   0+1+1 bytes
--[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 0 subslot 0x8001 with data direction  input. AREP 1 CREP 1. Data+IOPS+IOCS   0+1+1 bytes
--[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 1 subslot 0x0001 with data direction  input. AREP 1 CREP 1. Data+IOPS+IOCS  16+1+1 bytes
--[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 2 subslot 0x0001 with data direction  input. AREP 1 CREP 1. Data+IOPS+IOCS  16+1+1 bytes
--[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 3 subslot 0x0001 with data direction  input. AREP 1 CREP 1. Data+IOPS+IOCS  16+1+1 bytes
--[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 4 subslot 0x0001 with data direction  input. AREP 1 CREP 1. Data+IOPS+IOCS  16+1+1 bytes
--[11:53:25 DEBUG] PDPORT(330): Remove diagnosis about remote mismatch (if any) for port 1.
--[11:53:25 DEBUG] DIAG(960): Did not find the diagnosis to remove. Slot 0 Subslot 0x8001 Channel 0x8000 Ch err type 0x8001 Ext err type 0x8000 Usi 0x8002
--[11:53:25 DEBUG] DIAG(960): Did not find the diagnosis to remove. Slot 0 Subslot 0x8001 Channel 0x8000 Ch err type 0x8001 Ext err type 0x8001 Usi 0x8002
--[11:53:25 DEBUG] DIAG(960): Did not find the diagnosis to remove. Slot 0 Subslot 0x8001 Channel 0x8000 Ch err type 0x8001 Ext err type 0x8005 Usi 0x8002
--[11:53:25 DEBUG] FSPM(1153): Triggering connect callback for AREP 1
--PLC connect indication. AREP: 1
--[11:53:25 DEBUG] FSPM(495): Added logbook entry to position 0. Error: 0x00 0x00 0x00 0x00 Detail: 1
--[11:53:25 DEBUG] CMDEV(1456): New state: PF_CMDEV_STATE_W_CRES for AREP 1 (was PF_CMDEV_STATE_POWER_ON)
--[11:53:25 DEBUG] PPM(300): Create PPM instance. AREP 1 CREP 0
--[11:53:25 DEBUG] CPM(126): Create CPM instance. AREP 1 CREP 1
--[11:53:25 DEBUG] CPM(226): Activating CPM for output data reception. AREP 1 CREP 1 FrameID: 0x8001
--[11:53:25 DEBUG] ETH(285): Framehandler is adding FrameId 0x8001 at index 3.
--[11:53:25 DEBUG] CPM(104): New state PF_CPM_STATE_FRUN (was PF_CPM_STATE_W_START)
--[11:53:25 DEBUG] Alarm(921): Activating ALPMX for AREP 1
--[11:53:25 DEBUG] ETH(285): Framehandler is adding FrameId 0xfe01 at index 4.
--[11:53:25 DEBUG] ETH(285): Framehandler is adding FrameId 0xfc01 at index 5.
--[11:53:25 DEBUG] CMSU(84): New state PF_CMSU_STATE_STARTUP for AREP 1 (was PF_CMSU_STATE_IDLE)
--[11:53:25 DEBUG] CMDEV(1456): New state: PF_CMDEV_STATE_W_SUCNF for AREP 1 (was PF_CMDEV_STATE_W_CRES)
--[11:53:25 DEBUG] CMDEV(1494): Sending event PNET_EVENT_STARTUP for AREP 1. Current state PF_CMDEV_STATE_W_SUCNF
--[11:53:25 DEBUG] FSPM(1266): Triggering user state-change callback with event PNET_EVENT_STARTUP for AREP 1
--Event indication PNET_EVENT_STARTUP   AREP: 1
--[11:53:25 DEBUG] CMSU(104): Received event PNET_EVENT_STARTUP from CMDEV. Initial state PF_CMSU_STATE_STARTUP for AREP 1.
--[11:53:25 DEBUG] CMIO(177): Received event PNET_EVENT_STARTUP from CMDEV. Initial state PF_CMIO_STATE_IDLE for AREP 1.
--[11:53:25 DEBUG] CMIO(96): New state PF_CMIO_STATE_STARTUP for AREP 1 (was PF_CMIO_STATE_IDLE)
--[11:53:25 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_pdport_1.bin Access time 0 ms.
--[11:53:25 DEBUG] PDPORT(209): No storing of nvm port settings (no changes).
--[11:53:25 DEBUG] CMWRR(89): Received event PNET_EVENT_STARTUP from CMDEV. Initial state PF_CMWRR_STATE_IDLE for AREP 1.
--[11:53:25 DEBUG] CMWRR(146): New state state PF_CMWRR_STATE_STARTUP for AREP 1.
--[11:53:25 DEBUG] CMSM(172): Received event PNET_EVENT_STARTUP from CMDEV. Initial state PF_CMSM_STATE_IDLE for AREP 1.
--[11:53:25 DEBUG] CMSM(107): New state PF_CMSM_STATE_RUN (was PF_CMSM_STATE_IDLE)
--[11:53:25 DEBUG] CMSM(188): Starting timer. cm_initiator_activity_timeout_factor 200 x 100 ms
--[11:53:25 DEBUG] CMPBE(105): Received event PNET_EVENT_STARTUP from CMDEV. Initial state PF_CMPBE_STATE_IDLE for AREP 1.
--[11:53:25 DEBUG] CMRPC(5060): Received event PNET_EVENT_STARTUP from CMDEV for AREP 1.
--[11:53:25 DEBUG] CMDEV(1456): New state: PF_CMDEV_STATE_W_PEIND for AREP 1 (was PF_CMDEV_STATE_W_SUCNF)
--[11:53:25 DEBUG] CMRPC(1995): Create CONNECT response: ret = 0   error: 0x00 0x00 0x00 0x00
--[11:53:25 DEBUG] CMRPC(1836): Connect response args_length = 102
--[11:53:25 DEBUG] LLDP(1175): Enabling LLDP transmission for port 1
--[11:53:25 DEBUG] LLDP(1011): Send port 1 MAC: 6C:B3:11:12:A6:F3 IP: 192.168.214.71 Chassis ID: "Setpoint interface app    1                    007                  3 V  0  2  0" Port ID: "port-001.acc-setpoint-interface"
--[11:53:25 DEBUG] CMRPC(2021): Created connect response: ret 0
--[11:53:25 DEBUG] CMRPC(4560): Send RPC response. Total response length 202, sending 202 bytes. Start of RPC payload: 80
--[11:53:25 INFO ] CMRPC(917): Sending 202 bytes on socket 4 to 192.168.214.30:54065 Payload:"response" Session from me:0 Session index:0
--[11:53:25 INFO ] CMRPC(4986): Received 240 bytes UDP payload from remote 192.168.214.30:54065, on socket 4 for incoming DCE RPC requests.
--[11:53:25 DEBUG] CMRPC(4208): Incoming RPC frame. Seq: 1, Serial: 0, Frag num: 0, Frag Len: 160 Fragment flag: "Not set" Last Fragment flag: "Not set", No fack: "Not set"
--[11:53:25 INFO ] CMRPC(4409): Incoming DCE RPC request on UDP.
--[11:53:25 INFO ] CMRPC(3587): Incoming WRITE request via DCE RPC on UDP
--[11:53:25 INFO ] CMWRR(208): PLC is writing slot 0 subslot 0x8000 index 0x8071 "PDInterfaceAdjust for one subslot" for AREP 1
--[11:53:25 INFO ] PDPORT(1366): PD interface adjust. PLC is setting LLDP mode: Legacy
--[11:53:25 DEBUG] LLDP(1175): Enabling LLDP transmission for port 1
--[11:53:25 DEBUG] LLDP(1011): Send port 1 MAC: 6C:B3:11:12:A6:F3 IP: 192.168.214.71 Chassis ID: "acc-setpoint-interface" Port ID: "port-001"
--[11:53:25 DEBUG] CMRPC(4560): Send RPC response. Total response length 228, sending 228 bytes. Start of RPC payload: 80
--[11:53:25 INFO ] CMRPC(917): Sending 228 bytes on socket 4 to 192.168.214.30:54065 Payload:"response" Session from me:0 Session index:0
--[11:53:25 INFO ] CMRPC(4986): Received 132 bytes UDP payload from remote 192.168.214.30:54065, on socket 4 for incoming DCE RPC requests.
--[11:53:25 DEBUG] CMRPC(4208): Incoming RPC frame. Seq: 2, Serial: 0, Frag num: 0, Frag Len: 52 Fragment flag: "Not set" Last Fragment flag: "Not set", No fack: "Not set"
--[11:53:25 INFO ] CMRPC(4409): Incoming DCE RPC request on UDP.
--[11:53:25 INFO ] CMRPC(3600): Incoming DCONTROL request via DCE RPC on UDP
--[11:53:25 DEBUG] CMDEV(1456): New state: PF_CMDEV_STATE_W_PERES for AREP 1 (was PF_CMDEV_STATE_W_PEIND)
--[11:53:25 DEBUG] FSPM(1225): Triggering DControl callback with command bitfield 0x0001 for AREP 1
--PLC dcontrol message (The PLC is done with parameter writing). AREP: 1  Command: PRM_END
--[11:53:25 DEBUG] FSPM(495): Added logbook entry to position 1. Error: 0x00 0x00 0x00 0x00 Detail: 3
--[11:53:25 DEBUG] CMDEV(1456): New state: PF_CMDEV_STATE_W_ARDY for AREP 1 (was PF_CMDEV_STATE_W_PERES)
--[11:53:25 DEBUG] PDPORT(269): Checking local Ethernet port 1 "ens65". MAU type: 30  Fast enough.  Running: Yes.
--[11:53:25 DEBUG] CMDEV(4999): Prepare to send event PNET_EVENT_PRMEND
--[11:53:25 DEBUG] CMPBE(150): Received DControl command bitfield 0x0001 for AREP 1. Initial state PF_CMPBE_STATE_IDLE
--[11:53:25 DEBUG] CMRPC(2670): Prepare DCONTROL response message: ret = 0   error: 0x00 0x00 0x00 0x00
--[11:53:25 DEBUG] CMRPC(4560): Send RPC response. Total response length 132, sending 132 bytes. Start of RPC payload: 80
--[11:53:25 INFO ] CMRPC(917): Sending 132 bytes on socket 4 to 192.168.214.30:54065 Payload:"response" Session from me:0 Session index:0
--[11:53:25 DEBUG] CMDEV(1494): Sending event PNET_EVENT_PRMEND for AREP 1. Current state PF_CMDEV_STATE_W_ARDY
--[11:53:25 DEBUG] FSPM(1266): Triggering user state-change callback with event PNET_EVENT_PRMEND for AREP 1
--Event indication PNET_EVENT_PRMEND   AREP: 1
-    -  Set initial input data and IOPS for slot  0 subslot     1 IOXS_GOOD size   0 "DAP Identity 1"
-    -  Set initial input data and IOPS for slot  0 subslot 32768 IOXS_GOOD size   0 "DAP Interface 1"
-    -  Set initial input data and IOPS for slot  0 subslot 32769 IOXS_GOOD size   0 "DAP Port 1"
-    -  Set initial input data and IOPS for slot  1 subslot     1 IOXS_GOOD size  16 "Setpoint interface for X-axis"
-    -  Set initial output         IOCS for slot  1 subslot     1 IOXS_GOOD          "Setpoint interface for X-axis"
-    -  Set initial input data and IOPS for slot  2 subslot     1 IOXS_GOOD size  16 "Setpoint interface for Y-axis"
-    -  Set initial output         IOCS for slot  2 subslot     1 IOXS_GOOD          "Setpoint interface for Y-axis"
-    -  Set initial input data and IOPS for slot  3 subslot     1 IOXS_GOOD size  16 "Setpoint interface for Z-axis"
-    -  Set initial output         IOCS for slot  3 subslot     1 IOXS_GOOD          "Setpoint interface for Z-axis"
-    -  Set initial input data and IOPS for slot  4 subslot     1 IOXS_GOOD size  16 "Setpoint interface for C-axis"
-    -  Set initial output         IOCS for slot  4 subslot     1 IOXS_GOOD          "Setpoint interface for C-axis"
-       -[11:53:25 DEBUG] API(435): Application sets provider state to 1
-       -[11:53:25 DEBUG] CMSU(104): Received event PNET_EVENT_PRMEND from CMDEV. Initial state PF_CMSU_STATE_STARTUP for AREP 1.
-       -[11:53:25 DEBUG] PPM(371): Activate PPM. AREP 1 CREP 0, period 16000 microseconds. FrameID 0x8000
-       -[11:53:25 DEBUG] PPM(113): New state PF_PPM_STATE_RUN (was PF_PPM_STATE_W_START)
-       -[11:53:25 DEBUG] PPM(94): Start scheduling of process data frames for AREP 1 CREP 0
-       -[11:53:25 DEBUG] CMIO(177): Received event PNET_EVENT_PRMEND from CMDEV. Initial state PF_CMIO_STATE_STARTUP for AREP 1.
-       -[11:53:25 DEBUG] CMIO(96): New state PF_CMIO_STATE_WDATA for AREP 1 (was PF_CMIO_STATE_STARTUP)
-       -[11:53:25 DEBUG] CMWRR(89): Received event PNET_EVENT_PRMEND from CMDEV. Initial state PF_CMWRR_STATE_STARTUP for AREP 1.
-       -[11:53:25 DEBUG] CMWRR(146): New state state PF_CMWRR_STATE_PRMEND for AREP 1.
-       -[11:53:25 DEBUG] CMSM(172): Received event PNET_EVENT_PRMEND from CMDEV. Initial state PF_CMSM_STATE_RUN for AREP 1.
-       -[11:53:25 DEBUG] CMPBE(105): Received event PNET_EVENT_PRMEND from CMDEV. Initial state PF_CMPBE_STATE_IDLE for AREP 1.
-       -[11:53:25 DEBUG] CMRPC(5060): Received event PNET_EVENT_PRMEND from CMDEV for AREP 1.
-       -Application will signal that it is ready for data, for AREP 1.
-       -[11:53:25 DEBUG] API(464): Application calls application ready for AREP 1
-       -[11:53:25 DEBUG] CMDEV(1494): Sending event PNET_EVENT_APPLRDY for AREP 1. Current state PF_CMDEV_STATE_W_ARDY
-       -[11:53:25 DEBUG] FSPM(1266): Triggering user state-change callback with event PNET_EVENT_APPLRDY for AREP 1
-       -Event indication PNET_EVENT_APPLRDY   AREP: 1
-       -[11:53:25 DEBUG] CMSU(104): Received event PNET_EVENT_APPLRDY from CMDEV. Initial state PF_CMSU_STATE_STARTUP for AREP 1.
-       -[11:53:25 DEBUG] CMIO(177): Received event PNET_EVENT_APPLRDY from CMDEV. Initial state PF_CMIO_STATE_WDATA for AREP 1.
-       -[11:53:25 DEBUG] CMWRR(89): Received event PNET_EVENT_APPLRDY from CMDEV. Initial state PF_CMWRR_STATE_PRMEND for AREP 1.
-       -[11:53:25 DEBUG] CMWRR(146): New state state PF_CMWRR_STATE_DATA for AREP 1.
-       -[11:53:25 DEBUG] CMSM(172): Received event PNET_EVENT_APPLRDY from CMDEV. Initial state PF_CMSM_STATE_RUN for AREP 1.
-       -[11:53:25 DEBUG] CMPBE(105): Received event PNET_EVENT_APPLRDY from CMDEV. Initial state PF_CMPBE_STATE_IDLE for AREP 1.
-       -[11:53:25 DEBUG] CMRPC(5060): Received event PNET_EVENT_APPLRDY from CMDEV for AREP 1.
-       -[11:53:25 DEBUG] CMRPC(529): Allocated session 1
-       -[11:53:25 DEBUG] CMRPC(3799): Send CControl request for AREP 1, total 132 bytes (not fragmented).
-       -[11:53:25 INFO ] CMRPC(917): Sending 132 bytes on socket 6 to 192.168.214.30:34964 Payload:"CControl request (possibly fragment)" Session from me:1 Session index:1
-       -[11:53:25 DEBUG] CMDEV(1456): New state: PF_CMDEV_STATE_W_ARDYCNF for AREP 1 (was PF_CMDEV_STATE_W_ARDY)
-       -[11:53:25 INFO ] CMRPC(4939): Received 132 bytes UDP payload from remote 192.168.214.30:58924, on socket 6 used in session with index 1
-       -[11:53:25 DEBUG] CMRPC(4208): Incoming RPC frame. Seq: 0, Serial: 0, Frag num: 0, Frag Len: 52 Fragment flag: "Not set" Last Fragment flag: "Set", No fack: "Set"
-       -[11:53:25 DEBUG] CMRPC(4753): Received an RPC response.
-       -[11:53:25 INFO ] CMRPC(4042): Incoming CCONTROL response via DCE RPC on UDP
-       -[11:53:25 DEBUG] CMDEV(1456): New state: PF_CMDEV_STATE_WDATA for AREP 1 (was PF_CMDEV_STATE_W_ARDYCNF)
-       -[11:53:25 DEBUG] FSPM(651): Triggering CControl confirmation callback for AREP 1
-       -PLC control message confirmation (The PLC has received our Application Ready message). AREP: 1  Status codes: 0 0 0 0
-       -[11:53:25 DEBUG] CMRPC(4895): Kill session
-       -[11:53:25 DEBUG] CMRPC(567): Released session 1
-       -[11:53:25 DEBUG] CPM_DRV_SW(487): No data received in get data
-       -PLC reports Provider Status (IOPS) 44 for input slot 1 subslot 1 "Setpoint interface for X-axis".
-    -  Is the PLC in STOP mode?
-       -Wrong outputdata length: 0
-       -[11:53:25 DEBUG] CPM_DRV_SW(487): No data received in get data
-       -PLC reports Provider Status (IOPS) 44 for input slot 2 subslot 1 "Setpoint interface for Y-axis".
-    -  Is the PLC in STOP mode?
-       -Wrong outputdata length: 0
-       -[11:53:25 DEBUG] CPM_DRV_SW(487): No data received in get data
-       -PLC reports Provider Status (IOPS) 44 for input slot 3 subslot 1 "Setpoint interface for Z-axis".
-    -  Is the PLC in STOP mode?
-       -Wrong outputdata length: 0
-       -[11:53:25 DEBUG] CPM_DRV_SW(487): No data received in get data
-       -PLC reports Provider Status (IOPS) 44 for input slot 4 subslot 1 "Setpoint interface for C-axis".
-    -  Is the PLC in STOP mode?
-       -Wrong outputdata length: 0
-       -[11:53:25 INFO ] CMIO(313): CPM state change. CMIO state is WDATA. CREP: 1 AREP: 1 CPM start=true
-       -[11:53:25 DEBUG] FSPM(626): Triggering data status change callback for AREP 1. Status 0x35 changes 0x35
-       -Data status indication. AREP: 1  Data status changes: 0x35  Data status: 0x35
-    -   Run, Valid, Primary, Normal operation, Evaluate data status
-        -[11:53:25 DEBUG] CPM(104): New state PF_CPM_STATE_RUN (was PF_CPM_STATE_FRUN)
-        -PLC reports Provider Status (IOPS) 96 for input slot 1 subslot 1 "Setpoint interface for X-axis".
-    -  Is the PLC in STOP mode?
-       -PLC reports Consumer Status (IOCS) 96 for input slot 1 subslot 1 "Setpoint interface for X-axis".
-    -  Is the PLC in STOP mode?
-       -PLC reports Provider Status (IOPS) 96 for input slot 2 subslot 1 "Setpoint interface for Y-axis".
-    -  Is the PLC in STOP mode?
-       -PLC reports Consumer Status (IOCS) 96 for input slot 2 subslot 1 "Setpoint interface for Y-axis".
-    -  Is the PLC in STOP mode?
-       -PLC reports Provider Status (IOPS) 96 for input slot 3 subslot 1 "Setpoint interface for Z-axis".
-    -  Is the PLC in STOP mode?
-       -PLC reports Consumer Status (IOCS) 96 for input slot 3 subslot 1 "Setpoint interface for Z-axis".
-    -  Is the PLC in STOP mode?
-       -PLC reports Provider Status (IOPS) 96 for input slot 4 subslot 1 "Setpoint interface for C-axis".
-    -  Is the PLC in STOP mode?
-       -PLC reports Consumer Status (IOCS) 96 for input slot 4 subslot 1 "Setpoint interface for C-axis".
-    -  Is the PLC in STOP mode?
-       -PLC reports Provider Status (IOPS) GOOD for slot 1 subslot 1 "Setpoint interface for X-axis".
-       -X -- Position: 0	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
-       -PLC reports Consumer Status (IOCS) GOOD for slot 1 subslot 1 "Setpoint interface for X-axis".
-       -PLC reports Provider Status (IOPS) GOOD for slot 2 subslot 1 "Setpoint interface for Y-axis".
-       -Y -- Position: 0	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
-       -PLC reports Consumer Status (IOCS) GOOD for slot 2 subslot 1 "Setpoint interface for Y-axis".
-       -PLC reports Provider Status (IOPS) GOOD for slot 3 subslot 1 "Setpoint interface for Z-axis".
-       -Z -- Position: 0	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
-       -PLC reports Consumer Status (IOCS) GOOD for slot 3 subslot 1 "Setpoint interface for Z-axis".
-       -PLC reports Provider Status (IOPS) GOOD for slot 4 subslot 1 "Setpoint interface for C-axis".
-       -C -- Position: 0	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
-       -PLC reports Consumer Status (IOCS) GOOD for slot 4 subslot 1 "Setpoint interface for C-axis".
-       -Y -- Position: 1217430	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
-       -Z -- Position: -598686	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
-       -C -- Position: 1024	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
-       -Y -- Position: 1217430	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
-       -Z -- Position: -598686	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
-       -C -- Position: 1024	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
-       -Y -- Position: 1217430	Velocity: -1	Acceleration: -64	Torque: 0	Temperature: 0
-       -Z -- Position: -598686	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
-       -C -- Position: 1024	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
-       -Y -- Position: 1217430	Velocity: -1	Acceleration: -64	Torque: 0	Temperature: 0
-       -Z -- Position: -598686	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
-       -C -- Position: 1024	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
-       -[11:53:25 DEBUG] CMDEV(1525): Incoming DataPossible indication from CMIO. value = true
-       -[11:53:25 DEBUG] CMDEV(1494): Sending event PNET_EVENT_DATA for AREP 1. Current state PF_CMDEV_STATE_WDATA
-       -[11:53:25 DEBUG] FSPM(1266): Triggering user state-change callback with event PNET_EVENT_DATA for AREP 1
-       -Event indication PNET_EVENT_DATA   AREP: 1
-       -Cyclic data transmission started
-       +[11:55:17 DEBUG] API(145): Too long since pnet_handle_periodic() was called: 1574616492 microseconds
-       +[11:55:18 DEBUG] API(145): Too long since pnet_handle_periodic() was called: 6417 microseconds
+    -[11:53:19 DEBUG] API(145): Too long since pnet_handle_periodic() was called: 4625 microseconds
+    -[11:53:19 DEBUG] API(145): Too long since pnet_handle_periodic() was called: 4665 microseconds
+    -[11:53:19 INFO ] PDPORT(1028): Link went up on port 1.
+    -[11:53:21 INFO ] DCP(1934): Responding to incoming DCP identify request. All: 0 StationName: acc-setpoint-interface Alias:   Delay 0 us. Xid: 50332148
+    -[11:53:21 DEBUG] DCP(194): Sent a DCP identify response.
+    -[11:53:23 DEBUG] LLDP(1984): Receive port 1 MAC: EC:1C:5D:BF:45:2B Len: 283 Chassis ID: cs-90k1.pnxriexb2cdac Port ID: port-001
+    -[11:53:23 INFO ] LLDP(1944): New peer info on port 1 - MAC: EC:1C:5D:BF:45:2B Chassis ID: cs-90k1.pnxriexb2cdac Port ID: port-001
+    -[11:53:23 DEBUG] PDPORT(989): We do not check peer name or portID, so no port-change diagnosis is triggered.
+    -[11:53:23 DEBUG] DCP(1025): Incoming DCP Set request. Xid: 50332149
+    -[11:53:23 DEBUG] CMINA(688): The incoming set request is about changing IP (not DNS). IP: 192.168.214.71 Netmask: 255.255.255.0 Gateway: 192.168.214.71 Temporary: 1
+    -[11:53:23 DEBUG] DCP(240): Update SAM remote MAC address, and restart timeout.
+    -[11:53:23 DEBUG] DCP(1107): Sent DCP Get/Set response
+    -[11:53:23 INFO ] CMINA(417): Setting IP: 192.168.214.71 Netmask: 255.255.255.0 Gateway: 192.168.214.71 Station name: "acc-setpoint-interface" Permanent: 0
+    -[11:53:23 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_ip.bin Access time 0 ms.
+    -[11:53:23 DEBUG] CMINA(143): No storing of nvm IP settings (no changes). IP: 0.0.0.0 Netmask: 0.0.0.0 Gateway: 0.0.0.0 Station name: "acc-setpoint-interface"
+    -PNAL(168): Command for script: set_network_parameters ens65 192.168.214.71 255.255.255.0 192.168.214.71 acc-setpoint-interface 0
+    -Network script for ens65:  Set IP 192.168.214.71   Netmask 255.255.255.0   Gateway 192.168.214.71   Permanent: 0   Hostname: acc-setpoint-interface   Skip setting hostname: true
+    -[11:53:23 DEBUG] LLDP(1175): Enabling LLDP transmission for port 1
+    -[11:53:23 DEBUG] LLDP(1011): Send port 1 MAC: 6C:B3:11:12:A6:F3 IP: 192.168.214.71 Chassis ID: "Setpoint interface app    1                    007                  3 V  0  2  0" Port ID: "port-001.acc-setpoint-interface"
+    -[11:53:25 INFO ] CMRPC(4986): Received 80 bytes UDP payload from remote 192.168.214.30:54065, on socket 4 for incoming DCE RPC requests.
+    -[11:53:25 DEBUG] CMRPC(4208): Incoming RPC frame. Seq: 0, Serial: 1, Frag num: 0, Frag Len: 0 Fragment flag: "Not set" Last Fragment flag: "Not set", No fack: "Not set"
+    -[11:53:25 DEBUG] CMRPC(529): Allocated session 0
+    -[11:53:25 INFO ] CMRPC(4369): Incoming DCE RPC ping on UDP
+    -[11:53:25 INFO ] CMRPC(917): Sending 80 bytes on socket 4 to 192.168.214.30:54065 Payload:"PING response" Session from me:0 Session index:0
+    -[11:53:25 DEBUG] CMRPC(4895): Kill session
+    -[11:53:25 DEBUG] CMRPC(567): Released session 0
+    -[11:53:25 INFO ] CMRPC(4986): Received 677 bytes UDP payload from remote 192.168.214.30:54065, on socket 4 for incoming DCE RPC requests.
+    -[11:53:25 DEBUG] CMRPC(4208): Incoming RPC frame. Seq: 0, Serial: 2, Frag num: 0, Frag Len: 597 Fragment flag: "Not set" Last Fragment flag: "Not set", No fack: "Not set"
+    -[11:53:25 DEBUG] CMRPC(529): Allocated session 0
+    -[11:53:25 INFO ] CMRPC(4409): Incoming DCE RPC request on UDP.
+    -[11:53:25 INFO ] CMRPC(3546): Incoming CONNECT request via DCE RPC on UDP
+    -[11:53:25 DEBUG] CMRPC(698): Allocate AR 0 (AREP 1)
+    -[11:53:25 DEBUG] CMRPC(1209): AR type: "Controller AR" Device access: 0 Supervisor takeover: 0 Requested start up mode: "Advanced" Initiator station name: "cs-90k1.pnxriexb2cdac" UDP port: 0x8892 Session: 227 Timeout: 200 x 100 ms
+    -[11:53:25 DEBUG] CMRPC(1239): Requested send cycle time: 32 (in 1/32 of millisec) AREP 1 CREP 0  INPUT Reduction ratio: 16 Watchdog factor: 6 Data hold factor: 6 FrameID: 0x8000
+    -[11:53:25 DEBUG] CMRPC(1239): Requested send cycle time: 32 (in 1/32 of millisec) AREP 1 CREP 1 OUTPUT Reduction ratio: 16 Watchdog factor: 6 Data hold factor: 6 FrameID: 0x8001
+    -[11:53:25 DEBUG] BR(507): Slot 0. Expected module 0x1 with 3 submodules.
+    -[11:53:25 DEBUG] BR(320):   Subslot 0x0001. Expected submodule 0x1 with direction NO_IO
+    -[11:53:25 DEBUG] BR(320):   Subslot 0x8000. Expected submodule 0x8000 with direction NO_IO
+    -[11:53:25 DEBUG] BR(320):   Subslot 0x8001. Expected submodule 0x8001 with direction NO_IO
+    -[11:53:25 DEBUG] BR(507): Slot 1. Expected module 0x40 with 1 submodules.
+    -[11:53:25 DEBUG] BR(320):   Subslot 0x0001. Expected submodule 0x140 with direction INPUT_OUTPUT
+    -[11:53:25 DEBUG] BR(507): Slot 2. Expected module 0x41 with 1 submodules.
+    -[11:53:25 DEBUG] BR(320):   Subslot 0x0001. Expected submodule 0x141 with direction INPUT_OUTPUT
+    -[11:53:25 DEBUG] BR(507): Slot 3. Expected module 0x42 with 1 submodules.
+    -[11:53:25 DEBUG] BR(320):   Subslot 0x0001. Expected submodule 0x142 with direction INPUT_OUTPUT
+    -[11:53:25 DEBUG] BR(507): Slot 4. Expected module 0x43 with 1 submodules.
+    -[11:53:25 DEBUG] BR(320):   Subslot 0x0001. Expected submodule 0x143 with direction INPUT_OUTPUT
+    -[11:53:25 DEBUG] CMRPC(1438): Requested max alarm data length: 256 bytes
+    -[11:53:25 DEBUG] CMRPC(1622): Connect request num AR param: 1 CR: 2 Input: 1 Output: 1 Alarm: 1 Result: OK
+    -Module plug indication
+    -  Pull old module.    API: 0 Slot:  1
+       -[11:53:25 DEBUG] CMDEV(928): No module in slot 1
+      -  Plug module.        API: 0 Slot:  1 Module ID: 0x40 "Setpoint X interface module"
+         -Submodule plug indication.
+        -  Pull old submodule. API: 0 Slot:  1 Subslot: 1
+           -[11:53:25 DEBUG] CMDEV(704): No submodule in api_id 0 slot 1 subslot 1
+        -  Plug submodule.     API: 0 Slot:  1 Module ID: 0x40
+        -                      Subslot: 1 Submodule ID: 0x140 "Setpoint interface for X-axis"
+        -                      Data Dir: INPUT_OUTPUT  In: 16 bytes  Out: 48 bytes
+    -[11:53:25 INFO ] Alarm(3431): Sending plug alarm. Slot: 1  Subslot: 0x0001
+    -[11:53:25 INFO ] Alarm(3032): Alarm sending is disabled. Global enable: 1, AR enable: 0.
+    -[11:53:25 DEBUG] CMDEV(887): Plugged submodule ident 0x00000140 number in api 0 slot 1 subslot 1
+    -Module plug indication
+        -  Pull old module.    API: 0 Slot:  2
+           -[11:53:25 DEBUG] CMDEV(928): No module in slot 2
+        -  Plug module.        API: 0 Slot:  2 Module ID: 0x41 "Setpoint Y interface module"
+           -Submodule plug indication.
+        -  Pull old submodule. API: 0 Slot:  2 Subslot: 1
+           -[11:53:25 DEBUG] CMDEV(704): No submodule in api_id 0 slot 2 subslot 1
+        -  Plug submodule.     API: 0 Slot:  2 Module ID: 0x41
+        -                      Subslot: 1 Submodule ID: 0x141 "Setpoint interface for Y-axis"
+        -                      Data Dir: INPUT_OUTPUT  In: 16 bytes  Out: 24 bytes
+    -[11:53:25 INFO ] Alarm(3431): Sending plug alarm. Slot: 2  Subslot: 0x0001
+    -[11:53:25 INFO ] Alarm(3032): Alarm sending is disabled. Global enable: 1, AR enable: 0.
+    -[11:53:25 DEBUG] CMDEV(887): Plugged submodule ident 0x00000141 number in api 0 slot 2 subslot 1
+    -Module plug indication
+        -  Pull old module.    API: 0 Slot:  3
+           -[11:53:25 DEBUG] CMDEV(928): No module in slot 3
+        -  Plug module.        API: 0 Slot:  3 Module ID: 0x42 "Setpoint Z interface module"
+           -Submodule plug indication.
+        -  Pull old submodule. API: 0 Slot:  3 Subslot: 1
+           -[11:53:25 DEBUG] CMDEV(704): No submodule in api_id 0 slot 3 subslot 1
+        -  Plug submodule.     API: 0 Slot:  3 Module ID: 0x42
+        -                      Subslot: 1 Submodule ID: 0x142 "Setpoint interface for Z-axis"
+        -                      Data Dir: INPUT_OUTPUT  In: 16 bytes  Out: 24 bytes
+    -[11:53:25 INFO ] Alarm(3431): Sending plug alarm. Slot: 3  Subslot: 0x0001
+    -[11:53:25 INFO ] Alarm(3032): Alarm sending is disabled. Global enable: 1, AR enable: 0.
+    -[11:53:25 DEBUG] CMDEV(887): Plugged submodule ident 0x00000142 number in api 0 slot 3 subslot 1
+    -Module plug indication
+        -  Pull old module.    API: 0 Slot:  4
+           -[11:53:25 DEBUG] CMDEV(928): No module in slot 4
+        -  Plug module.        API: 0 Slot:  4 Module ID: 0x43 "Setpoint C interface module"
+           -Submodule plug indication.
+        -  Pull old submodule. API: 0 Slot:  4 Subslot: 1
+           -[11:53:25 DEBUG] CMDEV(704): No submodule in api_id 0 slot 4 subslot 1
+        -  Plug submodule.     API: 0 Slot:  4 Module ID: 0x43
+        -                      Subslot: 1 Submodule ID: 0x143 "Setpoint interface for C-axis"
+        -                      Data Dir: INPUT_OUTPUT  In: 16 bytes  Out: 24 bytes
+    -[11:53:25 INFO ] Alarm(3431): Sending plug alarm. Slot: 4  Subslot: 0x0001
+    -[11:53:25 INFO ] Alarm(3032): Alarm sending is disabled. Global enable: 1, AR enable: 0.
+    -[11:53:25 DEBUG] CMDEV(887): Plugged submodule ident 0x00000143 number in api 0 slot 4 subslot 1
+    -[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 0 subslot 0x0001 with data direction  input. AREP 1 CREP 0. Data+IOPS+IOCS   0+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 0 subslot 0x8000 with data direction  input. AREP 1 CREP 0. Data+IOPS+IOCS   0+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 0 subslot 0x8001 with data direction  input. AREP 1 CREP 0. Data+IOPS+IOCS   0+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 1 subslot 0x0001 with data direction  input. AREP 1 CREP 0. Data+IOPS+IOCS  16+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 2 subslot 0x0001 with data direction  input. AREP 1 CREP 0. Data+IOPS+IOCS  16+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 3 subslot 0x0001 with data direction  input. AREP 1 CREP 0. Data+IOPS+IOCS  16+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 4 subslot 0x0001 with data direction  input. AREP 1 CREP 0. Data+IOPS+IOCS  16+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 1 subslot 0x0001 with data direction output. AREP 1 CREP 0. Data+IOPS+IOCS  48+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 2 subslot 0x0001 with data direction output. AREP 1 CREP 0. Data+IOPS+IOCS  24+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 3 subslot 0x0001 with data direction output. AREP 1 CREP 0. Data+IOPS+IOCS  24+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 4 subslot 0x0001 with data direction output. AREP 1 CREP 0. Data+IOPS+IOCS  24+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 1 subslot 0x0001 with data direction output. AREP 1 CREP 1. Data+IOPS+IOCS  48+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 2 subslot 0x0001 with data direction output. AREP 1 CREP 1. Data+IOPS+IOCS  24+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 3 subslot 0x0001 with data direction output. AREP 1 CREP 1. Data+IOPS+IOCS  24+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2358) Read data and IOPS size from API 0 slot 4 subslot 0x0001 with data direction output. AREP 1 CREP 1. Data+IOPS+IOCS  24+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 0 subslot 0x0001 with data direction  input. AREP 1 CREP 1. Data+IOPS+IOCS   0+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 0 subslot 0x8000 with data direction  input. AREP 1 CREP 1. Data+IOPS+IOCS   0+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 0 subslot 0x8001 with data direction  input. AREP 1 CREP 1. Data+IOPS+IOCS   0+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 1 subslot 0x0001 with data direction  input. AREP 1 CREP 1. Data+IOPS+IOCS  16+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 2 subslot 0x0001 with data direction  input. AREP 1 CREP 1. Data+IOPS+IOCS  16+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 3 subslot 0x0001 with data direction  input. AREP 1 CREP 1. Data+IOPS+IOCS  16+1+1 bytes
+    -[11:53:25 INFO ] CMDEV(2197) Read          IOCS size from API 0 slot 4 subslot 0x0001 with data direction  input. AREP 1 CREP 1. Data+IOPS+IOCS  16+1+1 bytes
+    -[11:53:25 DEBUG] PDPORT(330): Remove diagnosis about remote mismatch (if any) for port 1.
+    -[11:53:25 DEBUG] DIAG(960): Did not find the diagnosis to remove. Slot 0 Subslot 0x8001 Channel 0x8000 Ch err type 0x8001 Ext err type 0x8000 Usi 0x8002
+    -[11:53:25 DEBUG] DIAG(960): Did not find the diagnosis to remove. Slot 0 Subslot 0x8001 Channel 0x8000 Ch err type 0x8001 Ext err type 0x8001 Usi 0x8002
+    -[11:53:25 DEBUG] DIAG(960): Did not find the diagnosis to remove. Slot 0 Subslot 0x8001 Channel 0x8000 Ch err type 0x8001 Ext err type 0x8005 Usi 0x8002
+    -[11:53:25 DEBUG] FSPM(1153): Triggering connect callback for AREP 1
+    -PLC connect indication. AREP: 1
+    -[11:53:25 DEBUG] FSPM(495): Added logbook entry to position 0. Error: 0x00 0x00 0x00 0x00 Detail: 1
+    -[11:53:25 DEBUG] CMDEV(1456): New state: PF_CMDEV_STATE_W_CRES for AREP 1 (was PF_CMDEV_STATE_POWER_ON)
+    -[11:53:25 DEBUG] PPM(300): Create PPM instance. AREP 1 CREP 0
+    -[11:53:25 DEBUG] CPM(126): Create CPM instance. AREP 1 CREP 1
+    -[11:53:25 DEBUG] CPM(226): Activating CPM for output data reception. AREP 1 CREP 1 FrameID: 0x8001
+    -[11:53:25 DEBUG] ETH(285): Framehandler is adding FrameId 0x8001 at index 3.
+    -[11:53:25 DEBUG] CPM(104): New state PF_CPM_STATE_FRUN (was PF_CPM_STATE_W_START)
+    -[11:53:25 DEBUG] Alarm(921): Activating ALPMX for AREP 1
+    -[11:53:25 DEBUG] ETH(285): Framehandler is adding FrameId 0xfe01 at index 4.
+    -[11:53:25 DEBUG] ETH(285): Framehandler is adding FrameId 0xfc01 at index 5.
+    -[11:53:25 DEBUG] CMSU(84): New state PF_CMSU_STATE_STARTUP for AREP 1 (was PF_CMSU_STATE_IDLE)
+    -[11:53:25 DEBUG] CMDEV(1456): New state: PF_CMDEV_STATE_W_SUCNF for AREP 1 (was PF_CMDEV_STATE_W_CRES)
+    -[11:53:25 DEBUG] CMDEV(1494): Sending event PNET_EVENT_STARTUP for AREP 1. Current state PF_CMDEV_STATE_W_SUCNF
+    -[11:53:25 DEBUG] FSPM(1266): Triggering user state-change callback with event PNET_EVENT_STARTUP for AREP 1
+    -Event indication PNET_EVENT_STARTUP   AREP: 1
+    -[11:53:25 DEBUG] CMSU(104): Received event PNET_EVENT_STARTUP from CMDEV. Initial state PF_CMSU_STATE_STARTUP for AREP 1.
+    -[11:53:25 DEBUG] CMIO(177): Received event PNET_EVENT_STARTUP from CMDEV. Initial state PF_CMIO_STATE_IDLE for AREP 1.
+    -[11:53:25 DEBUG] CMIO(96): New state PF_CMIO_STATE_STARTUP for AREP 1 (was PF_CMIO_STATE_IDLE)
+    -[11:53:25 DEBUG] FILE(184): Did read file /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/pnet_data_pdport_1.bin Access time 0 ms.
+    -[11:53:25 DEBUG] PDPORT(209): No storing of nvm port settings (no changes).
+    -[11:53:25 DEBUG] CMWRR(89): Received event PNET_EVENT_STARTUP from CMDEV. Initial state PF_CMWRR_STATE_IDLE for AREP 1.
+    -[11:53:25 DEBUG] CMWRR(146): New state state PF_CMWRR_STATE_STARTUP for AREP 1.
+    -[11:53:25 DEBUG] CMSM(172): Received event PNET_EVENT_STARTUP from CMDEV. Initial state PF_CMSM_STATE_IDLE for AREP 1.
+    -[11:53:25 DEBUG] CMSM(107): New state PF_CMSM_STATE_RUN (was PF_CMSM_STATE_IDLE)
+    -[11:53:25 DEBUG] CMSM(188): Starting timer. cm_initiator_activity_timeout_factor 200 x 100 ms
+    -[11:53:25 DEBUG] CMPBE(105): Received event PNET_EVENT_STARTUP from CMDEV. Initial state PF_CMPBE_STATE_IDLE for AREP 1.
+    -[11:53:25 DEBUG] CMRPC(5060): Received event PNET_EVENT_STARTUP from CMDEV for AREP 1.
+    -[11:53:25 DEBUG] CMDEV(1456): New state: PF_CMDEV_STATE_W_PEIND for AREP 1 (was PF_CMDEV_STATE_W_SUCNF)
+    -[11:53:25 DEBUG] CMRPC(1995): Create CONNECT response: ret = 0   error: 0x00 0x00 0x00 0x00
+    -[11:53:25 DEBUG] CMRPC(1836): Connect response args_length = 102
+    -[11:53:25 DEBUG] LLDP(1175): Enabling LLDP transmission for port 1
+    -[11:53:25 DEBUG] LLDP(1011): Send port 1 MAC: 6C:B3:11:12:A6:F3 IP: 192.168.214.71 Chassis ID: "Setpoint interface app    1                    007                  3 V  0  2  0" Port ID: "port-001.acc-setpoint-interface"
+    -[11:53:25 DEBUG] CMRPC(2021): Created connect response: ret 0
+    -[11:53:25 DEBUG] CMRPC(4560): Send RPC response. Total response length 202, sending 202 bytes. Start of RPC payload: 80
+    -[11:53:25 INFO ] CMRPC(917): Sending 202 bytes on socket 4 to 192.168.214.30:54065 Payload:"response" Session from me:0 Session index:0
+    -[11:53:25 INFO ] CMRPC(4986): Received 240 bytes UDP payload from remote 192.168.214.30:54065, on socket 4 for incoming DCE RPC requests.
+    -[11:53:25 DEBUG] CMRPC(4208): Incoming RPC frame. Seq: 1, Serial: 0, Frag num: 0, Frag Len: 160 Fragment flag: "Not set" Last Fragment flag: "Not set", No fack: "Not set"
+    -[11:53:25 INFO ] CMRPC(4409): Incoming DCE RPC request on UDP.
+    -[11:53:25 INFO ] CMRPC(3587): Incoming WRITE request via DCE RPC on UDP
+    -[11:53:25 INFO ] CMWRR(208): PLC is writing slot 0 subslot 0x8000 index 0x8071 "PDInterfaceAdjust for one subslot" for AREP 1
+    -[11:53:25 INFO ] PDPORT(1366): PD interface adjust. PLC is setting LLDP mode: Legacy
+    -[11:53:25 DEBUG] LLDP(1175): Enabling LLDP transmission for port 1
+    -[11:53:25 DEBUG] LLDP(1011): Send port 1 MAC: 6C:B3:11:12:A6:F3 IP: 192.168.214.71 Chassis ID: "acc-setpoint-interface" Port ID: "port-001"
+    -[11:53:25 DEBUG] CMRPC(4560): Send RPC response. Total response length 228, sending 228 bytes. Start of RPC payload: 80
+    -[11:53:25 INFO ] CMRPC(917): Sending 228 bytes on socket 4 to 192.168.214.30:54065 Payload:"response" Session from me:0 Session index:0
+    -[11:53:25 INFO ] CMRPC(4986): Received 132 bytes UDP payload from remote 192.168.214.30:54065, on socket 4 for incoming DCE RPC requests.
+    -[11:53:25 DEBUG] CMRPC(4208): Incoming RPC frame. Seq: 2, Serial: 0, Frag num: 0, Frag Len: 52 Fragment flag: "Not set" Last Fragment flag: "Not set", No fack: "Not set"
+    -[11:53:25 INFO ] CMRPC(4409): Incoming DCE RPC request on UDP.
+    -[11:53:25 INFO ] CMRPC(3600): Incoming DCONTROL request via DCE RPC on UDP
+    -[11:53:25 DEBUG] CMDEV(1456): New state: PF_CMDEV_STATE_W_PERES for AREP 1 (was PF_CMDEV_STATE_W_PEIND)
+    -[11:53:25 DEBUG] FSPM(1225): Triggering DControl callback with command bitfield 0x0001 for AREP 1
+    -PLC dcontrol message (The PLC is done with parameter writing). AREP: 1  Command: PRM_END
+    -[11:53:25 DEBUG] FSPM(495): Added logbook entry to position 1. Error: 0x00 0x00 0x00 0x00 Detail: 3
+    -[11:53:25 DEBUG] CMDEV(1456): New state: PF_CMDEV_STATE_W_ARDY for AREP 1 (was PF_CMDEV_STATE_W_PERES)
+    -[11:53:25 DEBUG] PDPORT(269): Checking local Ethernet port 1 "ens65". MAU type: 30  Fast enough.  Running: Yes.
+    -[11:53:25 DEBUG] CMDEV(4999): Prepare to send event PNET_EVENT_PRMEND
+    -[11:53:25 DEBUG] CMPBE(150): Received DControl command bitfield 0x0001 for AREP 1. Initial state PF_CMPBE_STATE_IDLE
+    -[11:53:25 DEBUG] CMRPC(2670): Prepare DCONTROL response message: ret = 0   error: 0x00 0x00 0x00 0x00
+    -[11:53:25 DEBUG] CMRPC(4560): Send RPC response. Total response length 132, sending 132 bytes. Start of RPC payload: 80
+    -[11:53:25 INFO ] CMRPC(917): Sending 132 bytes on socket 4 to 192.168.214.30:54065 Payload:"response" Session from me:0 Session index:0
+    -[11:53:25 DEBUG] CMDEV(1494): Sending event PNET_EVENT_PRMEND for AREP 1. Current state PF_CMDEV_STATE_W_ARDY
+    -[11:53:25 DEBUG] FSPM(1266): Triggering user state-change callback with event PNET_EVENT_PRMEND for AREP 1
+    -Event indication PNET_EVENT_PRMEND   AREP: 1
+        -  Set initial input data and IOPS for slot  0 subslot     1 IOXS_GOOD size   0 "DAP Identity 1"
+        -  Set initial input data and IOPS for slot  0 subslot 32768 IOXS_GOOD size   0 "DAP Interface 1"
+        -  Set initial input data and IOPS for slot  0 subslot 32769 IOXS_GOOD size   0 "DAP Port 1"
+        -  Set initial input data and IOPS for slot  1 subslot     1 IOXS_GOOD size  16 "Setpoint interface for X-axis"
+        -  Set initial output         IOCS for slot  1 subslot     1 IOXS_GOOD          "Setpoint interface for X-axis"
+        -  Set initial input data and IOPS for slot  2 subslot     1 IOXS_GOOD size  16 "Setpoint interface for Y-axis"
+        -  Set initial output         IOCS for slot  2 subslot     1 IOXS_GOOD          "Setpoint interface for Y-axis"
+        -  Set initial input data and IOPS for slot  3 subslot     1 IOXS_GOOD size  16 "Setpoint interface for Z-axis"
+        -  Set initial output         IOCS for slot  3 subslot     1 IOXS_GOOD          "Setpoint interface for Z-axis"
+        -  Set initial input data and IOPS for slot  4 subslot     1 IOXS_GOOD size  16 "Setpoint interface for C-axis"
+        -  Set initial output         IOCS for slot  4 subslot     1 IOXS_GOOD          "Setpoint interface for C-axis"
+           -[11:53:25 DEBUG] API(435): Application sets provider state to 1
+           -[11:53:25 DEBUG] CMSU(104): Received event PNET_EVENT_PRMEND from CMDEV. Initial state PF_CMSU_STATE_STARTUP for AREP 1.
+           -[11:53:25 DEBUG] PPM(371): Activate PPM. AREP 1 CREP 0, period 16000 microseconds. FrameID 0x8000
+           -[11:53:25 DEBUG] PPM(113): New state PF_PPM_STATE_RUN (was PF_PPM_STATE_W_START)
+           -[11:53:25 DEBUG] PPM(94): Start scheduling of process data frames for AREP 1 CREP 0
+           -[11:53:25 DEBUG] CMIO(177): Received event PNET_EVENT_PRMEND from CMDEV. Initial state PF_CMIO_STATE_STARTUP for AREP 1.
+           -[11:53:25 DEBUG] CMIO(96): New state PF_CMIO_STATE_WDATA for AREP 1 (was PF_CMIO_STATE_STARTUP)
+           -[11:53:25 DEBUG] CMWRR(89): Received event PNET_EVENT_PRMEND from CMDEV. Initial state PF_CMWRR_STATE_STARTUP for AREP 1.
+           -[11:53:25 DEBUG] CMWRR(146): New state state PF_CMWRR_STATE_PRMEND for AREP 1.
+           -[11:53:25 DEBUG] CMSM(172): Received event PNET_EVENT_PRMEND from CMDEV. Initial state PF_CMSM_STATE_RUN for AREP 1.
+           -[11:53:25 DEBUG] CMPBE(105): Received event PNET_EVENT_PRMEND from CMDEV. Initial state PF_CMPBE_STATE_IDLE for AREP 1.
+           -[11:53:25 DEBUG] CMRPC(5060): Received event PNET_EVENT_PRMEND from CMDEV for AREP 1.
+           -Application will signal that it is ready for data, for AREP 1.
+           -[11:53:25 DEBUG] API(464): Application calls application ready for AREP 1
+           -[11:53:25 DEBUG] CMDEV(1494): Sending event PNET_EVENT_APPLRDY for AREP 1. Current state PF_CMDEV_STATE_W_ARDY
+           -[11:53:25 DEBUG] FSPM(1266): Triggering user state-change callback with event PNET_EVENT_APPLRDY for AREP 1
+           -Event indication PNET_EVENT_APPLRDY   AREP: 1
+           -[11:53:25 DEBUG] CMSU(104): Received event PNET_EVENT_APPLRDY from CMDEV. Initial state PF_CMSU_STATE_STARTUP for AREP 1.
+           -[11:53:25 DEBUG] CMIO(177): Received event PNET_EVENT_APPLRDY from CMDEV. Initial state PF_CMIO_STATE_WDATA for AREP 1.
+           -[11:53:25 DEBUG] CMWRR(89): Received event PNET_EVENT_APPLRDY from CMDEV. Initial state PF_CMWRR_STATE_PRMEND for AREP 1.
+           -[11:53:25 DEBUG] CMWRR(146): New state state PF_CMWRR_STATE_DATA for AREP 1.
+           -[11:53:25 DEBUG] CMSM(172): Received event PNET_EVENT_APPLRDY from CMDEV. Initial state PF_CMSM_STATE_RUN for AREP 1.
+           -[11:53:25 DEBUG] CMPBE(105): Received event PNET_EVENT_APPLRDY from CMDEV. Initial state PF_CMPBE_STATE_IDLE for AREP 1.
+           -[11:53:25 DEBUG] CMRPC(5060): Received event PNET_EVENT_APPLRDY from CMDEV for AREP 1.
+           -[11:53:25 DEBUG] CMRPC(529): Allocated session 1
+           -[11:53:25 DEBUG] CMRPC(3799): Send CControl request for AREP 1, total 132 bytes (not fragmented).
+           -[11:53:25 INFO ] CMRPC(917): Sending 132 bytes on socket 6 to 192.168.214.30:34964 Payload:"CControl request (possibly fragment)" Session from me:1 Session index:1
+           -[11:53:25 DEBUG] CMDEV(1456): New state: PF_CMDEV_STATE_W_ARDYCNF for AREP 1 (was PF_CMDEV_STATE_W_ARDY)
+           -[11:53:25 INFO ] CMRPC(4939): Received 132 bytes UDP payload from remote 192.168.214.30:58924, on socket 6 used in session with index 1
+           -[11:53:25 DEBUG] CMRPC(4208): Incoming RPC frame. Seq: 0, Serial: 0, Frag num: 0, Frag Len: 52 Fragment flag: "Not set" Last Fragment flag: "Set", No fack: "Set"
+           -[11:53:25 DEBUG] CMRPC(4753): Received an RPC response.
+           -[11:53:25 INFO ] CMRPC(4042): Incoming CCONTROL response via DCE RPC on UDP
+           -[11:53:25 DEBUG] CMDEV(1456): New state: PF_CMDEV_STATE_WDATA for AREP 1 (was PF_CMDEV_STATE_W_ARDYCNF)
+           -[11:53:25 DEBUG] FSPM(651): Triggering CControl confirmation callback for AREP 1
+           -PLC control message confirmation (The PLC has received our Application Ready message). AREP: 1  Status codes: 0 0 0 0
+           -[11:53:25 DEBUG] CMRPC(4895): Kill session
+           -[11:53:25 DEBUG] CMRPC(567): Released session 1
+           -[11:53:25 DEBUG] CPM_DRV_SW(487): No data received in get data
+           -PLC reports Provider Status (IOPS) 44 for input slot 1 subslot 1 "Setpoint interface for X-axis".
+        -  Is the PLC in STOP mode?
+           -Wrong outputdata length: 0
+           -[11:53:25 DEBUG] CPM_DRV_SW(487): No data received in get data
+           -PLC reports Provider Status (IOPS) 44 for input slot 2 subslot 1 "Setpoint interface for Y-axis".
+        -  Is the PLC in STOP mode?
+           -Wrong outputdata length: 0
+           -[11:53:25 DEBUG] CPM_DRV_SW(487): No data received in get data
+           -PLC reports Provider Status (IOPS) 44 for input slot 3 subslot 1 "Setpoint interface for Z-axis".
+        -  Is the PLC in STOP mode?
+           -Wrong outputdata length: 0
+           -[11:53:25 DEBUG] CPM_DRV_SW(487): No data received in get data
+           -PLC reports Provider Status (IOPS) 44 for input slot 4 subslot 1 "Setpoint interface for C-axis".
+        -  Is the PLC in STOP mode?
+           -Wrong outputdata length: 0
+           -[11:53:25 INFO ] CMIO(313): CPM state change. CMIO state is WDATA. CREP: 1 AREP: 1 CPM start=true
+           -[11:53:25 DEBUG] FSPM(626): Triggering data status change callback for AREP 1. Status 0x35 changes 0x35
+           -Data status indication. AREP: 1  Data status changes: 0x35  Data status: 0x35
+        -   Run, Valid, Primary, Normal operation, Evaluate data status
+            -[11:53:25 DEBUG] CPM(104): New state PF_CPM_STATE_RUN (was PF_CPM_STATE_FRUN)
+            -PLC reports Provider Status (IOPS) 96 for input slot 1 subslot 1 "Setpoint interface for X-axis".
+        -  Is the PLC in STOP mode?
+           -PLC reports Consumer Status (IOCS) 96 for input slot 1 subslot 1 "Setpoint interface for X-axis".
+        -  Is the PLC in STOP mode?
+           -PLC reports Provider Status (IOPS) 96 for input slot 2 subslot 1 "Setpoint interface for Y-axis".
+        -  Is the PLC in STOP mode?
+           -PLC reports Consumer Status (IOCS) 96 for input slot 2 subslot 1 "Setpoint interface for Y-axis".
+        -  Is the PLC in STOP mode?
+           -PLC reports Provider Status (IOPS) 96 for input slot 3 subslot 1 "Setpoint interface for Z-axis".
+        -  Is the PLC in STOP mode?
+           -PLC reports Consumer Status (IOCS) 96 for input slot 3 subslot 1 "Setpoint interface for Z-axis".
+        -  Is the PLC in STOP mode?
+           -PLC reports Provider Status (IOPS) 96 for input slot 4 subslot 1 "Setpoint interface for C-axis".
+        -  Is the PLC in STOP mode?
+           -PLC reports Consumer Status (IOCS) 96 for input slot 4 subslot 1 "Setpoint interface for C-axis".
+        -  Is the PLC in STOP mode?
+           -PLC reports Provider Status (IOPS) GOOD for slot 1 subslot 1 "Setpoint interface for X-axis".
+           -X -- Position: 0	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+           -PLC reports Consumer Status (IOCS) GOOD for slot 1 subslot 1 "Setpoint interface for X-axis".
+           -PLC reports Provider Status (IOPS) GOOD for slot 2 subslot 1 "Setpoint interface for Y-axis".
+           -Y -- Position: 0	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+           -PLC reports Consumer Status (IOCS) GOOD for slot 2 subslot 1 "Setpoint interface for Y-axis".
+           -PLC reports Provider Status (IOPS) GOOD for slot 3 subslot 1 "Setpoint interface for Z-axis".
+           -Z -- Position: 0	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+           -PLC reports Consumer Status (IOCS) GOOD for slot 3 subslot 1 "Setpoint interface for Z-axis".
+           -PLC reports Provider Status (IOPS) GOOD for slot 4 subslot 1 "Setpoint interface for C-axis".
+           -C -- Position: 0	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+           -PLC reports Consumer Status (IOCS) GOOD for slot 4 subslot 1 "Setpoint interface for C-axis".
+           -Y -- Position: 1217430	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+           -Z -- Position: -598686	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+           -C -- Position: 1024	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+           -Y -- Position: 1217430	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+           -Z -- Position: -598686	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+           -C -- Position: 1024	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+           -Y -- Position: 1217430	Velocity: -1	Acceleration: -64	Torque: 0	Temperature: 0
+           -Z -- Position: -598686	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+           -C -- Position: 1024	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+           -Y -- Position: 1217430	Velocity: -1	Acceleration: -64	Torque: 0	Temperature: 0
+           -Z -- Position: -598686	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+           -C -- Position: 1024	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+           -[11:53:25 DEBUG] CMDEV(1525): Incoming DataPossible indication from CMIO. value = true
+           -[11:53:25 DEBUG] CMDEV(1494): Sending event PNET_EVENT_DATA for AREP 1. Current state PF_CMDEV_STATE_WDATA
+           -[11:53:25 DEBUG] FSPM(1266): Triggering user state-change callback with event PNET_EVENT_DATA for AREP 1
+           -Event indication PNET_EVENT_DATA   AREP: 1
+           -Cyclic data transmission started
+           +[11:55:17 DEBUG] API(145): Too long since pnet_handle_periodic() was called: 1574616492 microseconds
+           +[11:55:18 DEBUG] API(145): Too long since pnet_handle_periodic() was called: 6417 microseconds
 
--[11:53:25 DEBUG] CMSU(104): Received event PNET_EVENT_DATA from CMDEV. Initial state PF_CMSU_STATE_STARTUP for AREP 1.
--[11:53:25 DEBUG] CMIO(177): Received event PNET_EVENT_DATA from CMDEV. Initial state PF_CMIO_STATE_WDATA for AREP 1.
--[11:53:25 DEBUG] SCHEDULER(421): Tried to remove timeout "cmio", but it has already been triggered.
--[11:53:25 DEBUG] CMIO(96): New state PF_CMIO_STATE_DATA for AREP 1 (was PF_CMIO_STATE_WDATA)
--[11:53:25 DEBUG] CMWRR(89): Received event PNET_EVENT_DATA from CMDEV. Initial state PF_CMWRR_STATE_DATA for AREP 1.
--[11:53:25 DEBUG] CMSM(172): Received event PNET_EVENT_DATA from CMDEV. Initial state PF_CMSM_STATE_RUN for AREP 1.
--[11:53:25 DEBUG] CMSM(215): Stopping communication start-up timer. AREP 1
--[11:53:25 DEBUG] CMSM(107): New state PF_CMSM_STATE_IDLE (was PF_CMSM_STATE_RUN)
--[11:53:25 DEBUG] CMPBE(105): Received event PNET_EVENT_DATA from CMDEV. Initial state PF_CMPBE_STATE_IDLE for AREP 1.
--[11:53:25 DEBUG] CMPBE(91): New state PF_CMPBE_STATE_WFIND for AREP 1 (was PF_CMPBE_STATE_IDLE)
--[11:53:25 DEBUG] CMRPC(5060): Received event PNET_EVENT_DATA from CMDEV for AREP 1.
--[11:53:25 DEBUG] CMDEV(1456): New state: PF_CMDEV_STATE_DATA for AREP 1 (was PF_CMDEV_STATE_WDATA)
--Y -- Position: 1217430	Velocity: 0	Acceleration: 32	Torque: 0	Temperature: 0
--Z -- Position: -598686	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
--C -- Position: 1024	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
--Y -- Position: 1217430	Velocity: 0	Acceleration: 32	Torque: 0	Temperature: 0
--Z -- Position: -598686	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
--C -- Position: 1024	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
--Y -- Position: 1217430	Velocity: 0	Acceleration: 32	Torque: 0	Temperature: 0
--Z -- Position: -598686	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
--C -- Position: 1024	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
--Y -- Position: 1217430	Velocity: 0	Acceleration: 32	Torque: 0	Temperature: 0
--Z -- Position: -598686	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
--C -- Position: 1024	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
-+Process finished with exit code 143 (interrupted by signal 15: SIGTERM)
-```
-</details>
+    -[11:53:25 DEBUG] CMSU(104): Received event PNET_EVENT_DATA from CMDEV. Initial state PF_CMSU_STATE_STARTUP for AREP 1.
+    -[11:53:25 DEBUG] CMIO(177): Received event PNET_EVENT_DATA from CMDEV. Initial state PF_CMIO_STATE_WDATA for AREP 1.
+    -[11:53:25 DEBUG] SCHEDULER(421): Tried to remove timeout "cmio", but it has already been triggered.
+    -[11:53:25 DEBUG] CMIO(96): New state PF_CMIO_STATE_DATA for AREP 1 (was PF_CMIO_STATE_WDATA)
+    -[11:53:25 DEBUG] CMWRR(89): Received event PNET_EVENT_DATA from CMDEV. Initial state PF_CMWRR_STATE_DATA for AREP 1.
+    -[11:53:25 DEBUG] CMSM(172): Received event PNET_EVENT_DATA from CMDEV. Initial state PF_CMSM_STATE_RUN for AREP 1.
+    -[11:53:25 DEBUG] CMSM(215): Stopping communication start-up timer. AREP 1
+    -[11:53:25 DEBUG] CMSM(107): New state PF_CMSM_STATE_IDLE (was PF_CMSM_STATE_RUN)
+    -[11:53:25 DEBUG] CMPBE(105): Received event PNET_EVENT_DATA from CMDEV. Initial state PF_CMPBE_STATE_IDLE for AREP 1.
+    -[11:53:25 DEBUG] CMPBE(91): New state PF_CMPBE_STATE_WFIND for AREP 1 (was PF_CMPBE_STATE_IDLE)
+    -[11:53:25 DEBUG] CMRPC(5060): Received event PNET_EVENT_DATA from CMDEV for AREP 1.
+    -[11:53:25 DEBUG] CMDEV(1456): New state: PF_CMDEV_STATE_DATA for AREP 1 (was PF_CMDEV_STATE_WDATA)
+    -Y -- Position: 1217430	Velocity: 0	Acceleration: 32	Torque: 0	Temperature: 0
+    -Z -- Position: -598686	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+    -C -- Position: 1024	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+    -Y -- Position: 1217430	Velocity: 0	Acceleration: 32	Torque: 0	Temperature: 0
+    -Z -- Position: -598686	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+    -C -- Position: 1024	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+    -Y -- Position: 1217430	Velocity: 0	Acceleration: 32	Torque: 0	Temperature: 0
+    -Z -- Position: -598686	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+    -C -- Position: 1024	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+    -Y -- Position: 1217430	Velocity: 0	Acceleration: 32	Torque: 0	Temperature: 0
+    -Z -- Position: -598686	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+    -C -- Position: 1024	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
+    +Process finished with exit code 143 (interrupted by signal 15: SIGTERM)
+    ```
