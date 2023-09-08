@@ -114,13 +114,13 @@ pnet_t * pnet_init (const pnet_cfg_t * p_cfg)
          "API(%d): Failed to allocate memory for pnet_t (%zu bytes)\n",
          __LINE__,
          sizeof (*net));
-      return NULL;
+      //      return NULL;
    }
 
    if (pnet_init_only (net, p_cfg) != 0)
    {
       free (net);
-      return NULL;
+      //      return NULL;
    }
 
    return net;
