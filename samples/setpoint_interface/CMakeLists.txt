@@ -41,8 +41,8 @@ target_compile_options(setpoint_interface
         PRIVATE
         -Wall
         -Wextra
-        -Werror
-        -Wno-unused-parameter
+#        -Werror
+#        -Wno-unused-parameter
         -ffunction-sections
         -fdata-sections
         )

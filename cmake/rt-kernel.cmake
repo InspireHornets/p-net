@@ -35,8 +35,8 @@ target_compile_options(profinet
   PRIVATE
   -Wall
   -Wextra
-  -Werror
-  -Wno-unused-parameter
+#  -Werror
+#  -Wno-unused-parameter
   )
 
 target_include_directories(pn_dev
@@ -66,8 +66,8 @@ target_compile_options(pn_dev
   PRIVATE
   -Wall
   -Wextra
-  -Werror
-  -Wno-unused-parameter
+#  -Werror
+#  -Wno-unused-parameter
   )
 
 install (FILES

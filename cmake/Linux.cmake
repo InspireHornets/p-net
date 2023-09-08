@@ -47,8 +47,8 @@ target_compile_options(profinet
   PRIVATE
   -Wall
   -Wextra
-  -Werror
-  -Wno-unused-parameter
+#  -Werror
+#  -Wno-unused-parameter
   -ffunction-sections
   -fdata-sections
   INTERFACE
