@@ -58,7 +58,22 @@ diff --git "a/.\\success.txt" "b/.\\fail.txt"
 index 8c11704..2f9d742 100644
 --- "a/.\\success.txt"
 +++ "b/.\\fail.txt"
-@@ -16,64 +16,58 @@ Gateway:              192.168.214.1
+@@ -1,414 +1,81 @@
+ /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface/setpoint_interface -i ens65 -vvvv
+
+ ** Starting P-Net sample application 0.2.0+6939268 **
+ Number of slots:      5 (incl slot for DAP module)
+ P-net log level:      0 (DEBUG=0, FATAL=4)
+ App log level:        0 (DEBUG=0, FATAL=4)
+ Max number of ports:  1
+ Network interfaces:   ens65
+ Default station name: acc-setpoint-interface
+ Management port:      ens65 6C:B3:11:12:A6:F3
+ Physical port [1]:    ens65 6C:B3:11:12:A6:F3
+ Hostname:             robotvm
+ IP address:           192.168.214.71
+ Netmask:              255.255.255.0
+ Gateway:              192.168.214.1
  Storage directory:    /home/robotvm/profinet-fork/p-net/cmake-build-debug/samples/setpoint_interface
 
  Init P-Net stack and sample application
@@ -157,7 +172,7 @@ index 8c11704..2f9d742 100644
  Done plugging DAP
 
  Waiting for PLC connect request
-@@ -81,334 +75,7 @@ Waiting for PLC connect request
+
  UDP server: Socket created successfully
  UDP server: Listening for incoming messages on 127.0.0.1:2000
 
@@ -495,5 +510,4 @@ index 8c11704..2f9d742 100644
 -Z -- Position: -598686	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
 -C -- Position: 1024	Velocity: 0	Acceleration: 0	Torque: 0	Temperature: 0
 +Process finished with exit code 143 (interrupted by signal 15: SIGTERM)
-
 ```
