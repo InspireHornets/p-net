@@ -28,7 +28,13 @@ This is fork of the p-net stack from rt-labs. See original docs below.
 
 Endianess = The attribute of a system that indicates whether integers are represented with the most significant byte stored at the lowest address (big endian) or at the highest address (little endian)
 
+## Tip
 
+The app log level can be adjusted by the number of `v`'s as the argument when you call the app. For example:
+`sudo setpoint_interface -vvv` to see error, warning and info log messages in the console.
+
+The log level of p-net can be adjusted by changing `LOG_LEVEL_DEBUG` in `#define LOG_LEVEL (LOG_LEVEL_DEBUG)` in
+`/home/robotvm/profinet-fork/p-net/cmake-build-debug/src/options.h`
 
 ## Issues
 
@@ -45,3 +51,4 @@ Endianess = The attribute of a system that indicates whether integers are repres
     try to restart the VM. There seems to be a older instance still running in the background.
 - If you change the dns name of your profinet device, you might need to reset the ethernet adapters settings with `sudo my_pn_app -i ens192 -f`,
    where `-i` is the interface name and `-f` is the flag to reset to the factory settings.
+-
