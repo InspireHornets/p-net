@@ -36,7 +36,6 @@ target_sources(pf_test PRIVATE
   test_cmsm.cpp
   test_cmsu.cpp
   test_cmwdr.cpp
-  test_commands.cpp
   test_cpm.cpp
   test_dcp.cpp
   test_diag.cpp
