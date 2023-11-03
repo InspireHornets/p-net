@@ -296,6 +296,7 @@ void log_on_change (
           old_data,
           APP_GSDML_OUTPUT_DATA_SETPOINT_X_SIZE))
    {
+      /*
       uint32_t actual_position = combine_bytes_to_uint32 (&old_data[0]);
       uint32_t actual_speed = combine_bytes_to_uint32 (&old_data[4]);
       uint32_t actual_acceleration = combine_bytes_to_uint32 (&old_data[8]);
@@ -311,6 +312,7 @@ void log_on_change (
          actual_acceleration,
          actual_torque,
          actual_temperature);
+         */
    }
 }
 int app_data_from_plc (

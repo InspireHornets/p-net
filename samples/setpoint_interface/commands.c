@@ -1,6 +1,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <sys/time.h>
 #include "commands.h"
 #include "app_data.h"
 #include "app_log.h"
@@ -37,8 +38,14 @@ void handle_command (
    app_setpoint4_data_t setpoint4 = {.x = {0}, .y = {0}, .z = {0}, .c = {0}};
    uint8_t buffer[APP_UDP_MESSAGE_LENGTH];
    int COMMAND_SIZE = 1;
+   struct timeval tv;
 
-   APP_LOG_DEBUG ("UDP server: received command %x\n", input[0]);
+   gettimeofday (&tv, NULL);
+   APP_LOG_DEBUG (
+      "UDP server: received command %x at seconds %i, milliseconds %i \n",
+      input[0],
+      tv.tv_sec,
+      tv.tv_usec / 1000);
 
    switch (input[0])
    {
